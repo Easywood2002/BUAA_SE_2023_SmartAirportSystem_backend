@@ -23,23 +23,43 @@ public class tourist {
         this.passwords = passwords;
     }
 
-    public Integer getTouristid(){return touristid;}
+    public Integer getTouristid(){
+        return touristid;
+    }
 
-    public void setTouristid(Integer touristid){this.touristid = touristid;}
+    public void setTouristid(Integer touristid){
+        this.touristid = touristid;
+    }
 
-    public String getNickname(){return nickname;}
+    public String getNickname(){
+        return nickname;
+    }
 
-    public void setNickname(String nickname){this.nickname = nickname;}
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
 
-    public Boolean getVip(){return this.vip;}
+    public Boolean getVip(){
+        return this.vip;
+    }
 
-    public void setVip(Boolean vip){this.vip = vip;}
+    public void setVip(Boolean vip){
+        this.vip = vip;
+    }
 
-    public String getRealname(){return this.realname;}
+    public String getRealname(){
+        return this.realname;
+    }
 
-    public void setRealname(String realname){this.realname = realname;}
+    public void setRealname(String realname){
+        this.realname = realname;
+    }
 
-    public String getPasswords(){return passwords;}
+    public String getPasswords(){
+        return passwords;
+    }
 
-    public void setPasswords(String passwords){this.passwords = passwords;}
+    public void setPasswords(String passwords){
+        this.passwords = passwords;
+    }
 }

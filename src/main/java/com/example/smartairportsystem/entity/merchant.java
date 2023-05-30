@@ -13,11 +13,13 @@ public class merchant {
 
     private String realname;
     private String passwords;
+    private String salt;
     private String nickname;
 
-    public merchant(String realname,String passwords,String nickname){
+    public merchant(String realname,String passwords,String salt,String nickname){
         this.realname = realname;
         this.passwords = passwords;
+        this.salt = salt;
         this.nickname = nickname;
     }
 
@@ -51,5 +53,13 @@ public class merchant {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

@@ -13,12 +13,12 @@ public class repairrecord {
 
     private String deviceinfo;
     private String location;
-    private Boolean approved;
+    private String approved;
     private String devicename;
     private String devicepicture;
     private String deviceid;
 
-    public repairrecord(String deviceinfo,String location,Boolean approved,String devicename,String devicepicture,String deviceid){
+    public repairrecord(String deviceinfo,String location,String approved,String devicename,String devicepicture,String deviceid){
         this.deviceinfo = deviceinfo;
         this.location = location;
         this.approved = approved;
@@ -51,11 +51,11 @@ public class repairrecord {
         this.location = location;
     }
 
-    public Boolean getApproved() {
+    public String getApproved() {
         return approved;
     }
 
-    public void setApproved(Boolean approved) {
+    public void setApproved(String approved) {
         this.approved = approved;
     }
 

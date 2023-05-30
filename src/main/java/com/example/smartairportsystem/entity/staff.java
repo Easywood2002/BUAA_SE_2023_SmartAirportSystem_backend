@@ -15,12 +15,14 @@ public class staff {
     private String positionpost;
     private String nickname;
     private String passwords;
+    private String salt;
 
-    public staff(String realname, String positionpost,String nickname,String passwords){
+    public staff(String realname, String positionpost,String nickname,String passwords,String salt){
         this.realname = realname;
         this.positionpost = positionpost;
         this.nickname = nickname;
         this.passwords = passwords;
+        this.salt = salt;
     }
 
     public Integer getStaffid(){
@@ -61,5 +63,13 @@ public class staff {
 
     public void setPasswords(String passwords) {
         this.passwords = passwords;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

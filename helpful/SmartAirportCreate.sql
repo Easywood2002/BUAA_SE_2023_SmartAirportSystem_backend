@@ -4,19 +4,40 @@ use smartairport;
 
 #drop table if exists ;
 
+create table touristtoken(
+    id int,
+    token varchar(255)
+);
+
+create table merchanttoken(
+    id int,
+    token varchar(255)
+);
+
+create table stafftoken(
+    id int,
+    token varchar(255)
+);
+
+create table airlinecompanytoken(
+    id int,
+    token varchar(255)
+);
+
 create table staff(
 	staffid int primary key auto_increment,
 	realname varchar(255),
 	positionpost varchar(255),
 	nickname varchar(255),
-	passwords varchar(255)
+	passwords varchar(255),
+	salt varchar(255)
 );
 
 create table repairrecord(
 	recordid int primary key auto_increment,
 	deviceinfo varchar(255),
 	location varchar(255),
-	approved bool,
+	approved varchar(255),
 	devicename varchar(255),
 	devicepicture varchar(255),
 	deviceid varchar(255)
@@ -42,15 +63,16 @@ create table parkingspace(
 	parkingpostid int primary key auto_increment,
 	location varchar(255),
 	price double,
-	available bool
+	available varchar(255)
 );
 
 create table tourist(
 	touristid int primary key auto_increment,
 	nickname varchar(255),
-	vip bool,
 	realname varchar(255),
-	passwords varchar(255)
+	passwords varchar(255),
+	salt varchar(255),
+    vip varchar(255)
 );
 
 create table purchaserecord(
@@ -72,7 +94,8 @@ create table ticket(
 create table airlinecompany(
 	companyid int primary key auto_increment,
 	name varchar(255),
-	passwords varchar(255)
+	passwords varchar(255),
+	salt varchar(255)
 );
 
 create table flight(
@@ -91,6 +114,7 @@ create table merchant(
 	merchantid int primary key auto_increment,
 	realname varchar(255),
 	passwords varchar(255),
+    salt varchar(255),
 	nickname varchar(255)
 );
 

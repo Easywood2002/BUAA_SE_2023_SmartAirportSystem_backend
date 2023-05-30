@@ -13,9 +13,9 @@ public class parkingspace {
 
     private String location;
     private Double price;
-    private Boolean available;
+    private String available;
 
-    public parkingspace(String location,Double price,Boolean available){
+    public parkingspace(String location,Double price,String available){
         this.location = location;
         this.price = price;
         this.available = available;
@@ -45,11 +45,11 @@ public class parkingspace {
         this.price = price;
     }
 
-    public Boolean getAvailable() {
+    public String getAvailable() {
         return available;
     }
 
-    public void setAvailable(Boolean available) {
+    public void setAvailable(String available) {
         this.available = available;
     }
 }

@@ -4,6 +4,14 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.tourist">
     </resultMap>
     <insert id="logupNewTourist" parameterType="com.example.smartairportsystem.entity.tourist">
-        insert into tourist(touristid,nickname,vip,realname,passwords) values(#{touristid},#{nickname},#{vip},#{realname},sha1(#{passwords}))
+        insert into tourist(touristid,nickname,realname,passwords,salt,vip) values(#{touristid},#{nickname},#{realname},sha1(#{passwords}),#{salt},#{vip})
     </insert>
+
+    <select id="getTouristByNickname" resultType="com.example.smartairportsystem.entity.tourist">
+        select * from tourist where nickname = #{nickname}
+    </select>
+
+    <select id="corrspondPasswords" resultType="String">
+        select sha1(#{passwords})
+    </select>
 </mapper>

@@ -12,15 +12,17 @@ public class tourist {
     private Integer touristid;
 
     private String nickname;
-    private Boolean vip;
     private String realname;
     private String passwords;
+    private String salt;
+    private String vip;
 
-    public tourist(String nickname,Boolean vip,String realname,String passwords){
+    public tourist(String nickname,String realname,String passwords,String salt,String vip){
         this.nickname = nickname;
         this.vip = vip;
         this.realname = realname;
         this.passwords = passwords;
+        this.salt = salt;
     }
 
     public Integer getTouristid(){
@@ -39,11 +41,11 @@ public class tourist {
         this.nickname = nickname;
     }
 
-    public Boolean getVip(){
+    public String getVip(){
         return this.vip;
     }
 
-    public void setVip(Boolean vip){
+    public void setVip(String vip){
         this.vip = vip;
     }
 
@@ -61,5 +63,13 @@ public class tourist {
 
     public void setPasswords(String passwords){
         this.passwords = passwords;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

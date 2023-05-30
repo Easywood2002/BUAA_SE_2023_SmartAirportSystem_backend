@@ -13,10 +13,12 @@ public class airlinecompany {
 
     private String name;
     private String passwords;
+    private String salt;
 
-    public airlinecompany(String name,String passwords){
+    public airlinecompany(String name,String passwords,String salt){
         this.name = name;
         this.passwords = passwords;
+        this.salt = salt;
     }
 
     public Integer getCompanyid() {
@@ -41,5 +43,13 @@ public class airlinecompany {
 
     public void setPasswords(String passwords) {
         this.passwords = passwords;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }

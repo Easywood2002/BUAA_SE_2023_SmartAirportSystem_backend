@@ -13,5 +13,5 @@ public class touristserviceimpl implements touristservice{
 
     public void logupNewTourist(tourist newtourist){touristMapper.logupNewTourist(newtourist);}
     public tourist getTouristByNickname(String nickname){return touristMapper.getTouristByNickname(nickname);}
-    public String correspondPasswords(String passwords){return touristMapper.correspondPasswords(passwords);}
+    public tourist getTouristByToken(String token){return touristMapper.getTouristByToken(token);}
 }

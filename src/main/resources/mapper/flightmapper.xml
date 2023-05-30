@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.flightmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.flight">
+    </resultMap>
+    <insert id="addNewFlight" parameterType="com.example.smartairportsystem.entity.flight">
+        insert into flight(flightid,name,companyid,takeofflocation,landinglocation,departuretime,landingtime,departuregate,terminal) values(#{flightid},#{name},#{companyid},#{takeofflocation},#{landinglocation},#{departuretime},#{landingtime},#{departuregate},#{terminal})
+    </insert>
+
+    <select id="getFlightByID" resultType="com.example.smartairportsystem.entity.flight">
+        select * from flight where flightid = #{flightid}
+    </select>
+</mapper>

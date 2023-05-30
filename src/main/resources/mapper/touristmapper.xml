@@ -11,7 +11,7 @@
         select * from tourist where nickname = #{nickname}
     </select>
 
-    <select id="corrspondPasswords" resultType="String">
-        select sha1(#{passwords})
+    <select id="getTouristByToken" resultType="com.example.smartairportsystem.entity.tourist">
+        select t.touristid,t.nickname,t.realname,t.passwords,t.salt,t.vip from tourist t,touristtoken ttk where ttk.token = #{token} and ttk.id = t.touristid
     </select>
 </mapper>

@@ -28,12 +28,21 @@ public class touristcontroller {
     @Resource
     private securityservice securityService = new securityserviceimpl();
 
+    //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
-    public Map<String,Object> logupNewTourist(@RequestParam("nickname") String nickname, @RequestParam("realname") String realname, @RequestParam("passwords") String passwords, @RequestParam("repasswords") String repasswords, @RequestParam("vip") String vip){
+    public Map<String,Object> logupNewTourist(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String nickname = rawmap.get("nickname");
+        String realname = rawmap.get("realname");
+        String passwords = rawmap.get("passwords");
+        String repasswords = rawmap.get("repasswords");
+        String vip = rawmap.get("vip");
 
         try{
             if(repasswords.equals(passwords)) {
+                //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
                 tourist newtourist = new tourist(nickname, realname, passwords+salt,salt, vip);
@@ -58,16 +67,23 @@ public class touristcontroller {
         return map;
     }
 
+    //旅客用户登录功能
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Map<String,Object> loginOldTourist(@RequestParam("nickname") String nickname, @RequestParam("passwords") String passwords){
+    public Map<String,Object> loginOldTourist(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
         map.put("token", "null");
+
+        //表单取参
+        String nickname = rawmap.get("nickname");
+        String passwords = rawmap.get("passwords");
 
         try{
             tourist exist = touristService.getTouristByNickname(nickname);
             if (exist != null) {
+                //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords+exist.getSalt());
                 if(inpwd.equals(exist.getPasswords())) {
+                    //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String touristtk = securityService.MD5(exist.getTouristid().toString());
                     token newtk = new token(exist.getTouristid(),touristtk);
                     token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.TOURIST);

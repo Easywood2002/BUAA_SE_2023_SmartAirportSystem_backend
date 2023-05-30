@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.companymapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.airlinecompany">
+    </resultMap>
+    <insert id="logupNewCompany" parameterType="com.example.smartairportsystem.entity.airlinecompany">
+        insert into airlinecompany(companyid,name,passwords,salt) values(#{companyid},#{name},sha1(#{passwords}),#{salt})
+    </insert>
+
+    <select id="getCompanyByName" resultType="com.example.smartairportsystem.entity.airlinecompany">
+        select * from airlinecompany where name = #{name}
+    </select>
+
+    <select id="getCompanyByToken" resultType="com.example.smartairportsystem.entity.airlinecompany">
+        select a.companyid,a.name,a.passwords,a.salt from airlinecompany a,airlinecompanytoken atk where atk.token = #{token} and atk.id = a.companyid
+    </select>
+</mapper>

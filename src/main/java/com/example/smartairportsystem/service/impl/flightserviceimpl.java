@@ -17,5 +17,5 @@ public class flightserviceimpl implements flightservice {
     public void addNewFlight(flight newflight){flightMapper.addNewFlight(newflight);}
     public void updateOldFlight(flight newflight){flightMapper.updateOldFlight(newflight);}
     public void removeOldFlight(String flightid){flightMapper.removeOldFlight(flightid);}
-    public List<flight> listFlightByID(Integer companyid){return flightMapper.listFlightByID(companyid);}
+    public List<flight> listFlightByCompanyid(Integer companyid){return flightMapper.listFlightByCompanyid(companyid);}
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.ticketmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.ticket">
+    </resultMap>
+    <insert id="addNewTicket" parameterType="com.example.smartairportsystem.entity.ticket">
+        insert into ticket(ticketid,flightid,tickettype,price,amount) values(#{ticketid},#{flightid},#{tickettype},#{price},#{amount})
+    </insert>
+
+    <select id="getTicketByID" resultType="com.example.smartairportsystem.entity.ticket">
+        select * from ticket where flightid = #{flightid}
+    </select>
+
+    <update id="updateOldTicket" parameterType="com.example.smartairportsystem.entity.ticket">
+        update ticket set tickettype = #{tickettype},price = #{price},amount = #{amount} where ticketid = #{ticketid}
+    </update>
+
+    <delete id="removeOldTicket">
+        delete from ticket where ticketid = #{ticketid}
+    </delete>
+
+    <select id="listTicketByFlightid" resultType="com.example.smartairportsystem.entity.ticket">
+        select * from ticket where ticketid = #{ticketid}
+    </select>
+</mapper>

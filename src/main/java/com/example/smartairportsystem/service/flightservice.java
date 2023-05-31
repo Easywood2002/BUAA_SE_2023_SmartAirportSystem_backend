@@ -9,5 +9,5 @@ public interface flightservice {
     public void addNewFlight(flight newflight);
     public void updateOldFlight(flight newflight);
     public void removeOldFlight(String flightid);
-    public List<flight> listFlightByID(Integer companyid);
+    public List<flight> listFlightByCompanyid(Integer companyid);
 }

@@ -2,15 +2,10 @@ package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.airlinecompany;
 import com.example.smartairportsystem.entity.flight;
+import com.example.smartairportsystem.entity.ticket;
 import com.example.smartairportsystem.entity.token;
-import com.example.smartairportsystem.service.companyservice;
-import com.example.smartairportsystem.service.flightservice;
-import com.example.smartairportsystem.service.impl.companyserviceimpl;
-import com.example.smartairportsystem.service.impl.flightserviceimpl;
-import com.example.smartairportsystem.service.impl.securityserviceimpl;
-import com.example.smartairportsystem.service.impl.tokenserviceimpl;
-import com.example.smartairportsystem.service.securityservice;
-import com.example.smartairportsystem.service.tokenservice;
+import com.example.smartairportsystem.service.*;
+import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.TokenTypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +24,8 @@ public class companycontroller {
     private securityservice securityService = new securityserviceimpl();
     @Resource
     private flightservice flightService = new flightserviceimpl();
+    @Resource
+    private ticketservice ticketService = new ticketserviceimpl();
 
     //航空公司注册功能
     @RequestMapping(value = "/logup", method = RequestMethod.POST)
@@ -125,7 +122,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                List<flight> rtlist = flightService.listFlightByID(tokenentity.getId());
+                List<flight> rtlist = flightService.listFlightByCompanyid(tokenentity.getId());
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -159,7 +156,7 @@ public class companycontroller {
                 map.put("message", "航司未登录或已注销登录！");
             }else {
                 airlinecompany company = companyService.getCompanyByID(tokenentity.getId());
-                String flightid = securityService.MD5(company.getName() + name + departuretime);
+                String flightid = securityService.MD5(company.getCompanyid().toString() + name + departuretime);
                 flight newflight = new flight(flightid, name, company.getCompanyid(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
                 flight exist = flightService.getFlightByID(flightid);
                 if (exist != null) {
@@ -202,7 +199,7 @@ public class companycontroller {
                 map.put("message", "航司未登录或已注销登录！");
             }else {
                 airlinecompany company = companyService.getCompanyByID(tokenentity.getId());
-                flight newflight = new flight(flightid, name, company.getCompanyid(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
+                flight newflight = new flight(flightid, name, 0, takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
                 flight exist = flightService.getFlightByID(flightid);
                 if (exist != null && exist.getCompanyid().equals(company.getCompanyid())) {
                     flightService.updateOldFlight(newflight);
@@ -251,6 +248,143 @@ public class companycontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "删除航班信息失败！");
+        }
+        return map;
+    }
+
+    //航司添加机票信息功能
+    @RequestMapping(value = "/addticket", method = RequestMethod.POST)
+    public Map<String, Object> addTicket(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String flightid = rawmap.get("flightid");
+        String tickettype = rawmap.get("tickettype");
+        String price = rawmap.get("price");
+        String amount = rawmap.get("amount");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                String ticketid = securityService.MD5(flightid+tickettype);
+                ticket newticket = new ticket(ticketid, flightid, tickettype, Double.parseDouble(price), Integer.parseInt(amount));
+                ticket exist = ticketService.getTicketByID(ticketid);
+                if (exist != null) {
+                    map.put("success", false);
+                    map.put("message", "机票信息已存在！");
+                } else {
+                    ticketService.addNewTicket(newticket);
+                    map.put("success", true);
+                    map.put("message", "添加机票信息成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "添加机票信息失败！");
+        }
+        return map;
+    }
+
+    //航司修改机票信息功能
+    @RequestMapping(value = "/updateticket", method = RequestMethod.POST)
+    public Map<String, Object> updateTicket(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String ticketid = rawmap.get("ticketid");
+        String tickettype = rawmap.get("tickettype");
+        String price = rawmap.get("price");
+        String amount = rawmap.get("amount");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                ticket newticket = new ticket(ticketid, "", tickettype, Double.parseDouble(price), Integer.parseInt(amount));
+                ticket exist = ticketService.getTicketByID(ticketid);
+                if (exist != null) {
+                    ticketService.updateOldTicket(newticket);
+                    map.put("success", true);
+                    map.put("message", "机票信息已更新！");
+
+                } else {
+                    map.put("success", false);
+                    map.put("message", "机票信息不存在！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改机票信息失败！");
+        }
+        return map;
+    }
+
+    //航司删除机票信息功能
+    @RequestMapping(value = "/removeticket", method = RequestMethod.POST)
+    public Map<String, Object> removeTicket(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String ticketid = rawmap.get("ticketid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                ticket exist = ticketService.getTicketByID(ticketid);
+                if (exist != null) {
+                    ticketService.removeOldTicket(ticketid);
+                    map.put("success", true);
+                    map.put("message", "机票信息已删除！");
+
+                } else {
+                    map.put("success", false);
+                    map.put("message", "机票信息不存在！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "删除机票信息失败！");
+        }
+        return map;
+    }
+
+    //列出该航班的机票信息功能
+    @RequestMapping(value = "/listticket",method = RequestMethod.POST)
+    public Map<String,Object> listTicket(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String flightid = rawmap.get("flightid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                List<ticket> rtlist = ticketService.listTicketByFlightid(flightid);
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
         }
         return map;
     }

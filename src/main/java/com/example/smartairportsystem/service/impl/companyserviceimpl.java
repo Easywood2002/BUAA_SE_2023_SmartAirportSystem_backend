@@ -12,6 +12,6 @@ public class companyserviceimpl implements companyservice {
     private companymapper companyMapper;
 
     public void logupNewCompany(airlinecompany newcompany){companyMapper.logupNewCompany(newcompany);}
-    public airlinecompany getCompanyByName(String name){return companyMapper.getCompanyByName(name);}
+    public airlinecompany getCompanyByEmail(String email){return companyMapper.getCompanyByEmail(email);}
     public airlinecompany getCompanyByID(Integer companyid){return companyMapper.getCompanyByID(companyid);}
 }

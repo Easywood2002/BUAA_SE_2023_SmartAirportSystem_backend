@@ -8,7 +8,7 @@
     </insert>
 
     <select id="getTicketByID" resultType="com.example.smartairportsystem.entity.ticket">
-        select * from ticket where flightid = #{flightid}
+        select * from ticket where ticketid = #{ticketid}
     </select>
 
     <update id="updateOldTicket" parameterType="com.example.smartairportsystem.entity.ticket">
@@ -20,6 +20,6 @@
     </delete>
 
     <select id="listTicketByFlightid" resultType="com.example.smartairportsystem.entity.ticket">
-        select * from ticket where ticketid = #{ticketid}
+        select * from ticket where flightid = #{flightid}
     </select>
 </mapper>

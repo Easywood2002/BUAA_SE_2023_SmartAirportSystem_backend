@@ -11,11 +11,13 @@ public class airlinecompany {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer companyid;
 
+    private String email;
     private String name;
     private String passwords;
     private String salt;
 
-    public airlinecompany(String name,String passwords,String salt){
+    public airlinecompany(String email,String name,String passwords,String salt){
+        this.email = email;
         this.name = name;
         this.passwords = passwords;
         this.salt = salt;
@@ -27,6 +29,14 @@ public class airlinecompany {
 
     public void setCompanyid(Integer companyid) {
         this.companyid = companyid;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public String getName() {

@@ -11,16 +11,14 @@ public class tourist {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer touristid;
 
-    private String nickname;
-    private String realname;
+    private String email;
     private String passwords;
     private String salt;
     private String vip;
 
-    public tourist(String nickname,String realname,String passwords,String salt,String vip){
-        this.nickname = nickname;
+    public tourist(String email,String passwords,String salt,String vip){
+        this.email = email;
         this.vip = vip;
-        this.realname = realname;
         this.passwords = passwords;
         this.salt = salt;
     }
@@ -33,12 +31,12 @@ public class tourist {
         this.touristid = touristid;
     }
 
-    public String getNickname(){
-        return nickname;
+    public String getEmail(){
+        return email;
     }
 
-    public void setNickname(String nickname){
-        this.nickname = nickname;
+    public void setEmail(String email){
+        this.email = email;
     }
 
     public String getVip(){
@@ -47,14 +45,6 @@ public class tourist {
 
     public void setVip(String vip){
         this.vip = vip;
-    }
-
-    public String getRealname(){
-        return this.realname;
-    }
-
-    public void setRealname(String realname){
-        this.realname = realname;
     }
 
     public String getPasswords(){

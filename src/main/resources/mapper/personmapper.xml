@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.personmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.person">
+    </resultMap>
+    <insert id="addNewPerson" parameterType="com.example.smartairportsystem.entity.person">
+        insert into person(personid,touristid,realname,idnumber,email) values(#{personid},#{touristid},#{realname},#{idnumber},#{email})
+    </insert>
+
+    <update id="updateOldPerson" parameterType="com.example.smartairportsystem.entity.person">
+        update person set realname = #{realname},idnumber = #{idnumber},email = #{email} where personid = #{personid}
+    </update>
+
+    <select id="getPersonByID" resultType="com.example.smartairportsystem.entity.person">
+        select * from person where personid = #{personid}
+    </select>
+
+    <select id="getPersonByTouristidAndIdnumber" resultType="com.example.smartairportsystem.entity.person">
+        select * from person where touristid = #{touristid} and idnumber = #{idnumber}
+    </select>
+</mapper>

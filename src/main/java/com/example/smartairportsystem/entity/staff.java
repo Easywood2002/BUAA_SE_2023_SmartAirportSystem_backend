@@ -13,14 +13,14 @@ public class staff {
 
     private String realname;
     private String positionpost;
-    private String nickname;
+    private String email;
     private String passwords;
     private String salt;
 
-    public staff(String realname, String positionpost,String nickname,String passwords,String salt){
+    public staff(String realname, String positionpost,String email,String passwords,String salt){
         this.realname = realname;
         this.positionpost = positionpost;
-        this.nickname = nickname;
+        this.email = email;
         this.passwords = passwords;
         this.salt = salt;
     }
@@ -49,12 +49,12 @@ public class staff {
         this.positionpost = positionpost;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getEmail() {
+        return email;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPasswords() {

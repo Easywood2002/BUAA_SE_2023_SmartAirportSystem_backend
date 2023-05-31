@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface companymapper {
     public void logupNewCompany(airlinecompany newcompany);
-    public airlinecompany getCompanyByName(String name);
+    public airlinecompany getCompanyByEmail(String email);
     public airlinecompany getCompanyByID(Integer companyid);
 }

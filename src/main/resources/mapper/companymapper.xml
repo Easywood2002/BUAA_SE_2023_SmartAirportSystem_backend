@@ -4,11 +4,11 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.airlinecompany">
     </resultMap>
     <insert id="logupNewCompany" parameterType="com.example.smartairportsystem.entity.airlinecompany">
-        insert into airlinecompany(companyid,name,passwords,salt) values(#{companyid},#{name},sha1(#{passwords}),#{salt})
+        insert into airlinecompany(companyid,email,name,passwords,salt) values(#{companyid},#{email},#{name},sha1(#{passwords}),#{salt})
     </insert>
 
-    <select id="getCompanyByName" resultType="com.example.smartairportsystem.entity.airlinecompany">
-        select * from airlinecompany where name = #{name}
+    <select id="getCompanyByEmail" resultType="com.example.smartairportsystem.entity.airlinecompany">
+        select * from airlinecompany where email = #{email}
     </select>
 
     <select id="getCompanyByID" resultType="com.example.smartairportsystem.entity.airlinecompany">

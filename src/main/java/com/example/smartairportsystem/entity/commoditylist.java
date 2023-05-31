@@ -15,14 +15,12 @@ public class commoditylist {
     private Integer merchantid;
     private Integer counts;
     private Double price;
-    private String destination;
 
-    public commoditylist(String name,Integer merchantid,Integer counts,Double price,String destination){
+    public commoditylist(String name,Integer merchantid,Integer counts,Double price){
         this.name = name;
         this.merchantid = merchantid;
         this.counts = counts;
         this.price = price;
-        this.destination = destination;
     }
 
     public Integer getCommodityid() {
@@ -63,13 +61,5 @@ public class commoditylist {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(String destination) {
-        this.destination = destination;
     }
 }

@@ -28,7 +28,7 @@ create table staff(
 	staffid int primary key auto_increment,
 	realname varchar(255),
 	positionpost varchar(255),
-	nickname varchar(255),
+	email varchar(255),
 	passwords varchar(255),
 	salt varchar(255)
 );
@@ -68,11 +68,18 @@ create table parkingspace(
 
 create table tourist(
 	touristid int primary key auto_increment,
-	nickname varchar(255),
-	realname varchar(255),
+	email varchar(255),
 	passwords varchar(255),
 	salt varchar(255),
     vip varchar(255)
+);
+
+create table person(
+    personid int primary key auto_increment,
+    touristid int,
+    realname varchar(255),
+    idnumber varchar(255),
+    email varchar(255)
 );
 
 create table purchaserecord(
@@ -93,6 +100,7 @@ create table ticket(
 
 create table airlinecompany(
 	companyid int primary key auto_increment,
+	email varchar(255),
 	name varchar(255),
 	passwords varchar(255),
 	salt varchar(255)
@@ -115,7 +123,8 @@ create table merchant(
 	realname varchar(255),
 	passwords varchar(255),
     salt varchar(255),
-	nickname varchar(255)
+	shopname varchar(255),
+	email varchar(255)
 );
 
 create table commoditylist(
@@ -123,8 +132,7 @@ create table commoditylist(
 	name varchar(255),
 	merchantid int,
 	counts int,
-	price double,
-	destination varchar(255)
+	price double
 );
 
 drop trigger if exists delflight;

@@ -33,6 +33,7 @@ public class companycontroller {
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
+        String email = rawmap.get("email");
         String name = rawmap.get("name");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
@@ -42,8 +43,8 @@ public class companycontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt() + "";
-                airlinecompany newcompany = new airlinecompany(name, passwords + salt, salt);
-                airlinecompany exist = companyService.getCompanyByName(name);
+                airlinecompany newcompany = new airlinecompany(email,name, passwords + salt, salt);
+                airlinecompany exist = companyService.getCompanyByEmail(email);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "航司重复注册！");
@@ -71,11 +72,11 @@ public class companycontroller {
         map.put("token", "null");
 
         //表单取参
-        String name = rawmap.get("name");
+        String email = rawmap.get("email");
         String passwords = rawmap.get("passwords");
 
         try {
-            airlinecompany exist = companyService.getCompanyByName(name);
+            airlinecompany exist = companyService.getCompanyByEmail(email);
             if (exist != null) {
                 //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords + exist.getSalt());

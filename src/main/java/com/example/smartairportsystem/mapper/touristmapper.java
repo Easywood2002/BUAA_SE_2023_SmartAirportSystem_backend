@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface touristmapper {
     public void logupNewTourist(tourist newtourist);
-    public tourist getTouristByNickname(String nickname);
+    public tourist getTouristByEmail(String email);
     public tourist getTouristByID(Integer touristid);
 }

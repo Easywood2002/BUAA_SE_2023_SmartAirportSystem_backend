@@ -12,6 +12,6 @@ public class touristserviceimpl implements touristservice{
     private touristmapper touristMapper;
 
     public void logupNewTourist(tourist newtourist){touristMapper.logupNewTourist(newtourist);}
-    public tourist getTouristByNickname(String nickname){return touristMapper.getTouristByNickname(nickname);}
+    public tourist getTouristByEmail(String email){return touristMapper.getTouristByEmail(email);}
     public tourist getTouristByID(Integer touristid){return touristMapper.getTouristByID(touristid);}
 }

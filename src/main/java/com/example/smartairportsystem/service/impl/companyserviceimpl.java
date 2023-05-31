@@ -13,5 +13,5 @@ public class companyserviceimpl implements companyservice {
 
     public void logupNewCompany(airlinecompany newcompany){companyMapper.logupNewCompany(newcompany);}
     public airlinecompany getCompanyByName(String name){return companyMapper.getCompanyByName(name);}
-    public airlinecompany getCompanyByToken(String token){return companyMapper.getCompanyByToken(token);}
+    public airlinecompany getCompanyByID(Integer companyid){return companyMapper.getCompanyByID(companyid);}
 }

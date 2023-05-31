@@ -10,4 +10,16 @@
     <select id="getFlightByID" resultType="com.example.smartairportsystem.entity.flight">
         select * from flight where flightid = #{flightid}
     </select>
+
+    <update id="updateOldFlight" parameterType="com.example.smartairportsystem.entity.flight">
+        update flight set name = #{name},takeofflocation = #{takeofflocation},landinglocation = #{landinglocation},departuretime = #{departuretime},landingtime = #{landingtime},departuregate = #{departuregate},terminal = #{terminal} where flightid = #{flightid} and companyid = #{companyid}
+    </update>
+
+    <delete id="removeOldFlight">
+        delete from flight where flightid = #{flightid}
+    </delete>
+
+    <select id="listFlightByID" resultType="com.example.smartairportsystem.entity.flight">
+        select * from flight where companyid = #{companyid}
+    </select>
 </mapper>

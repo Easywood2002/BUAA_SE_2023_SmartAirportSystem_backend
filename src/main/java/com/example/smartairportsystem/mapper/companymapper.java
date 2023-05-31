@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface companymapper {
     public void logupNewCompany(airlinecompany newcompany);
     public airlinecompany getCompanyByName(String name);
-    public airlinecompany getCompanyByToken(String token);
+    public airlinecompany getCompanyByID(Integer companyid);
 }

@@ -68,4 +68,25 @@ public class tokenserviceimpl implements tokenservice {
         }
         return rttoken;
     }
+
+    public token getTokenByToken(String token,int type){
+        token rttoken = null;
+        switch (type){
+            case TokenTypeUtil.TOURIST:
+                rttoken = tokenMapper.getTokenByToken_TOURIST(token);
+                break;
+            case TokenTypeUtil.MERCHANT:
+                rttoken = tokenMapper.getTokenByToken_MERCHANT(token);
+                break;
+            case TokenTypeUtil.STAFF:
+                rttoken = tokenMapper.getTokenByToken_STAFF(token);
+                break;
+            case TokenTypeUtil.COMPANY:
+                rttoken = tokenMapper.getTokenByToken_COMPANY(token);
+                break;
+            default:
+                break;
+        }
+        return rttoken;
+    }
 }

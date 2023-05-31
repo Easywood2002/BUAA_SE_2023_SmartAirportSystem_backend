@@ -21,4 +21,9 @@ public interface tokenmapper {
     public token getTokenByID_MERCHANT(Integer id);
     public token getTokenByID_STAFF(Integer id);
     public token getTokenByID_COMPANY(Integer id);
+
+    public token getTokenByToken_TOURIST(String token);
+    public token getTokenByToken_MERCHANT(String token);
+    public token getTokenByToken_STAFF(String token);
+    public token getTokenByToken_COMPANY(String token);
 }

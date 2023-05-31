@@ -6,6 +6,8 @@ import com.example.smartairportsystem.service.flightservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("flightservice")
 public class flightserviceimpl implements flightservice {
     @Autowired
@@ -13,4 +15,7 @@ public class flightserviceimpl implements flightservice {
 
     public flight getFlightByID(String flightid){return flightMapper.getFlightByID(flightid);}
     public void addNewFlight(flight newflight){flightMapper.addNewFlight(newflight);}
+    public void updateOldFlight(flight newflight){flightMapper.updateOldFlight(newflight);}
+    public void removeOldFlight(String flightid){flightMapper.removeOldFlight(flightid);}
+    public List<flight> listFlightByID(Integer companyid){return flightMapper.listFlightByID(companyid);}
 }

@@ -11,7 +11,7 @@
         select * from airlinecompany where name = #{name}
     </select>
 
-    <select id="getCompanyByToken" resultType="com.example.smartairportsystem.entity.airlinecompany">
-        select a.companyid,a.name,a.passwords,a.salt from airlinecompany a,airlinecompanytoken atk where atk.token = #{token} and atk.id = a.companyid
+    <select id="getCompanyByID" resultType="com.example.smartairportsystem.entity.airlinecompany">
+        select * from airlinecompany where companyid = #{companyid}
     </select>
 </mapper>

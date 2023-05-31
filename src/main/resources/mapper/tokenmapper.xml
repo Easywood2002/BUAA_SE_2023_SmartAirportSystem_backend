@@ -42,4 +42,17 @@
     <select id="getTokenByID_COMPANY" resultType="com.example.smartairportsystem.entity.token">
         select * from airlinecompanytoken where id = #{id}
     </select>
+
+    <select id="getTokenByToken_TOURIST" resultType="com.example.smartairportsystem.entity.token">
+        select * from touristtoken where token = #{token}
+    </select>
+    <select id="getTokenByToken_MERCHANT" resultType="com.example.smartairportsystem.entity.token">
+        select * from merchanttoken where token = #{token}
+    </select>
+    <select id="getTokenByToken_STAFF" resultType="com.example.smartairportsystem.entity.token">
+        select * from stafftoken where token = #{token}
+    </select>
+    <select id="getTokenByToken_COMPANY" resultType="com.example.smartairportsystem.entity.token">
+        select * from airlinecompanytoken where token = #{token}
+    </select>
 </mapper>

@@ -9,5 +9,5 @@ import org.springframework.stereotype.Repository;
 public interface touristmapper {
     public void logupNewTourist(tourist newtourist);
     public tourist getTouristByNickname(String nickname);
-    public tourist getTouristByToken(String token);
+    public tourist getTouristByID(Integer touristid);
 }

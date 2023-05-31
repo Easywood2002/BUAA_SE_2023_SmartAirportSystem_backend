@@ -126,3 +126,11 @@ create table commoditylist(
 	price double,
 	destination varchar(255)
 );
+
+drop trigger if exists delflight;
+delimiter //
+create trigger delflight before delete on flight for each row
+    begin
+        delete from ticket where flightid = old.flightid;
+    end //
+delimiter ;

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -115,6 +116,32 @@ public class touristcontroller {
         return map;
     }
 
+    //列出该用户的实名信息功能
+    @RequestMapping(value = "/listperson",method = RequestMethod.POST)
+    public Map<String,Object> listPerson(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<person> rtlist = personService.listPersonByTouristid(tokenentity.getId());
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
     //旅客用户添加实名信息功能
     @RequestMapping(value = "/addperson",method = RequestMethod.POST)
     public Map<String,Object> addPerson(@RequestParam Map<String,String> rawmap){
@@ -179,7 +206,7 @@ public class touristcontroller {
                     map.put("success", true);
                     map.put("message", "实名信息已更新！");
                 }else{
-                    map.put("success", true);
+                    map.put("success", false);
                     map.put("message", "本用户不存在该实名信息！");
                 }
             }
@@ -187,6 +214,40 @@ public class touristcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "修改实名信息失败！");
+        }
+        return map;
+    }
+
+    //旅客用户删除实名信息功能
+    @RequestMapping(value = "/removeperson",method = RequestMethod.POST)
+    public Map<String,Object> removePerson(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String personid = rawmap.get("personid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                tourist tour = touristService.getTouristByID(tokenentity.getId());
+                person exist = personService.getPersonByID(Integer.parseInt(personid));
+                if(exist != null && exist.getTouristid().equals(tour.getTouristid())){
+                    personService.removeOldPerson(Integer.parseInt(personid));
+                    map.put("success", true);
+                    map.put("message", "实名信息已删除！");
+                }else{
+                    map.put("success", false);
+                    map.put("message", "本用户不存在该实名信息！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "删除实名信息失败！");
         }
         return map;
     }

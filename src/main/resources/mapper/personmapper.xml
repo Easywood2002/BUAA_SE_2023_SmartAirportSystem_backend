@@ -18,4 +18,12 @@
     <select id="getPersonByTouristidAndIdnumber" resultType="com.example.smartairportsystem.entity.person">
         select * from person where touristid = #{touristid} and idnumber = #{idnumber}
     </select>
+
+    <delete id="removeOldPerson">
+        delete from person where personid = #{personid}
+    </delete>
+
+    <select id="listPersonByTouristid" resultType="com.example.smartairportsystem.entity.person">
+        select * from person where touristid = #{touristid}
+    </select>
 </mapper>

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.flight">
     </resultMap>
     <insert id="addNewFlight" parameterType="com.example.smartairportsystem.entity.flight">
-        insert into flight(flightid,name,companyid,takeofflocation,landinglocation,departuretime,landingtime,departuregate,terminal) values(#{flightid},#{name},#{companyid},#{takeofflocation},#{landinglocation},#{departuretime},#{landingtime},#{departuregate},#{terminal})
+        insert into flight(name,companyid,takeofflocation,landinglocation,departuretime,landingtime,departuregate,terminal) values(#{name},#{companyid},#{takeofflocation},#{landinglocation},#{departuretime},#{landingtime},#{departuregate},#{terminal})
     </insert>
 
     <select id="getFlightByID" resultType="com.example.smartairportsystem.entity.flight">

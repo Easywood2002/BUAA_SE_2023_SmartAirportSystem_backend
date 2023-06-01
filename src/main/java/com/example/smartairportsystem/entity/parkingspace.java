@@ -1,21 +1,19 @@
 package com.example.smartairportsystem.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class parkingspace {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer parkingpostid;
 
     private String location;
     private Double price;
     private String available;
 
-    public parkingspace(String location,Double price,String available){
+    public parkingspace(Integer parkingpostid,String location,Double price,String available){
+        this.parkingpostid = parkingpostid;
         this.location = location;
         this.price = price;
         this.available = available;

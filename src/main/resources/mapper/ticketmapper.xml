@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.ticket">
     </resultMap>
     <insert id="addNewTicket" parameterType="com.example.smartairportsystem.entity.ticket">
-        insert into ticket(ticketid,flightid,tickettype,price,amount) values(#{ticketid},#{flightid},#{tickettype},#{price},#{amount})
+        insert into ticket(flightid,tickettype,price,amount) values(#{flightid},#{tickettype},#{price},#{amount})
     </insert>
 
     <select id="getTicketByID" resultType="com.example.smartairportsystem.entity.ticket">

@@ -16,5 +16,5 @@ public interface flightmapper {
     public void updateOldFlight(flight newflight);
     public void removeOldFlight(Integer flightid);
     public List<flight> listFlightByCompanyid(Integer companyid);
-    public List<flight> listFlightByCombine(String takeofflocation,String landinglocation,String date);
+    public List<flight> listFlightByCombine(@Param("takeofflocation") String takeofflocation,@Param("landinglocation") String landinglocation,@Param("date") String date);
 }

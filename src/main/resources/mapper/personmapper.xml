@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.person">
     </resultMap>
     <insert id="addNewPerson" parameterType="com.example.smartairportsystem.entity.person">
-        insert into person(personid,touristid,realname,idnumber,email) values(#{personid},#{touristid},#{realname},#{idnumber},#{email})
+        insert into person(touristid,realname,idnumber,email) values(#{touristid},#{realname},#{idnumber},#{email})
     </insert>
 
     <update id="updateOldPerson" parameterType="com.example.smartairportsystem.entity.person">

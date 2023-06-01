@@ -1,14 +1,11 @@
 package com.example.smartairportsystem.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class commoditylist {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer commodityid;
 
     private String name;
@@ -16,7 +13,8 @@ public class commoditylist {
     private Integer counts;
     private Double price;
 
-    public commoditylist(String name,Integer merchantid,Integer counts,Double price){
+    public commoditylist(Integer commodityid,String name,Integer merchantid,Integer counts,Double price){
+        this.commodityid =commodityid;
         this.name = name;
         this.merchantid = merchantid;
         this.counts = counts;

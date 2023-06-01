@@ -1,14 +1,11 @@
 package com.example.smartairportsystem.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class airlinecompany {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer companyid;
 
     private String email;
@@ -16,7 +13,8 @@ public class airlinecompany {
     private String passwords;
     private String salt;
 
-    public airlinecompany(String email,String name,String passwords,String salt){
+    public airlinecompany(Integer companyid,String email,String name,String passwords,String salt){
+        this.companyid = companyid;
         this.email = email;
         this.name = name;
         this.passwords = passwords;

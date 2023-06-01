@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.tourist">
     </resultMap>
     <insert id="logupNewTourist" parameterType="com.example.smartairportsystem.entity.tourist">
-        insert into tourist(touristid,email,passwords,salt,vip) values(#{touristid},#{email},sha1(#{passwords}),#{salt},#{vip})
+        insert into tourist(email,passwords,salt,vip) values(#{email},sha1(#{passwords}),#{salt},#{vip})
     </insert>
 
     <select id="getTouristByEmail" resultType="com.example.smartairportsystem.entity.tourist">

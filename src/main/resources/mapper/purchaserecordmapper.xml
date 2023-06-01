@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.purchaserecord">
     </resultMap>
     <insert id="addNewRecord" parameterType="com.example.smartairportsystem.entity.purchaserecord">
-        insert into purchaserecord(orderid,personid,ticketid,purchasetime,seatinfo) values(#{orderid},#{personid},#{ticketid},#{purchasetime},#{seatinfo})
+        insert into purchaserecord(personid,ticketid,purchasetime,seatinfo) values(#{personid},#{ticketid},#{purchasetime},#{seatinfo})
     </insert>
 
     <delete id="removeOldRecord">

@@ -43,7 +43,7 @@ public class companycontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt() + "";
-                airlinecompany newcompany = new airlinecompany(email,name, passwords + salt, salt);
+                airlinecompany newcompany = new airlinecompany(0,email,name, passwords + salt, salt);
                 airlinecompany exist = companyService.getCompanyByEmail(email);
                 if (exist != null) {
                     map.put("success", false);
@@ -156,7 +156,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight newflight = new flight(name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
+                flight newflight = new flight(0,name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
                 flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
                 if (exist != null) {
                     map.put("success", false);
@@ -197,8 +197,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight newflight = new flight(name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
-                newflight.setFlightid(Integer.parseInt(flightid));
+                flight newflight = new flight(Integer.parseInt(flightid),name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
                 flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
                 if(conflict != null){
                     map.put("success", false);
@@ -262,7 +261,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket newticket = new ticket(Integer.parseInt(flightid), tickettype, Double.parseDouble(price), Integer.parseInt(amount));
+                ticket newticket = new ticket(0,Integer.parseInt(flightid), tickettype, Double.parseDouble(price), Integer.parseInt(amount));
                 ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype);
                 if (exist != null) {
                     map.put("success", false);
@@ -299,8 +298,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket newticket = new ticket(0, tickettype, Double.parseDouble(price), Integer.parseInt(amount));
-                newticket.setTicketid(Integer.parseInt(ticketid));
+                ticket newticket = new ticket(Integer.parseInt(ticketid),0, tickettype, Double.parseDouble(price), Integer.parseInt(amount));
                 ticket conflict = ticketService.getTicketByCombine(ticketService.getTicketByID(Integer.parseInt(ticketid)).getFlightid(),tickettype);
                 if(conflict != null){
                     map.put("success", false);

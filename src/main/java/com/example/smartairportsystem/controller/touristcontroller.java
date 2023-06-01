@@ -46,7 +46,7 @@ public class touristcontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                tourist newtourist = new tourist(email,passwords+salt,salt, "false");
+                tourist newtourist = new tourist(0,email,passwords+salt,salt, "false");
                 tourist exist = touristService.getTouristByEmail(email);
                 if (exist != null) {
                     map.put("success", false);
@@ -155,7 +155,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person newperson = new person(tokenentity.getId(),realname,idnumber,email);
+                person newperson = new person(0,tokenentity.getId(),realname,idnumber,email);
                 person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber);
                 if(exist != null){
                     map.put("success", false);
@@ -192,8 +192,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person newperson = new person(tokenentity.getId(),realname,idnumber,email);
-                newperson.setPersonid(Integer.parseInt(personid));
+                person newperson = new person(Integer.parseInt(personid),tokenentity.getId(),realname,idnumber,email);
                 person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
                 if(conflict != null){
                     map.put("success", false);
@@ -321,7 +320,7 @@ public class touristcontroller {
                     map.put("message", "剩余机票不足！");
                 }else {
                     for (String personid : personids) {
-                        purchaserecordService.addNewRecord(new purchaserecord(Integer.valueOf(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
+                        purchaserecordService.addNewRecord(new purchaserecord(0,Integer.valueOf(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
                     }
                     map.put("success", true);
                     map.put("message", "用户购票成功");

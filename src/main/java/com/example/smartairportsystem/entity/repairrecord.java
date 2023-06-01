@@ -1,14 +1,11 @@
 package com.example.smartairportsystem.entity;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class repairrecord {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer recordid;
 
     private String deviceinfo;
@@ -17,7 +14,8 @@ public class repairrecord {
     private String devicename;
     private String devicepicture;
 
-    public repairrecord(String deviceinfo,String location,String approved,String devicename,String devicepicture){
+    public repairrecord(Integer recordid,String deviceinfo,String location,String approved,String devicename,String devicepicture){
+        this.recordid = recordid;
         this.deviceinfo = deviceinfo;
         this.location = location;
         this.approved = approved;

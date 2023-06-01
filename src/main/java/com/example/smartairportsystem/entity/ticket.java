@@ -1,39 +1,41 @@
 package com.example.smartairportsystem.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class ticket {
     @Id
-    private String ticketid;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer ticketid;
 
-    private String flightid;
+    private Integer flightid;
     private String tickettype;
     private Double price;
     private Integer amount;
 
-    public ticket(String ticketid,String flightid,String tickettype,Double price,Integer amount){
-        this.ticketid = ticketid;
+    public ticket(Integer flightid,String tickettype,Double price,Integer amount){
         this.flightid = flightid;
         this.tickettype = tickettype;
         this.price = price;
         this.amount = amount;
     }
 
-    public String getTicketid() {
+    public Integer getTicketid() {
         return ticketid;
     }
 
-    public void setTicketid(String ticketid) {
+    public void setTicketid(Integer ticketid) {
         this.ticketid = ticketid;
     }
 
-    public String getFlightid() {
+    public Integer getFlightid() {
         return flightid;
     }
 
-    public void setFlightid(String flightid) {
+    public void setFlightid(Integer flightid) {
         this.flightid = flightid;
     }
 

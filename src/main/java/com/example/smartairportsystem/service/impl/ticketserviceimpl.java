@@ -13,9 +13,10 @@ public class ticketserviceimpl implements ticketservice {
     @Autowired
     private ticketmapper ticketMapper;
 
-    public ticket getTicketByID(String ticketid){return ticketMapper.getTicketByID(ticketid);}
+    public ticket getTicketByID(Integer ticketid){return ticketMapper.getTicketByID(ticketid);}
+    public ticket getTicketByCombine(Integer flightid,String tickettype){return ticketMapper.getTicketByCombine(flightid,tickettype);}
     public void addNewTicket(ticket newticket){ticketMapper.addNewTicket(newticket);}
     public void updateOldTicket(ticket newticket){ticketMapper.updateOldTicket(newticket);}
-    public void removeOldTicket(String ticketid){ticketMapper.removeOldTicket(ticketid);}
-    public List<ticket> listTicketByFlightid(String flightid){return ticketMapper.listTicketByFlightid(flightid);}
+    public void removeOldTicket(Integer ticketid){ticketMapper.removeOldTicket(ticketid);}
+    public List<ticket> listTicketByFlightid(Integer flightid){return ticketMapper.listTicketByFlightid(flightid);}
 }

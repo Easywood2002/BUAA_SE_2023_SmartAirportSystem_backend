@@ -13,9 +13,10 @@ public class flightserviceimpl implements flightservice {
     @Autowired
     private flightmapper flightMapper;
 
-    public flight getFlightByID(String flightid){return flightMapper.getFlightByID(flightid);}
+    public flight getFlightByID(Integer flightid){return flightMapper.getFlightByID(flightid);}
+    public flight getFlightByCombine(String name,Integer companyid,String departuretime){return flightMapper.getFlightByCombine(name,companyid,departuretime);}
     public void addNewFlight(flight newflight){flightMapper.addNewFlight(newflight);}
     public void updateOldFlight(flight newflight){flightMapper.updateOldFlight(newflight);}
-    public void removeOldFlight(String flightid){flightMapper.removeOldFlight(flightid);}
+    public void removeOldFlight(Integer flightid){flightMapper.removeOldFlight(flightid);}
     public List<flight> listFlightByCompanyid(Integer companyid){return flightMapper.listFlightByCompanyid(companyid);}
 }

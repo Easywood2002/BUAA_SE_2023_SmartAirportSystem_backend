@@ -39,14 +39,13 @@ create table repairrecord(
 	location varchar(255),
 	approved varchar(255),
 	devicename varchar(255),
-	devicepicture varchar(255),
-	deviceid varchar(255)
+	devicepicture varchar(255)
 );
 
 create table luggage(
-	luggageid varchar(255) primary key,
+	luggageid int primary key auto_increment,
 	touristid int,
-	flightid varchar(255),
+	flightid int,
 	state varchar(255),
 	location varchar(255)
 );
@@ -85,14 +84,14 @@ create table person(
 create table purchaserecord(
 	orderid int primary key auto_increment,
 	touristid int,
-	ticketid varchar(255),
+	ticketid int,
 	purchasetime varchar(255),
 	seatinfo varchar(255)
 );
 
 create table ticket(
-	ticketid varchar(255) primary key,
-	flightid varchar(255),
+	ticketid int primary key auto_increment,
+	flightid int,
 	tickettype varchar(255),
 	price double,
 	amount int
@@ -107,7 +106,7 @@ create table airlinecompany(
 );
 
 create table flight(
-	flightid varchar(255) primary key,
+	flightid int primary key auto_increment,
 	name varchar(255),
 	companyid int,
 	takeofflocation varchar(255),

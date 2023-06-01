@@ -36,7 +36,7 @@ public class touristcontroller {
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
-    public Map<String,Object> logupNewTourist(@RequestParam Map<String,String> rawmap){
+    public Map<String,Object> logupTourist(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
@@ -74,7 +74,7 @@ public class touristcontroller {
 
     //旅客用户登录功能
     @RequestMapping(value = "/login",method = RequestMethod.POST)
-    public Map<String,Object> loginOldTourist(@RequestParam Map<String,String> rawmap){
+    public Map<String,Object> loginTourist(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
         map.put("token", "null");
 
@@ -159,9 +159,8 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                tourist tour = touristService.getTouristByID(tokenentity.getId());
-                person newperson = new person(tour.getTouristid(),realname,idnumber,email);
-                person exist = personService.getPersonByTouristidAndIdnumber(tour.getTouristid(),idnumber);
+                person newperson = new person(tokenentity.getId(),realname,idnumber,email);
+                person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber);
                 if(exist != null){
                     map.put("success", false);
                     map.put("message", "实名信息已存在！");
@@ -197,17 +196,22 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                tourist tour = touristService.getTouristByID(tokenentity.getId());
-                person newperson = new person(tour.getTouristid(),realname,idnumber,email);
+                person newperson = new person(tokenentity.getId(),realname,idnumber,email);
                 newperson.setPersonid(Integer.parseInt(personid));
                 person exist = personService.getPersonByID(Integer.parseInt(personid));
                 if(exist != null){
-                    personService.updateOldPerson(newperson);
-                    map.put("success", true);
-                    map.put("message", "实名信息已更新！");
+                    person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
+                    if(conflict != null){
+                        map.put("success", false);
+                        map.put("message", "已存在相同实名信息！");
+                    }else {
+                        personService.updateOldPerson(newperson);
+                        map.put("success", true);
+                        map.put("message", "实名信息已更新！");
+                    }
                 }else{
                     map.put("success", false);
-                    map.put("message", "本用户不存在该实名信息！");
+                    map.put("message", "实名信息不存在！");
                 }
             }
         }catch (Exception e){
@@ -233,15 +237,14 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                tourist tour = touristService.getTouristByID(tokenentity.getId());
                 person exist = personService.getPersonByID(Integer.parseInt(personid));
-                if(exist != null && exist.getTouristid().equals(tour.getTouristid())){
+                if(exist != null){
                     personService.removeOldPerson(Integer.parseInt(personid));
                     map.put("success", true);
                     map.put("message", "实名信息已删除！");
                 }else{
                     map.put("success", false);
-                    map.put("message", "本用户不存在该实名信息！");
+                    map.put("message", "实名信息不存在！");
                 }
             }
         }catch (Exception e){

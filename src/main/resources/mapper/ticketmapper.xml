@@ -11,6 +11,10 @@
         select * from ticket where ticketid = #{ticketid}
     </select>
 
+    <select id="getTicketByCombine" resultType="com.example.smartairportsystem.entity.ticket">
+        select * from ticket where flightid = #{flightid} and tickettype = #{tickettype}
+    </select>
+
     <update id="updateOldTicket" parameterType="com.example.smartairportsystem.entity.ticket">
         update ticket set tickettype = #{tickettype},price = #{price},amount = #{amount} where ticketid = #{ticketid}
     </update>

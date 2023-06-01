@@ -13,7 +13,7 @@ public class personserviceimpl implements personservice {
     @Autowired
     private personmapper personMapper;
 
-    public person getPersonByTouristidAndIdnumber(Integer touristid, String idnumber){return personMapper.getPersonByTouristidAndIdnumber(touristid,idnumber);}
+    public person getPersonByCombine(Integer touristid, String idnumber){return personMapper.getPersonByCombine(touristid,idnumber);}
     public person getPersonByID(Integer personid){return personMapper.getPersonByID(personid);}
     public void updateOldPerson(person newperson){personMapper.updateOldPerson(newperson);}
     public void removeOldPerson(Integer personid){personMapper.removeOldPerson(personid);}

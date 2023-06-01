@@ -29,7 +29,7 @@ public class companycontroller {
 
     //航空公司注册功能
     @RequestMapping(value = "/logup", method = RequestMethod.POST)
-    public Map<String, Object> logupNewTourist(@RequestParam Map<String,String> rawmap){
+    public Map<String, Object> logupCompany(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
@@ -67,7 +67,7 @@ public class companycontroller {
 
     //航空公司登录功能
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Map<String, Object> loginOldTourist(@RequestParam Map<String,String> rawmap){
+    public Map<String, Object> loginCompany(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
         map.put("token", "null");
 
@@ -156,10 +156,8 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                airlinecompany company = companyService.getCompanyByID(tokenentity.getId());
-                String flightid = securityService.MD5(company.getCompanyid().toString() + name + departuretime);
-                flight newflight = new flight(flightid, name, company.getCompanyid(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
-                flight exist = flightService.getFlightByID(flightid);
+                flight newflight = new flight(name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
+                flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "航班信息已存在！");
@@ -199,16 +197,22 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                airlinecompany company = companyService.getCompanyByID(tokenentity.getId());
-                flight newflight = new flight(flightid, name, 0, takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
-                flight exist = flightService.getFlightByID(flightid);
-                if (exist != null && exist.getCompanyid().equals(company.getCompanyid())) {
-                    flightService.updateOldFlight(newflight);
-                    map.put("success", true);
-                    map.put("message", "航班信息已更新！");
+                flight newflight = new flight(name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal));
+                newflight.setFlightid(Integer.parseInt(flightid));
+                flight exist = flightService.getFlightByID(Integer.parseInt(flightid));
+                if (exist != null) {
+                    flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
+                    if(conflict != null){
+                        map.put("success", false);
+                        map.put("message", "已存在相同航班信息！");
+                    }else {
+                        flightService.updateOldFlight(newflight);
+                        map.put("success", true);
+                        map.put("message", "航班信息已更新！");
+                    }
                 } else {
                     map.put("success", false);
-                    map.put("message", "本航司不存在该航班信息！");
+                    map.put("message", "航班信息不存在！");
                 }
             }
         } catch (Exception e) {
@@ -234,15 +238,14 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                airlinecompany company = companyService.getCompanyByID(tokenentity.getId());
-                flight exist = flightService.getFlightByID(flightid);
-                if (exist != null && exist.getCompanyid().equals(company.getCompanyid())) {
-                    flightService.removeOldFlight(flightid);
+                flight exist = flightService.getFlightByID(Integer.parseInt(flightid));
+                if (exist != null) {
+                    flightService.removeOldFlight(Integer.parseInt(flightid));
                     map.put("success", true);
                     map.put("message", "航班信息已删除！");
                 } else {
                     map.put("success", false);
-                    map.put("message", "本航司不存在该航班信息！");
+                    map.put("message", "航班信息不存在！");
                 }
             }
         } catch (Exception e) {
@@ -271,9 +274,8 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                String ticketid = securityService.MD5(flightid+tickettype);
-                ticket newticket = new ticket(ticketid, flightid, tickettype, Double.parseDouble(price), Integer.parseInt(amount));
-                ticket exist = ticketService.getTicketByID(ticketid);
+                ticket newticket = new ticket(Integer.parseInt(flightid), tickettype, Double.parseDouble(price), Integer.parseInt(amount));
+                ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "机票信息已存在！");
@@ -309,13 +311,19 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket newticket = new ticket(ticketid, "", tickettype, Double.parseDouble(price), Integer.parseInt(amount));
-                ticket exist = ticketService.getTicketByID(ticketid);
+                ticket newticket = new ticket(0, tickettype, Double.parseDouble(price), Integer.parseInt(amount));
+                newticket.setTicketid(Integer.parseInt(ticketid));
+                ticket exist = ticketService.getTicketByID(Integer.parseInt(ticketid));
                 if (exist != null) {
-                    ticketService.updateOldTicket(newticket);
-                    map.put("success", true);
-                    map.put("message", "机票信息已更新！");
-
+                    ticket conflict = ticketService.getTicketByCombine(exist.getFlightid(),tickettype);
+                    if(conflict != null){
+                        map.put("success", false);
+                        map.put("message", "已存在相同机票信息！");
+                    }else {
+                        ticketService.updateOldTicket(newticket);
+                        map.put("success", true);
+                        map.put("message", "机票信息已更新！");
+                    }
                 } else {
                     map.put("success", false);
                     map.put("message", "机票信息不存在！");
@@ -344,9 +352,9 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket exist = ticketService.getTicketByID(ticketid);
+                ticket exist = ticketService.getTicketByID(Integer.parseInt(ticketid));
                 if (exist != null) {
-                    ticketService.removeOldTicket(ticketid);
+                    ticketService.removeOldTicket(Integer.parseInt(ticketid));
                     map.put("success", true);
                     map.put("message", "机票信息已删除！");
 
@@ -378,7 +386,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                List<ticket> rtlist = ticketService.listTicketByFlightid(flightid);
+                List<ticket> rtlist = ticketService.listTicketByFlightid(Integer.parseInt(flightid));
                 map.put("success", true);
                 map.put("message", rtlist);
             }

@@ -12,11 +12,11 @@ public class purchaserecord {
     private Integer orderid;
 
     private Integer touristid;
-    private String ticketid;
+    private Integer ticketid;
     private String purchasetime;
     private String seatinfo;
 
-    public purchaserecord(Integer touristid,String ticketid,String purchasetime,String seatinfo){
+    public purchaserecord(Integer touristid,Integer ticketid,String purchasetime,String seatinfo){
         this.touristid = touristid;
         this.ticketid = ticketid;
         this.purchasetime = purchasetime;
@@ -39,11 +39,11 @@ public class purchaserecord {
         this.touristid = touristid;
     }
 
-    public String getTicketid() {
+    public Integer getTicketid() {
         return ticketid;
     }
 
-    public void setTicketid(String ticketid) {
+    public void setTicketid(Integer ticketid) {
         this.ticketid = ticketid;
     }
 

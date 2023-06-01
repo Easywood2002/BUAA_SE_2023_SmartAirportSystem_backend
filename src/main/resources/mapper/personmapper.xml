@@ -15,7 +15,7 @@
         select * from person where personid = #{personid}
     </select>
 
-    <select id="getPersonByTouristidAndIdnumber" resultType="com.example.smartairportsystem.entity.person">
+    <select id="getPersonByCombine" resultType="com.example.smartairportsystem.entity.person">
         select * from person where touristid = #{touristid} and idnumber = #{idnumber}
     </select>
 

@@ -83,7 +83,7 @@ create table person(
 
 create table purchaserecord(
 	orderid int primary key auto_increment,
-	touristid int,
+    personid int,
 	ticketid int,
 	purchasetime varchar(255),
 	seatinfo varchar(255)
@@ -140,4 +140,20 @@ create trigger delflight before delete on flight for each row
     begin
         delete from ticket where flightid = old.flightid;
     end //
+delimiter ;
+
+drop trigger if exists delticket;
+delimiter //
+create trigger delticket before delete on ticket for each row
+begin
+    delete from purchaserecord where ticketid = old.ticketid;
+end //
+delimiter ;
+
+drop trigger if exists delperson;
+delimiter //
+create trigger delperson before delete on person for each row
+begin
+    delete from purchaserecord where personid = old.personid;
+end //
 delimiter ;

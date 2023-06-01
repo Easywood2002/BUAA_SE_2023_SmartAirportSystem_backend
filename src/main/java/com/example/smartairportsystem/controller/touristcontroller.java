@@ -1,25 +1,16 @@
 package com.example.smartairportsystem.controller;
 
-import com.example.smartairportsystem.entity.person;
-import com.example.smartairportsystem.entity.token;
-import com.example.smartairportsystem.service.impl.personserviceimpl;
-import com.example.smartairportsystem.service.impl.securityserviceimpl;
-import com.example.smartairportsystem.service.impl.tokenserviceimpl;
-import com.example.smartairportsystem.service.impl.touristserviceimpl;
-import com.example.smartairportsystem.service.personservice;
-import com.example.smartairportsystem.service.securityservice;
-import com.example.smartairportsystem.service.tokenservice;
-import com.example.smartairportsystem.service.touristservice;
-import com.example.smartairportsystem.entity.tourist;
+import com.example.smartairportsystem.entity.*;
+import com.example.smartairportsystem.entity.bowl.eticket;
+import com.example.smartairportsystem.service.*;
+import com.example.smartairportsystem.service.impl.*;
 
+import com.example.smartairportsystem.utils.TimeFormatUtil;
 import com.example.smartairportsystem.utils.TokenTypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -33,6 +24,12 @@ public class touristcontroller {
     private securityservice securityService = new securityserviceimpl();
     @Resource
     private personservice personService = new personserviceimpl();
+    @Resource
+    private flightservice flightService = new flightserviceimpl();
+    @Resource
+    private ticketservice ticketService = new ticketserviceimpl();
+    @Resource
+    private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -43,14 +40,13 @@ public class touristcontroller {
         String email = rawmap.get("email");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
-        String vip = rawmap.get("vip");
 
         try{
             if(repasswords.equals(passwords)) {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                tourist newtourist = new tourist(email,passwords+salt,salt, vip);
+                tourist newtourist = new tourist(email,passwords+salt,salt, "false");
                 tourist exist = touristService.getTouristByEmail(email);
                 if (exist != null) {
                     map.put("success", false);
@@ -198,20 +194,14 @@ public class touristcontroller {
             }else {
                 person newperson = new person(tokenentity.getId(),realname,idnumber,email);
                 newperson.setPersonid(Integer.parseInt(personid));
-                person exist = personService.getPersonByID(Integer.parseInt(personid));
-                if(exist != null){
-                    person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
-                    if(conflict != null){
-                        map.put("success", false);
-                        map.put("message", "已存在相同实名信息！");
-                    }else {
-                        personService.updateOldPerson(newperson);
-                        map.put("success", true);
-                        map.put("message", "实名信息已更新！");
-                    }
-                }else{
+                person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
+                if(conflict != null){
                     map.put("success", false);
-                    map.put("message", "实名信息不存在！");
+                    map.put("message", "已存在相同实名信息！");
+                }else {
+                    personService.updateOldPerson(newperson);
+                    map.put("success", true);
+                    map.put("message", "实名信息已更新！");
                 }
             }
         }catch (Exception e){
@@ -237,20 +227,163 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person exist = personService.getPersonByID(Integer.parseInt(personid));
-                if(exist != null){
-                    personService.removeOldPerson(Integer.parseInt(personid));
-                    map.put("success", true);
-                    map.put("message", "实名信息已删除！");
-                }else{
-                    map.put("success", false);
-                    map.put("message", "实名信息不存在！");
-                }
+                personService.removeOldPerson(Integer.parseInt(personid));
+                map.put("success", true);
+                map.put("message", "实名信息已删除！");
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "删除实名信息失败！");
+        }
+        return map;
+    }
+
+    //旅客用户查询航班信息功能
+    @RequestMapping(value = "/searchflight",method = RequestMethod.POST)
+    public Map<String,Object> searchFlight(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String takeofflocation = rawmap.get("takeofflocation");
+        String landinglocation = rawmap.get("landinglocation");
+        String date = rawmap.get("date");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<flight> rtlist = flightService.listFlightByCombine(takeofflocation,landinglocation,date+"%");
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //列出该航班的机票信息功能
+    @RequestMapping(value = "/listticket",method = RequestMethod.POST)
+    public Map<String,Object> listTicket(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String flightid = rawmap.get("flightid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<ticket> rtlist = ticketService.listTicketByFlightid(Integer.parseInt(flightid));
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //旅客用户购票功能
+    @RequestMapping(value = "/purchaseflight",method = RequestMethod.POST)
+    public Map<String,Object> purchaseFlight(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String ticketid = rawmap.get("ticketid");
+        String personidlist = rawmap.get("personidlist");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                String[] personids = personidlist.split("&");
+                //总人数
+                int len = personids.length;
+                ticket tkt = ticketService.getTicketByID(Integer.parseInt(ticketid));
+                int count = purchaserecordService.getCountByTicketid(Integer.parseInt(ticketid));
+                if(tkt.getAmount()-count < len){
+                    map.put("success", false);
+                    map.put("message", "剩余机票不足！");
+                }else {
+                    for (String personid : personids) {
+                        purchaserecordService.addNewRecord(new purchaserecord(Integer.valueOf(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
+                    }
+                    map.put("success", true);
+                    map.put("message", "用户购票成功");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "用户购票失败！");
+        }
+        return map;
+    }
+
+    //列出已购机票功能
+    @RequestMapping(value = "/listpurchase",method = RequestMethod.POST)
+    public Map<String,Object> listPurchase(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<eticket> rtlist = ticketService.listEticketByTouristid(tokenentity.getId());
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //旅客用户退票功能
+    @RequestMapping(value = "/returnpurchase",method = RequestMethod.POST)
+    public Map<String,Object> returnPurchase(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                purchaserecordService.removeOldRecord(Integer.parseInt(orderid));
+                map.put("success", true);
+                map.put("message", "用户退票成功");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "用户退票失败！");
         }
         return map;
     }

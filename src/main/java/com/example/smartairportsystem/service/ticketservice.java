@@ -1,5 +1,6 @@
 package com.example.smartairportsystem.service;
 
+import com.example.smartairportsystem.entity.bowl.eticket;
 import com.example.smartairportsystem.entity.ticket;
 
 import java.util.List;
@@ -11,4 +12,5 @@ public interface ticketservice {
     public void updateOldTicket(ticket newticket);
     public void removeOldTicket(Integer ticketid);
     public List<ticket> listTicketByFlightid(Integer flightid);
+    public List<eticket> listEticketByTouristid(Integer touristid);
 }

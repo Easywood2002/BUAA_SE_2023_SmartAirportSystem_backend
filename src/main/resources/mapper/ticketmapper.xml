@@ -26,4 +26,8 @@
     <select id="listTicketByFlightid" resultType="com.example.smartairportsystem.entity.ticket">
         select * from ticket where flightid = #{flightid}
     </select>
+
+    <select id="listEticketByTouristid" resultType="com.example.smartairportsystem.entity.bowl.eticket">
+        select pr.orderid, c.name, f.name, f.takeofflocation, f.landinglocation, f.departuretime, f.landingtime, f.departuregate, f.terminal, ps.realname, pr.seatinfo, t.tickettype from purchaserecord pr, ticket t, airlinecompany c, flight f, person ps where pr.personid = ps.personid and pr.ticketid = t.ticketid and t.flightid = f.flightid and f.companyid = c.companyid and ps.touristid = #{touristid}
+    </select>
 </mapper>

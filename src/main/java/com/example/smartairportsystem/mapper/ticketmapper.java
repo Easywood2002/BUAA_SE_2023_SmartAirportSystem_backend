@@ -1,5 +1,6 @@
 package com.example.smartairportsystem.mapper;
 
+import com.example.smartairportsystem.entity.bowl.eticket;
 import com.example.smartairportsystem.entity.ticket;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -16,4 +17,5 @@ public interface ticketmapper {
     public void updateOldTicket(ticket newticket);
     public void removeOldTicket(Integer ticketid);
     public List<ticket> listTicketByFlightid(Integer flightid);
+    public List<eticket> listEticketByTouristid(Integer touristid);
 }

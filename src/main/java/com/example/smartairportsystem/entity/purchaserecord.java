@@ -11,13 +11,13 @@ public class purchaserecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer orderid;
 
-    private Integer touristid;
+    private Integer personid;
     private Integer ticketid;
     private String purchasetime;
     private String seatinfo;
 
-    public purchaserecord(Integer touristid,Integer ticketid,String purchasetime,String seatinfo){
-        this.touristid = touristid;
+    public purchaserecord(Integer personid,Integer ticketid,String purchasetime,String seatinfo){
+        this.personid = personid;
         this.ticketid = ticketid;
         this.purchasetime = purchasetime;
         this.seatinfo = seatinfo;
@@ -31,12 +31,12 @@ public class purchaserecord {
         this.orderid = orderid;
     }
 
-    public Integer getTouristid() {
-        return touristid;
+    public Integer getPersonid() {
+        return personid;
     }
 
-    public void setTouristid(Integer touristid) {
-        this.touristid = touristid;
+    public void setPersonid(Integer personid) {
+        this.personid = personid;
     }
 
     public Integer getTicketid() {

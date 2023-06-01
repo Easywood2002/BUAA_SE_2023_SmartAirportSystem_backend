@@ -1,5 +1,6 @@
 package com.example.smartairportsystem.service.impl;
 
+import com.example.smartairportsystem.entity.bowl.eticket;
 import com.example.smartairportsystem.entity.ticket;
 import com.example.smartairportsystem.mapper.ticketmapper;
 import com.example.smartairportsystem.service.ticketservice;
@@ -19,4 +20,5 @@ public class ticketserviceimpl implements ticketservice {
     public void updateOldTicket(ticket newticket){ticketMapper.updateOldTicket(newticket);}
     public void removeOldTicket(Integer ticketid){ticketMapper.removeOldTicket(ticketid);}
     public List<ticket> listTicketByFlightid(Integer flightid){return ticketMapper.listTicketByFlightid(flightid);}
+    public List<eticket> listEticketByTouristid(Integer touristid){return ticketMapper.listEticketByTouristid(touristid);}
 }

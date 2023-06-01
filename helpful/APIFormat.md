@@ -15,7 +15,7 @@ http://localhost:8080
 ​	**API路径：**
 
 ```
-/users/register
+/tourist/logup
 ```
 
 ​	**请求方式：**

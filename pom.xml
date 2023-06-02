@@ -71,7 +71,6 @@
                 <version>${spring-boot.version}</version>
                 <configuration>
                     <mainClass>com.example.smartairportsystem.SmartairportsystemApplication</mainClass>
-                    <skip>true</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -95,5 +94,5 @@
             </resource>
         </resources>
     </build>
-
+    <packaging>jar</packaging>
 </project>

@@ -9,7 +9,7 @@
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -49,7 +49,7 @@ Form Data请求{"email": "12345@abc.com",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -90,7 +90,7 @@ Form Data请求{"email": "12345@abc.com",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -126,7 +126,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo"}
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -168,7 +168,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -212,7 +212,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -250,7 +250,7 @@ Form Data请求{"token": "78d789dasddasd8"，
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -292,7 +292,7 @@ Form Data请求{"token": "78d789dasddasd8"，
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -330,7 +330,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -370,7 +370,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -406,7 +406,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo"}
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -444,7 +444,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -482,7 +482,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -526,7 +526,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -568,7 +568,7 @@ Form Data请求{"email": "12345@abc.com",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -609,7 +609,7 @@ Form Data请求{"email": "12345@abc.com",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -645,7 +645,7 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo"}
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -695,7 +695,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -747,7 +747,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -785,7 +785,7 @@ Form Data请求{"token": "78d789dasddasd8"，
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -829,7 +829,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -873,7 +873,7 @@ Form Data请求{"token": "78d789dasddasd8",
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**
@@ -911,7 +911,7 @@ Form Data请求{"token": "78d789dasddasd8"，
 ​	**根路径：**
 
 ```
-http://localhost:8080
+http://101.200.143.220:8080
 ```
 
 ​	**API路径：**

@@ -6,7 +6,9 @@
 
 2. 本项目使用 `Java 11` 与 `Spring Boot` 框架进行后端开发，数据源连接到名为 `smartairport` 的 `MySQL` 数据库，具体配置请参考下一节；
 
-3. 其他相关仓库如下：
+3. 本后端项目现已完成服务器部署，公网IP为：101.200.143.220；
+
+4. 其他相关仓库如下：
 
    [智慧机场系统前端仓库](https://github.com/Boat1098/BUAA_SE_2023_SmartAirportSystem_frontend)
 

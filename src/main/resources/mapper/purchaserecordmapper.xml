@@ -11,6 +11,22 @@
         delete from purchaserecord where orderid = #{orderid}
     </delete>
 
+    <update id="selectSeatForOrderid">
+        update purchaserecord set seatinfo = #{seatinfo} where orderid = #{orderid}
+    </update>
+
+    <select id="getRecordByID" resultType="com.example.smartairportsystem.entity.purchaserecord">
+        select * from purchaserecord where orderid = #{orderid}
+    </select>
+
+    <select id="getRecordByCombine" resultType="com.example.smartairportsystem.entity.purchaserecord">
+        select * from purchaserecord where ticketid = #{ticketid} and seatinfo = #{seatinfo}
+    </select>
+
+    <select id="getRecordByTicketid" resultType="com.example.smartairportsystem.entity.purchaserecord">
+        select * from purchaserecord where ticketid = #{ticketid}
+    </select>
+
     <select id="getCountByTicketid" resultType="Integer">
         select count(*) from purchaserecord where ticketid = #{ticketid}
     </select>

@@ -439,6 +439,84 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 		 	 "message": "具体原因信息"}
 ```
 
+### （十二）列出空余座位：
+
+​	**根路径：**
+
+```
+http://localhost:8080
+```
+
+​	**API路径：**
+
+```
+/tourist/listseat
+```
+
+​	**请求方式：**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"orderid": "2"}
+		 
+（前端传入登录后得到的识别码token和所选订单id，验证后进行查询）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+		 	 "message": List形式的该订单所对应的机票类型的座位列表/"具体原因信息"}
+```
+
+### （十三）旅客用户选座：
+
+​	**根路径：**
+
+```
+http://localhost:8080
+```
+
+​	**API路径：**
+
+```
+/tourist/selectseat
+```
+
+​	**请求方式：**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"orderid": "2",
+			
+			"seatid": "33"}
+		 
+（前端传入登录后得到的识别码token、所选订单id和所选座位号，验证后为该用户的该机票进行选座）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+		 	 "message": "具体原因信息"}
+```
+
 
 
 ## 二、航空公司：

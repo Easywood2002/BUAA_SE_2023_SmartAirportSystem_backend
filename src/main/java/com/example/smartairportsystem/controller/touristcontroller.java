@@ -2,6 +2,7 @@ package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.entity.bowl.eticket;
+import com.example.smartairportsystem.entity.bowl.seat;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 
@@ -46,13 +47,12 @@ public class touristcontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                tourist newtourist = new tourist(0,email,passwords+salt,salt, "false");
                 tourist exist = touristService.getTouristByEmail(email);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "邮箱已被注册！");
                 } else {
-                    touristService.logupNewTourist(newtourist);
+                    touristService.logupNewTourist(new tourist(0,email,passwords+salt,salt, "false"));
                     map.put("success", true);
                     map.put("message", "用户注册成功！");
                 }
@@ -155,13 +155,12 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person newperson = new person(0,tokenentity.getId(),realname,idnumber,email);
                 person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber);
                 if(exist != null){
                     map.put("success", false);
                     map.put("message", "实名信息已存在！");
                 }else{
-                    personService.addNewPerson(newperson);
+                    personService.addNewPerson(new person(0,tokenentity.getId(),realname,idnumber,email));
                     map.put("success", true);
                     map.put("message", "添加实名信息成功！");
                 }
@@ -192,13 +191,12 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person newperson = new person(Integer.parseInt(personid),tokenentity.getId(),realname,idnumber,email);
                 person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同实名信息！");
                 }else {
-                    personService.updateOldPerson(newperson);
+                    personService.updateOldPerson(new person(Integer.parseInt(personid),tokenentity.getId(),realname,idnumber,email));
                     map.put("success", true);
                     map.put("message", "实名信息已更新！");
                 }
@@ -383,6 +381,94 @@ public class touristcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "用户退票失败！");
+        }
+        return map;
+    }
+
+    //列出空余座位功能
+    @RequestMapping(value = "/listseat",method = RequestMethod.POST)
+    public Map<String,Object> listSeat(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                purchaserecord record = purchaserecordService.getRecordByID(Integer.parseInt(orderid));
+                ticket tkt = ticketService.getTicketByID(record.getTicketid());
+                int mount = tkt.getAmount();
+                List<purchaserecord> prlist = purchaserecordService.getRecordByTicketid(record.getTicketid());
+                List<seat> rtlist = new ArrayList<>();
+                for(int i=1;i<=mount;i++){
+                    //均初始化为未选择座位（可用蓝色标识）
+                    rtlist.add(new seat(i,"false"));
+                }
+                for(purchaserecord pr : prlist){
+                    //跳过尚未选座的订单
+                    if(! pr.getSeatinfo().equals("0")) {
+                        //根据订单信息设置为已选择座位（可用灰色标识）
+                        rtlist.set(Integer.parseInt(pr.getSeatinfo()) - 1, new seat(Integer.parseInt(pr.getSeatinfo()), "true"));
+                    }
+                }
+                //若当前用户已选择座位则单独标出（可用绿色标识）
+                if(! record.getSeatinfo().equals("0")){
+                    rtlist.set(Integer.parseInt(record.getSeatinfo()) - 1,new seat(Integer.parseInt(record.getSeatinfo()),"mine"));
+                }
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //旅客用户选座功能
+    @RequestMapping(value = "/selectseat",method = RequestMethod.POST)
+    public Map<String,Object> selectseat(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+        String seatid = rawmap.get("seatid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                purchaserecord record = purchaserecordService.getRecordByID(Integer.parseInt(orderid));
+                //旅客尚未选座
+                if(record.getSeatinfo().equals("0")) {
+                    purchaserecord pr = purchaserecordService.getRecordByCombine(record.getTicketid(),seatid);
+                    //座位已选
+                    if(pr != null){
+                        map.put("success", false);
+                        map.put("message", "座位已被其他旅客选择！");
+                    }else {
+                        purchaserecordService.selectSeatForOrderid(record.getOrderid(),seatid);
+                        map.put("success", true);
+                        map.put("message", "用户选座成功！");
+                    }
+                }else{
+                    map.put("success", false);
+                    map.put("message", "不可重复选座！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "用户选座失败！");
         }
         return map;
     }

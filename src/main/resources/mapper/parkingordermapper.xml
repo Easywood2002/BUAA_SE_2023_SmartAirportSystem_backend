@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.example.smartairportsystem.mapper.parkingordermapper">
-    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.purchaserecord">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.parkingorder">
     </resultMap>
     <insert id="addNewOrder" parameterType="com.example.smartairportsystem.entity.parkingorder">
         insert into parkingorder(touristid,parktime,price,parkingspaceid) values(#{touristid},#{parktime},#{price},#{parkingspaceid})

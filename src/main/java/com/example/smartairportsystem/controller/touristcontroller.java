@@ -536,22 +536,22 @@ public class touristcontroller {
                 ticket tkt = ticketService.getTicketByID(record.getTicketid());
                 int mount = ;
                 // List<parkingorder> polist = parkingorderService.getRecordByTicketid(record.getTicketid());
-                List<parkingspace> pslist = new ArrayList<>();
+                List<parkingspace> rtlist = new ArrayList<>();
                 for(int i=1;i<=mount;i++){
                     //均初始化为未选择座位（可用蓝色标识）
-                    pslist.add(new parkingspace(i,));
+                    rtlist.add(new parkingspace(i,));
                 }
 
                 // if(! ps.available().equals("0")) {
                 //     //根据车位信息设置为已选择车位（可用灰色标识）
-                //        pslist.set(Integer.parseInt(ps.getLocation()) - 1, new parkingspace(Integer.parseInt(ps.getLocation()), "true"));
+                //        rtlist.set(Integer.parseInt(ps.getLocation()) - 1, new parkingspace(Integer.parseInt(ps.getLocation()), "true"));
                 // }
                 // //若当前用户已选择车位则单独标出（可用绿色标识）
                 // if(! order.getLocation().equals("0")){
-                //     pslist.set(Integer.parseInt(order.getLocation()) - 1,new parkingspace(Integer.parseInt(order.getLocation()),"mine"));
+                //     rtlist.set(Integer.parseInt(order.getLocation()) - 1,new parkingspace(Integer.parseInt(order.getLocation()),"mine"));
                 // }
                 map.put("success", true);
-                map.put("message", pslist);
+                map.put("message", rtlist);
             }
         }catch (Exception e){
             e.printStackTrace();

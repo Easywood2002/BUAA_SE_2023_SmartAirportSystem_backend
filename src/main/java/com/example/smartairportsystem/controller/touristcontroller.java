@@ -31,6 +31,8 @@ public class touristcontroller {
     private ticketservice ticketService = new ticketserviceimpl();
     @Resource
     private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
+    @Resource
+    private parkingorderservice parkingorderService = new parkingorderservicempl();
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)

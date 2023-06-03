@@ -11,14 +11,14 @@ public class parkingorder {
     private Integer touristid;
     private Double parktime;
     private Double price;
-    private String location;
+    private Integer parkingspaceid;
 
-    public parkingorder(Integer orderid,Integer touristid,Double parktime,Double price,String location){
+    public parkingorder(Integer orderid,Integer touristid,Double parktime,Double price,Integer parkingspaceid){
         this.orderid = orderid;
         this.touristid = touristid;
         this.parktime = parktime;
         this.price = price;
-        this.location = location;
+        this.parkingspaceid = parkingspaceid;
     }
 
     public Integer getOrderid() {
@@ -53,11 +53,11 @@ public class parkingorder {
         this.price = price;
     }
 
-    public String getLocation() {
-        return location;
+    public Integer getParkingspaceid() {
+        return parkingspaceid;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setParkingspaceid(Integer parkingspaceid) {
+        this.parkingspaceid = parkingspaceid;
     }
 }

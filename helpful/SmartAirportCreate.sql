@@ -55,14 +55,13 @@ create table parkingorder(
 	touristid int,
 	parktime double,
 	price double,
-	location varchar(255)
+	parkingspaceid int
 );
 
 create table parkingspace(
-	parkingpostid int primary key auto_increment,
+	parkingspaceid int primary key auto_increment,
 	location varchar(255),
-	price double,
-	available varchar(255)
+	price double
 );
 
 create table tourist(

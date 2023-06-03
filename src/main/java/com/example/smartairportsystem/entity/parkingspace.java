@@ -10,13 +10,11 @@ public class parkingspace {
 
     private String location;
     private Double price;
-    private String available;
 
-    public parkingspace(Integer parkingpostid,String location,Double price,String available){
+    public parkingspace(Integer parkingpostid,String location,Double price){
         this.parkingpostid = parkingpostid;
         this.location = location;
         this.price = price;
-        this.available = available;
     }
 
     public Integer getParkingpostid() {
@@ -41,13 +39,5 @@ public class parkingspace {
 
     public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public String getAvailable() {
-        return available;
-    }
-
-    public void setAvailable(String available) {
-        this.available = available;
     }
 }

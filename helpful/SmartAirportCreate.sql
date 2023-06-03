@@ -1,7 +1,6 @@
 drop database if exists smartairport;
 create database smartairport;
 use smartairport;
-
 #drop table if exists ;
 
 create table touristtoken(

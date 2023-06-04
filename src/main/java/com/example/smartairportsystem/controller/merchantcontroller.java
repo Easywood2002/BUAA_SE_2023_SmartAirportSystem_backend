@@ -76,7 +76,7 @@ public class merchantcontroller {
                 if(inpwd.equals(exist.getPasswords())) {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String merchanttk = securityService.MD5(exist.getMerchantByID().toString());
-                    token newtk = new token(exist.getMerchantByID(),merchanttk);
+                    token newtk = new token(exist.getMerchantid(),merchanttk);
                     token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.MERCHANT);
                     if (existtk == null){
                         tokenService.loginNewToken(newtk, TokenTypeUtil.MERCHANT);

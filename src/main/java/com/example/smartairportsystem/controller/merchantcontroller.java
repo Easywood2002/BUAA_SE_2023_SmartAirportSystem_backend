@@ -211,7 +211,7 @@ public class merchantcontroller {
                     map.put("success", false);
                     map.put("message", "商品信息已存在！");
                 } else {
-                    ticketService.addNewTicket(new ticket(0,name,Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
+                    commodityService.addNewCommodity(new ticket(0,name,Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
                     map.put("success", true);
                     map.put("message", "添加商品信息成功！");
                 }

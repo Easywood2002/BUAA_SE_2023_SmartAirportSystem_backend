@@ -18,5 +18,4 @@ public class merchantserviceimpl implements merchantservice{
     public merchant getMerchantByShopname(String shopname){return merchantMapper.getMerchantByShopname(shopname);}
     public void updateOldMerchant(merchant newmerchant){merchantMapper.updateOldMerchant(newmerchant);}
     public void removeOldMerchant(Integer merchantid){merchantMapper.removeOldMerchant(merchantid);}
-    public List<merchant> listMerchantByMerchantid(Integer merchantid){return merchantMapper.listMerchantByMerchantid(merchantid);}
 }

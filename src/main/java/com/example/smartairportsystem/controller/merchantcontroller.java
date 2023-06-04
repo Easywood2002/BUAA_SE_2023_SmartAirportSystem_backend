@@ -75,7 +75,7 @@ public class merchantcontroller {
                 String inpwd = securityService.SHA1(passwords+exist.getSalt());
                 if(inpwd.equals(exist.getPasswords())) {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
-                    String merchanttk = securityService.MD5(exist.getMerchantByID().toString());
+                    String merchanttk = securityService.MD5(exist.getMerchantid().toString());
                     token newtk = new token(exist.getMerchantid(),merchanttk);
                     token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.MERCHANT);
                     if (existtk == null){
@@ -116,14 +116,14 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<merchant> rtlist = merchantService.listMerchantByMerchantid(tokenentity.getId());
+                merchant rt = merchantService.getMerchantByID(tokenentity.getId());
                 map.put("success", true);
-                map.put("message", rtlist);
+                map.put("message", rt);
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "获取列表失败！");
+            map.put("message", "获取信息失败！");
         }
         return map;
     }

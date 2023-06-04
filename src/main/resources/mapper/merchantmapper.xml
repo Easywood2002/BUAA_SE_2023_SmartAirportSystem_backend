@@ -30,8 +30,4 @@
     <delete id="removeOldMerchant">
         delete from merchant where merchantid = #{merchantid}
     </delete>
-
-    <select id="listMerchantByMerchantid" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where merchantid = #{merchantid}
-    </select>
 </mapper>

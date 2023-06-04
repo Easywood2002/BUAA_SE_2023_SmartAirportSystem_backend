@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchant">
     </resultMap>
     <insert id="logupNewMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
-        insert into merchant(realname,passwords,salt,shopname,email) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email})
+        insert into merchant(realname,idnumber,passwords,salt,shopname,email) values(#{realname},#{idnumber},sha1(#{passwords}),#{salt},#{shopname},#{email})
     </insert>
 
     <select id="getMerchantByEmail" resultType="com.example.smartairportsystem.entity.merchant">
@@ -15,8 +15,8 @@
         select * from merchant where merchantid = #{merchantid}
     </select>
 
-    <select id="getMerchantByName" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where realname = #{realname}
+    <select id="getMerchantByIDnumber" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where idnumber = #{idnumber}
     </select>
 
     <!-- <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">

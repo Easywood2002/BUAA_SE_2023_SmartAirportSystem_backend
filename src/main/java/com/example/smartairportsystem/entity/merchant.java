@@ -9,14 +9,16 @@ public class merchant {
     private Integer merchantid;
 
     private String realname;
+    private Integer idnumber;
     private String passwords;
     private String salt;
     private String shopname;
     private String email;
 
-    public merchant(Integer merchantid, String realname,String passwords,String salt,String shopname,String email){
+    public merchant(Integer merchantid, String realname, Integer idnumber, String passwords,String salt,String shopname,String email){
         this.merchantid = merchantid;
         this.realname = realname;
+        this.idnumber = idnumber;
         this.passwords = passwords;
         this.salt = salt;
         this.shopname = shopname;
@@ -69,5 +71,13 @@ public class merchant {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Integer getID() {
+        return idnumber;
+    }
+
+    public void setID(String idnumber) {
+        this.idnumber = idnumber;
     }
 }

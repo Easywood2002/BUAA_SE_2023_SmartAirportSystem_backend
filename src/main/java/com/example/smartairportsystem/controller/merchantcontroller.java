@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class merchantcontroller {
     @Resource
     private merchantservice merchantService = new merchantserviceimpl();
+    @Resource
+    private commodityservice commodityService = new commodityserviceimpl();
 
     //商户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -22,21 +24,23 @@ public class merchantcontroller {
         String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
         String email = rawmap.get("email");
+        Integer idnumber = rawmap.get("idnumber");
 
         try{
             if(repasswords.equals(passwords)) {
                 //对商户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                merchant exist = merchantService.getMerchantByEmail(email);
-                // if (exist_name != null) {
-                //     map.put("success", false);
-                //     map.put("message", "该真实姓名已被注册！");
-                if (exist != null) {
+                merchant exist_ID = merchantService.getMerchantByIDnumber(idnumber);
+                merchant exist_name = merchantService.getMerchantByEmail(email);
+                if (exist_ID != null) {
                     map.put("success", false);
-                    map.put("message", "邮箱已被注册！");
+                    map.put("message", "该身份证号已被注册！");
+                else if (exist_name != null) {
+                    map.put("success", false);
+                    map.put("message", "该邮箱已被注册！");
                 } else {
-                    merchantService.logupNewMerchant(new merchant(0,realname,passwords+salt,salt,shopname,email));
+                    merchantService.logupNewMerchant(new merchant(0,realname,idnumber,passwords+salt,salt,shopname,email));
                     map.put("success", true);
                     map.put("message", "用户注册成功！");
                 }
@@ -122,41 +126,41 @@ public class merchantcontroller {
         return map;
     }
 
-    // //商户修改实名信息功能
-    // @RequestMapping(value = "/updateperson",method = RequestMethod.POST)
-    // public Map<String,Object> updatePerson(@RequestParam Map<String,String> rawmap){
-    //     Map<String,Object> map = new HashMap<>();
+    //商户修改实名信息功能
+    @RequestMapping(value = "/updateperson",method = RequestMethod.POST)
+    public Map<String,Object> updatePerson(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
 
-    //     //表单取参
-    //     String touristtk = rawmap.get("token");
-    //     String merchantid = rawmap.get("merchantid");
-    //     String realname = rawmap.get("realname");
-    //     String shopname = rawmap.get("shopname");
-    //     String email = rawmap.get("email");
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String merchantid = rawmap.get("merchantid");
+        String realname = rawmap.get("realname");
+        String shopname = rawmap.get("shopname");
+        String email = rawmap.get("email");
 
-    //     try {
-    //         token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
-    //         if(tokenentity == null){
-    //             map.put("success", false);
-    //             map.put("message", "用户未登录或已注销登录！");
-    //         }else {
-    //             merchant conflict = merchantService.getMerchantByName(realname);
-    //             if(conflict != null){
-    //                 map.put("success", false);
-    //                 map.put("message", "已存在相同实名信息！");
-    //             }else {
-    //                 personService.updateOldMerchant(new merchant(Integer.parseInt(merchantid),realname,shopname,email));
-    //                 map.put("success", true);
-    //                 map.put("message", "实名信息已更新！");
-    //             }
-    //         }
-    //     }catch (Exception e){
-    //         e.printStackTrace();
-    //         map.put("success", false);
-    //         map.put("message", "修改实名信息失败！");
-    //     }
-    //     return map;
-    // }
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                merchant conflict = merchantService.getMerchantByName(realname);
+                if(conflict != null){
+                    map.put("success", false);
+                    map.put("message", "已存在相同实名信息！");
+                }else {
+                    personService.updateOldMerchant(new merchant(Integer.parseInt(merchantid),realname,shopname,email));
+                    map.put("success", true);
+                    map.put("message", "实名信息已更新！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改实名信息失败！");
+        }
+        return map;
+    }
 
     // //商户删除实名信息功能
     // @RequestMapping(value = "/removemerchant",method = RequestMethod.POST)

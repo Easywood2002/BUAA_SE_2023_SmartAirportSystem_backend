@@ -126,17 +126,20 @@ public class merchantcontroller {
         return map;
     }
 
-    //商户修改实名信息功能
-    @RequestMapping(value = "/updateperson",method = RequestMethod.POST)
-    public Map<String,Object> updatePerson(@RequestParam Map<String,String> rawmap){
+    //商户修改信息功能
+    @RequestMapping(value = "/updatemerchant",method = RequestMethod.POST)
+    public Map<String,Object> updateMerchant(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
         String touristtk = rawmap.get("token");
         String merchantid = rawmap.get("merchantid");
         String realname = rawmap.get("realname");
+        String passwords = rawmap.get("passwords");
+        String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
         String email = rawmap.get("email");
+        Integer idnumber = rawmap.get("idnumber");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
@@ -144,50 +147,54 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                merchant conflict = merchantService.getMerchantByName(realname);
-                if(conflict != null){
+                merchant conflict_email = merchantService.getMerchantByEmail(email);
+                merchant conflict_shop = merchantService.getMerchantByShopname(shopname);
+                if(conflict_email != null){
                     map.put("success", false);
-                    map.put("message", "已存在相同实名信息！");
+                    map.put("message", "该邮箱已被使用！");
+                }else if(conflict_shop != null){
+                    map.put("success", false);
+                    map.put("message", "该店名已被使用！");
                 }else {
-                    personService.updateOldMerchant(new merchant(Integer.parseInt(merchantid),realname,shopname,email));
+                    personService.updateOldMerchant(new merchant(Integer.parseInt(merchantid),realname,idnumber,passwords+salt,salt,shopname,email));
                     map.put("success", true);
-                    map.put("message", "实名信息已更新！");
+                    map.put("message", "商户信息已更新！");
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "修改实名信息失败！");
+            map.put("message", "修改商户信息失败！");
         }
         return map;
     }
 
-    // //商户删除实名信息功能
-    // @RequestMapping(value = "/removemerchant",method = RequestMethod.POST)
-    // public Map<String,Object> removeMerchant(@RequestParam Map<String,String> rawmap){
-    //     Map<String,Object> map = new HashMap<>();
+    //商户注销账户功能
+    @RequestMapping(value = "/removemerchant",method = RequestMethod.POST)
+    public Map<String,Object> removeMerchant(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
 
-    //     //表单取参
-    //     String touristtk = rawmap.get("token");
-    //     String merchantid = rawmap.get("merchantid");
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String merchantid = rawmap.get("merchantid");
 
-    //     try {
-    //         token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
-    //         if(tokenentity == null){
-    //             map.put("success", false);
-    //             map.put("message", "用户未登录或已注销登录！");
-    //         }else {
-    //             personService.removeOldMerchant(Integer.parseInt(merchantid));
-    //             map.put("success", true);
-    //             map.put("message", "实名信息已删除！");
-    //         }
-    //     }catch (Exception e){
-    //         e.printStackTrace();
-    //         map.put("success", false);
-    //         map.put("message", "删除实名信息失败！");
-    //     }
-    //     return map;
-    // }
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                merchantService.removeOldMerchant(Integer.parseInt(merchantid));
+                map.put("success", true);
+                map.put("message", "商户信息已注销！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "商户信息注销失败！");
+        }
+        return map;
+    }
 
     //商户提交入驻请求
 

@@ -11,7 +11,8 @@ public interface merchantmapper {
     public merchant getMerchantByEmail(String email);
     public merchant getMerchantByID(Integer merchantid);
     public merchant getMerchantByIDnumber(Integer idnumber);
-    // public void updateOldMerchant(person newmerchant);
-    // public void removeOldMerchant(Integer merchantid);
+    public merchant getMerchantByShopname(String shopname);
+    public void updateOldMerchant(person newmerchant);
+    public void removeOldMerchant(Integer merchantid);
     public List<merchant> listMerchantByMerchantid(Integer merchantid);
 }

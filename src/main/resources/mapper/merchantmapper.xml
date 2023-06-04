@@ -19,13 +19,17 @@
         select * from merchant where idnumber = #{idnumber}
     </select>
 
-    <!-- <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
-        update merchant set realname = #{realname},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
+    <select id="getMerchantByShopname" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where shopname = #{shopname}
+    </select>
+
+    <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
+        update merchant set realname = #{realname},idnumber = #{idnumber},passwords = sha1(#{passwords}),salt = #{salt},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
     </update>
 
     <delete id="removeOldMerchant">
         delete from merchant where merchantid = #{merchantid}
-    </delete> -->
+    </delete>
 
     <select id="listMerchantByMerchantid" resultType="com.example.smartairportsystem.entity.merchant">
         select * from merchant where merchantid = #{merchantid}

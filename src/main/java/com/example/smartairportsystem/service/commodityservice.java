@@ -8,6 +8,7 @@ import java.util.List;
 public interface commodityservice {
     public commoditylist getCommodityByID(Integer commodityid);
     public commoditylist getCommodityByCombine(Integer mercantid,String name);
+    public Integer getMerchantByCommodity(Integer commodityid);
     public void addNewCommodity(commoditylist newcommodity);
     public void updateOldCommodity(commoditylist newcommodity);
     public void removeOldCommodity(Integer commodityid);

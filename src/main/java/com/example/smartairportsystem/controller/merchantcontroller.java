@@ -222,7 +222,7 @@ public class merchantcontroller {
                     map.put("success", false);
                     map.put("message", "商品信息已存在！");
                 } else {
-                    commodityService.addNewCommodity(new ticket(0,name,Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
+                    commodityService.addNewCommodity(new commoditylist(0,name,Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
                     map.put("success", true);
                     map.put("message", "添加商品信息成功！");
                 }
@@ -254,12 +254,12 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                commoditylist conflict = commodityService.getCommodityByCombine(commodityService.getMerchantByCommodity(Integer.parseInt(commodityid)).getCommodityid(),name);
+                commoditylist conflict = commodityService.getCommodityByCombine(commodityService.getMerchantByCommodity(Integer.parseInt(commodityid)),name);
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同商品信息！");
                 }else{
-                    commodityService.updateOldCommodity(new commoditylist(Integer.parseInt(commodityid), name, 0, Integer.parseInt(counts), Double.parseDouble(price)));
+                    commodityService.updateOldCommodity(new commoditylist(Integer.parseInt(commodityid), name, Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
                     map.put("success", true);
                     map.put("message", "商品信息已更新！");
                 }
@@ -314,7 +314,7 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<commoditylist> rtlist = commodityService.listCommodityByMerchantid(Integer.parseInt(merchantid));
+                List<commoditylist> rtlist = commodityService.listCommodityByMerchantid(tokenentity.getId());
                 map.put("success", true);
                 map.put("message", rtlist);
             }

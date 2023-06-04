@@ -134,8 +134,7 @@ public class merchantcontroller {
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
-        String touristtk = rawmap.get("token");
-        String merchantid = rawmap.get("merchantid");
+        String merchanttk = rawmap.get("token");
         String realname = rawmap.get("realname");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
@@ -158,7 +157,7 @@ public class merchantcontroller {
                     map.put("success", false);
                     map.put("message", "该店名已被使用！");
                 }else {
-                    personService.updateOldMerchant(new merchant(Integer.parseInt(merchantid),realname,idnumber,passwords+salt,salt,shopname,email));
+                    personService.updateOldMerchant(new merchant(Integer.parseInt(tokenentity.getId()),realname,idnumber,passwords+salt,salt,shopname,email));
                     map.put("success", true);
                     map.put("message", "商户信息已更新！");
                 }

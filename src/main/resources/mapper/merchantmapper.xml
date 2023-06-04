@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.merchantmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchant">
+    </resultMap>
+    <insert id="logupNewMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
+        insert into merchant(realname,passwords,salt,shopname,email) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email})
+    </insert>
+
+    <select id="getMerchantByEmail" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where email = #{email}
+    </select>
+
+    <select id="getMerchantByID" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where merchantid = #{merchantid}
+    </select>
+
+    <select id="getMerchantByName" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where realname = #{realname}
+    </select>
+
+    <!-- <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
+        update merchant set realname = #{realname},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
+    </update>
+
+    <delete id="removeOldMerchant">
+        delete from merchant where merchantid = #{merchantid}
+    </delete> -->
+
+    <select id="listMerchantByMerchantid" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where merchantid = #{merchantid}
+    </select>
+</mapper>

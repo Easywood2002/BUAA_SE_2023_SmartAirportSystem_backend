@@ -12,6 +12,8 @@ public class merchantcontroller {
     private merchantservice merchantService = new merchantserviceimpl();
     @Resource
     private commodityservice commodityService = new commodityserviceimpl();
+    @Resource
+    private merchantrequestservice merchantrequestService = new merchantserviceimpl();
 
     //商户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)

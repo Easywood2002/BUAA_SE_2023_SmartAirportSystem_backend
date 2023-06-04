@@ -24,7 +24,7 @@ public class merchantcontroller {
         String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
         String email = rawmap.get("email");
-        Integer idnumber = rawmap.get("idnumber");
+        String idnumber = rawmap.get("idnumber");
 
         try{
             if(repasswords.equals(passwords)) {
@@ -73,8 +73,8 @@ public class merchantcontroller {
                 String inpwd = securityService.SHA1(passwords+exist.getSalt());
                 if(inpwd.equals(exist.getPasswords())) {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
-                    String merchanttk = securityService.MD5(exist.getMerchantid().toString());
-                    token newtk = new token(exist.getMerchantid(),merchanttk);
+                    String merchanttk = securityService.MD5(exist.getMerchantByID().toString());
+                    token newtk = new token(exist.getMerchantByID(),merchanttk);
                     token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.MERCHANT);
                     if (existtk == null){
                         tokenService.loginNewToken(newtk, TokenTypeUtil.MERCHANT);
@@ -139,7 +139,7 @@ public class merchantcontroller {
         String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
         String email = rawmap.get("email");
-        Integer idnumber = rawmap.get("idnumber");
+        String idnumber = rawmap.get("idnumber");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
@@ -197,7 +197,43 @@ public class merchantcontroller {
     }
 
     //商户提交入驻请求
+    @RequestMapping(value = "/addmerchantrequest", method = RequestMethod.POST)
+    public Map<String, Object> addMerchantrequest(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
 
+        //表单取参
+        String realname = rawmap.get("realname");
+        String nickname = rawmap.get("nickname");
+        String passwords = rawmap.get("passwords");
+        String repasswords = rawmap.get("repasswords");
+        String email = rawmap.get("email");
+
+        try{
+            if(repasswords.equals(passwords)) {
+                //对用户设置的密码加盐加密后保存
+                Random root = new Random((new Random()).nextInt());
+                String salt = root.nextInt()+"";
+                merchantrequest exist = merchantrequestService.getMerchantrequestByEmail(email);
+                if (exist != null) {
+                    map.put("success", false);
+                    map.put("message", "请勿重复提交请求！");
+                } else {
+                    merchantrequestService.logupNewMerchantrequest(new merchantrequest(0,realname,nickname,passwords+salt,salt,email));
+                    map.put("success", true);
+                    map.put("message", "商户入驻请求提交成功！");
+                }
+            }else{
+                map.put("success", false);
+                map.put("message", "确认密码不一致！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","商户入驻请求提交失败！");
+        }
+
+        return map;
+    }
     
     //商户添加商品信息功能
     @RequestMapping(value = "/addcommodity", method = RequestMethod.POST)
@@ -301,7 +337,7 @@ public class merchantcontroller {
 
     //商户查询自身的商品清单
     @RequestMapping(value = "/listcommodity",method = RequestMethod.POST)
-    public Map<String,Object> listcommodity(@RequestParam Map<String,String> rawmap){
+    public Map<String,Object> listCommodity(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
@@ -325,5 +361,4 @@ public class merchantcontroller {
         }
         return map;
     }
-    
 }

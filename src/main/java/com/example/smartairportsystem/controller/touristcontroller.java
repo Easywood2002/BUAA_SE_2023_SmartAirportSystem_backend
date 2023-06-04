@@ -532,7 +532,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<parkingorder> rtlist = parkingorderService.getOrderByTouristid(Integer.parseInt(tokenentity.getId()));
+                List<parkingorder> rtlist = parkingorderService.getOrderByTouristid(tokenentity.getId());
                 map.put("success", true);
                 map.put("message", rtlist);
             }

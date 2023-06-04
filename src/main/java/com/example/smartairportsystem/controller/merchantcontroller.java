@@ -111,7 +111,7 @@ public class merchantcontroller {
         String merchanttk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -143,7 +143,7 @@ public class merchantcontroller {
         String idnumber = rawmap.get("idnumber");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -176,16 +176,15 @@ public class merchantcontroller {
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
-        String touristtk = rawmap.get("token");
-        String merchantid = rawmap.get("merchantid");
+        String merchanttk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                merchantService.removeOldMerchant(Integer.parseInt(merchantid));
+                merchantService.removeOldMerchant(tokenentity.getId());
                 map.put("success", true);
                 map.put("message", "商户信息已注销！");
             }
@@ -346,7 +345,7 @@ public class merchantcontroller {
         String commodityid = rawmap.get("commodityid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");

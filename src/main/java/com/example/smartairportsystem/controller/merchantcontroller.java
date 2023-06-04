@@ -184,4 +184,135 @@ public class merchantcontroller {
     //     }
     //     return map;
     // }
+
+    //商户提交入驻请求
+
+    
+    //商户添加商品信息功能
+    @RequestMapping(value = "/addcommodity", method = RequestMethod.POST)
+    public Map<String, Object> addCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String name = rawmap.get("name");
+        String merchantid = rawmap.get("mercantid")
+        String counts = rawmap.get("counts");
+        String price = rawmap.get("price");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                commoditylist exist = commodityService.getCommodityByCombine(Integer.parseInt(merchantid),name);
+                if (exist != null) {
+                    map.put("success", false);
+                    map.put("message", "商品信息已存在！");
+                } else {
+                    commodityService.addNewCommodity(new ticket(0,name,Integer.parseInt(mercantid), Integer.parseInt(counts), Double.parseDouble(price)));
+                    map.put("success", true);
+                    map.put("message", "添加商品信息成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "添加商品信息失败！");
+        }
+        return map;
+    }
+
+    //商户修改商品信息功能
+    @RequestMapping(value = "/updatecommodity", method = RequestMethod.POST)
+    public Map<String, Object> updateCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String commodityid = rawmap.get("commodityid");
+        String name = rawmap.get("name");
+        String merchantid = rawmap.get("mercantid")
+        String counts = rawmap.get("counts");
+        String price = rawmap.get("price");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                commoditylist conflict = commodityService.getCommodityByCombine(commodityService.getMerchantByCommodity(Integer.parseInt(commodityid)).getCommodityid(),name);
+                if(conflict != null){
+                    map.put("success", false);
+                    map.put("message", "已存在相同商品信息！");
+                }else{
+                    commodityService.updateOldCommodity(new commoditylist(Integer.parseInt(commodityid), name, 0, Integer.parseInt(counts), Double.parseDouble(price)));
+                    map.put("success", true);
+                    map.put("message", "商品信息已更新！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改商品信息失败！");
+        }
+        return map;
+    }
+
+    //商户删除商品信息功能
+    @RequestMapping(value = "/removecommodity", method = RequestMethod.POST)
+    public Map<String, Object> removeCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String commodityid = rawmap.get("commodityid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                commodityService.removeOldCommodity(Integer.parseInt(commodityid));
+                map.put("success", true);
+                map.put("message", "商户信息已删除！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "删除商户信息失败！");
+        }
+        return map;
+    }
+
+    //商户查询自身的商品清单
+    @RequestMapping(value = "/listcommodity",method = RequestMethod.POST)
+    public Map<String,Object> listcommodity(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String commodityid = rawmap.get("commodityid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<commoditylist> rtlist = commodityService.listCommodityByMerchantid(Integer.parseInt(merchantid));
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+    
 }

@@ -32,7 +32,7 @@ public class touristcontroller {
     @Resource
     private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
     @Resource
-    private parkingorderservice parkingorderService = new parkingorderservicempl(); 
+    private parkingorderservice parkingorderService = new parkingorderserviceimpl();
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -110,6 +110,47 @@ public class touristcontroller {
             e.printStackTrace();
             map.put("success",false);
             map.put("message","用户登录失败！");
+        }
+        return map;
+    }
+
+    //旅客用户修改密码功能
+    @RequestMapping(value = "/updatepassword",method = RequestMethod.POST)
+    public Map<String,Object> updatePassword(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String newpasswords = rawmap.get("newpasswords");
+        String renewpasswords = rawmap.get("renewpasswords");
+        String passwords = rawmap.get("passwords");
+
+        try{
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                if(renewpasswords.equals(newpasswords)) {
+                    tourist exist = touristService.getTouristByID(tokenentity.getId());
+                    String inpwd = securityService.SHA1(passwords+exist.getSalt());
+                    if(inpwd.equals(exist.getPasswords())) {
+                        touristService.updatePassword(tokenentity.getId(),newpasswords+exist.getSalt());
+                        map.put("success", true);
+                        map.put("message", "修改密码成功！");
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "用户密码错误！");
+                    }
+                }else{
+                    map.put("success",false);
+                    map.put("message","确认密码不一致！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","修改密码失败！");
         }
         return map;
     }
@@ -476,7 +517,7 @@ public class touristcontroller {
     }
 
     //旅客用户预定泊车功能
-    @RequestMapping(value = "/selectparking",method = RequestMethod.POST)
+    /*@RequestMapping(value = "/selectparking",method = RequestMethod.POST)
     public Map<String,Object> selectparking(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
@@ -515,10 +556,10 @@ public class touristcontroller {
             map.put("message", "用户预定车位失败！");
         }
         return map;
-    }
+    }*/
 
     //列出空余车位功能, 未完成！！！！
-    @RequestMapping(value = "/listparking",method = RequestMethod.POST)
+    /*@RequestMapping(value = "/listparking",method = RequestMethod.POST)
     public Map<String,Object> listParking(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
@@ -559,5 +600,5 @@ public class touristcontroller {
             map.put("message", "获取列表失败！");
         }
         return map;
-    }    
+    }*/
 }

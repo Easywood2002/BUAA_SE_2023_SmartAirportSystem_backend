@@ -1,15 +1,32 @@
 package com.example.smartairportsystem.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.smartairportsystem.entity.merchant;
+import com.example.smartairportsystem.entity.token;
+import com.example.smartairportsystem.service.impl.merchantserviceimpl;
+import com.example.smartairportsystem.service.impl.securityserviceimpl;
+import com.example.smartairportsystem.service.impl.tokenserviceimpl;
+import com.example.smartairportsystem.service.merchantservice;
+import com.example.smartairportsystem.service.securityservice;
+import com.example.smartairportsystem.service.tokenservice;
+import com.example.smartairportsystem.utils.TokenTypeUtil;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/merchant")
 public class merchantcontroller {
-    @Resource
+    /*@Resource
     private merchantservice merchantService = new merchantserviceimpl();
+    @Resource
+    private securityservice securityService = new securityserviceimpl();
+    @Resource
+    private tokenservice tokenService = new tokenserviceimpl();
 
     //商户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -105,7 +122,7 @@ public class merchantcontroller {
         String merchanttk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -183,5 +200,5 @@ public class merchantcontroller {
     //         map.put("message", "删除实名信息失败！");
     //     }
     //     return map;
-    // }
+    // }*/
 }

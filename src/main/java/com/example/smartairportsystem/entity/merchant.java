@@ -13,14 +13,16 @@ public class merchant {
     private String salt;
     private String shopname;
     private String email;
+    private String numberid;
 
-    public merchant(Integer merchantid, String realname,String passwords,String salt,String shopname,String email){
+    public merchant(Integer merchantid, String realname,String passwords,String salt,String shopname,String email,String numberid){
         this.merchantid = merchantid;
         this.realname = realname;
-        this.passwords = passwords;
         this.salt = salt;
+        this.passwords = passwords;
         this.shopname = shopname;
         this.email = email;
+        this.numberid = numberid;
     }
 
     public Integer getMerchantid() {
@@ -29,6 +31,22 @@ public class merchant {
 
     public void setMerchantid(Integer merchantid) {
         this.merchantid = merchantid;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
+    }
+
+    public String getNumberid() {
+        return numberid;
+    }
+
+    public void setNumberid(String numberid) {
+        this.numberid = numberid;
     }
 
     public String getRealname() {
@@ -45,14 +63,6 @@ public class merchant {
 
     public void setPasswords(String passwords) {
         this.passwords = passwords;
-    }
-
-    public String getShopname() {
-        return shopname;
-    }
-
-    public void setShopname(String shopname) {
-        this.shopname = shopname;
     }
 
     public String getEmail() {

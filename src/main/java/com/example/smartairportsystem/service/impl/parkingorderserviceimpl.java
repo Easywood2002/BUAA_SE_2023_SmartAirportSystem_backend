@@ -13,7 +13,7 @@ public class parkingorderserviceimpl implements parkingorderservice {
     @Autowired
     private parkingordermapper parkingorderMapper;
 
-    public void addNewOrder(parkingorder newrorder){parkingorderMapper.addNewOrder(neworder);}
+    public void addNewOrder(parkingorder neworder){parkingorderMapper.addNewOrder(neworder);}
     public void removeOldOrder(Integer orderid){parkingorderMapper.removeOldOrder(orderid);}
     public void selectParkingForOrderid(Integer orderid,Integer parkingspaceid){parkingorderMapper.selectParkingForOrderid(orderid,parkingspaceid);}
     public parkingorder getOrderByID(Integer orderid){return parkingorderMapper.getOrderByID(orderid);}

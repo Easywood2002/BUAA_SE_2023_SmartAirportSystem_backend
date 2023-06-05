@@ -51,8 +51,8 @@ create table luggage(
 create table parkingorder(
 	orderid int primary key auto_increment,
 	touristid int,
-	parktime double,
-	price double,
+	starttime varchar(255),
+	endtime varchar(255),
 	parkingspaceid int
 );
 
@@ -114,13 +114,24 @@ create table flight(
 	terminal int
 );
 
+create table merchantrequest(
+    requestid int primary key auto_increment,
+    realname varchar(255),
+    passwords varchar(255),
+    salt varchar(255),
+    shopname varchar(255),
+    email varchar(255),
+    numberid varchar(255)
+);
+
 create table merchant(
 	merchantid int primary key auto_increment,
 	realname varchar(255),
 	passwords varchar(255),
     salt varchar(255),
 	shopname varchar(255),
-	email varchar(255)
+	email varchar(255),
+    numberid varchar(255)
 );
 
 create table commoditylist(
@@ -129,6 +140,28 @@ create table commoditylist(
 	merchantid int,
 	counts int,
 	price double
+);
+
+create table commodityorder(
+    orderid int primary key auto_increment,
+    counts int,
+    commodityid int,
+    touristid int
+);
+
+create table information(
+    informationid int primary key auto_increment,
+    type varchar(255),
+    touristid int,
+    staffid int,
+    sendtime varchar(255),
+    content varchar(255)
+);
+
+create table notifyaudience(
+    audienceid int primary key auto_increment,
+    touristid int,
+    ticketid int
 );
 
 drop trigger if exists delflight;

@@ -9,15 +9,15 @@ public class parkingorder {
     private Integer orderid;
 
     private Integer touristid;
-    private Double parktime;
-    private Double price;
+    private String starttime;
+    private String endtime;
     private Integer parkingspaceid;
 
-    public parkingorder(Integer orderid,Integer touristid,Double parktime,Double price,Integer parkingspaceid){
+    public parkingorder(Integer orderid,Integer touristid,String starttime,String endtime,Integer parkingspaceid){
         this.orderid = orderid;
         this.touristid = touristid;
-        this.parktime = parktime;
-        this.price = price;
+        this.starttime = starttime;
+        this.endtime = endtime;
         this.parkingspaceid = parkingspaceid;
     }
 
@@ -37,20 +37,20 @@ public class parkingorder {
         this.touristid = touristid;
     }
 
-    public Double getParktime() {
-        return parktime;
+    public String getStarttime() {
+        return starttime;
     }
 
-    public void setParktime(Double parktime) {
-        this.parktime = parktime;
+    public void setStarttime(String starttime) {
+        this.starttime = starttime;
     }
 
-    public Double getPrice() {
-        return price;
+    public String getEndtime() {
+        return endtime;
     }
 
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setEndtime(String endtime) {
+        this.endtime = endtime;
     }
 
     public Integer getParkingspaceid() {

@@ -6,23 +6,23 @@ import javax.persistence.Id;
 @Entity
 public class parkingspace {
     @Id
-    private Integer parkingpostid;
+    private Integer parkingspaceid;
 
     private String location;
     private Double price;
 
-    public parkingspace(Integer parkingpostid,String location,Double price){
-        this.parkingpostid = parkingpostid;
+    public parkingspace(Integer parkingspaceid,String location,Double price){
+        this.parkingspaceid = parkingspaceid;
         this.location = location;
         this.price = price;
     }
 
-    public Integer getParkingpostid() {
-        return parkingpostid;
+    public Integer getParkingspaceid() {
+        return parkingspaceid;
     }
 
-    public void setParkingpostid(Integer parkingpostid) {
-        this.parkingpostid = parkingpostid;
+    public void setParkingspaceid(Integer parkingspaceid) {
+        this.parkingspaceid = parkingspaceid;
     }
 
     public String getLocation() {

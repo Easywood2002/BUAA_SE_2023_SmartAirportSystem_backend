@@ -7,6 +7,10 @@
         insert into airlinecompany(email,name,passwords,salt) values(#{email},#{name},sha1(#{passwords}),#{salt})
     </insert>
 
+    <update id="updatePassword">
+        update airlinecompany set passwords = sha1(#{newpasswords}) where companyid = #{companyid}
+    </update>
+
     <select id="getCompanyByEmail" resultType="com.example.smartairportsystem.entity.airlinecompany">
         select * from airlinecompany where email = #{email}
     </select>

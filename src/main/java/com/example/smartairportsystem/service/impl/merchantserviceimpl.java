@@ -6,6 +6,8 @@ import com.example.smartairportsystem.service.merchantservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("merchantservice")
 public class merchantserviceimpl implements merchantservice{
     @Autowired

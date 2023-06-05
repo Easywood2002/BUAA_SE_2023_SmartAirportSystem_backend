@@ -6,29 +6,47 @@ import javax.persistence.Id;
 @Entity
 public class merchantrequest {
     @Id
-    private Integer loginRequest;
+    private Integer requestid;
 
     private String realname;
-    private String nickname;
     private String passwords;
     private String salt;
+    private String shopname;
     private String email;
+    private String numberid;
 
-    public merchantrequest(Integer loginRequest, String realname,String nickname,String passwords,String salt,String email){
-        this.loginRequest = loginRequest;
+    public merchantrequest(Integer requestid, String realname,String passwords,String salt,String shopname,String email,String numberid){
+        this.requestid = requestid;
         this.realname = realname;
-        this.nickname = nickname;
-        this.passwords = passwords;
         this.salt = salt;
+        this.passwords = passwords;
+        this.shopname = shopname;
         this.email = email;
+        this.numberid = numberid;
     }
 
-    public Integer getLoginRequest() {
-        return loginRequest;
+    public Integer getRequestid() {
+        return requestid;
     }
 
-    public void setLoginRequest(Integer loginRequest) {
-        this.loginRequest = loginRequest;
+    public void setRequestid(Integer requestid) {
+        this.requestid = requestid;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
+    }
+
+    public String getNumberid() {
+        return numberid;
+    }
+
+    public void setNumberid(String numberid) {
+        this.numberid = numberid;
     }
 
     public String getRealname() {
@@ -37,14 +55,6 @@ public class merchantrequest {
 
     public void setRealname(String realname) {
         this.realname = realname;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     public String getPasswords() {

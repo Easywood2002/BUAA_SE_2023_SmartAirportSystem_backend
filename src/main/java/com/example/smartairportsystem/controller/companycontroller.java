@@ -1,9 +1,6 @@
 package com.example.smartairportsystem.controller;
 
-import com.example.smartairportsystem.entity.airlinecompany;
-import com.example.smartairportsystem.entity.flight;
-import com.example.smartairportsystem.entity.ticket;
-import com.example.smartairportsystem.entity.token;
+import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.TokenTypeUtil;
@@ -104,6 +101,47 @@ public class companycontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "航司登录失败！");
+        }
+        return map;
+    }
+
+    //航空公司修改密码功能
+    @RequestMapping(value = "/updatepassword",method = RequestMethod.POST)
+    public Map<String,Object> updatePassword(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String newpasswords = rawmap.get("newpasswords");
+        String renewpasswords = rawmap.get("renewpasswords");
+        String passwords = rawmap.get("passwords");
+
+        try{
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                if(renewpasswords.equals(newpasswords)) {
+                    airlinecompany exist = companyService.getCompanyByID(tokenentity.getId());
+                    String inpwd = securityService.SHA1(passwords+exist.getSalt());
+                    if(inpwd.equals(exist.getPasswords())) {
+                        companyService.updatePassword(tokenentity.getId(),newpasswords+exist.getSalt());
+                        map.put("success", true);
+                        map.put("message", "修改密码成功！");
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "航司密码错误！");
+                    }
+                }else{
+                    map.put("success",false);
+                    map.put("message","确认密码不一致！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","修改密码失败！");
         }
         return map;
     }

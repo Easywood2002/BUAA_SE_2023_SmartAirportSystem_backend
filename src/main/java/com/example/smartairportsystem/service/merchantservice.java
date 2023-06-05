@@ -2,6 +2,8 @@ package com.example.smartairportsystem.service;
 
 import com.example.smartairportsystem.entity.merchant;
 
+import java.util.List;
+
 public interface merchantservice {
     public void logupNewMerchant(merchant newmerchant);
     public merchant getMerchantByEmail(String email);

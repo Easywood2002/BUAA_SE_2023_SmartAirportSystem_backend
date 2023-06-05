@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface parkingordermapper {
-    public void addNewOrder(parkingorder newrorder);
+    public void addNewOrder(parkingorder neworder);
     public void removeOldOrder(Integer orderid);
     public void selectParkingForOrderid(@Param("orderid") Integer orderid,@Param("parkingspaceid") Integer parkingspaceid);
     public parkingorder getOrderByID(Integer orderid);

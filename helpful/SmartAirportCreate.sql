@@ -28,7 +28,8 @@ create table staff(
 	positionpost varchar(255),
 	email varchar(255),
 	passwords varchar(255),
-	salt varchar(255)
+	salt varchar(255),
+	idnumber varchar(255)
 );
 
 create table repairrecord(
@@ -121,7 +122,7 @@ create table merchantrequest(
     salt varchar(255),
     shopname varchar(255),
     email varchar(255),
-    numberid varchar(255)
+    idnumber varchar(255)
 );
 
 create table merchant(
@@ -131,7 +132,7 @@ create table merchant(
     salt varchar(255),
 	shopname varchar(255),
 	email varchar(255),
-    numberid varchar(255)
+    idnumber varchar(255)
 );
 
 create table commoditylist(

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.parkingorder">
     </resultMap>
     <insert id="addNewOrder" parameterType="com.example.smartairportsystem.entity.parkingorder">
-        insert into parkingorder(touristid,parktime,price,parkingspaceid) values(#{touristid},#{parktime},#{price},#{parkingspaceid})
+        insert into parkingorder(touristid,starttime,endtime,parkingspaceid) values(#{touristid},#{starttime},#{endtime},#{parkingspaceid})
     </insert>
 
     <delete id="removeOldOrder">
@@ -19,7 +19,7 @@
         select * from parkingorder where parkingspaceid = #{parkingspaceid}
     </select>
 
-    <select id="getOrderByTouristid" resultType="com.example.smartairportsystem.entity.parkingorder">
-        select * from parkingorder where touristid = #{touristid}
+    <select id="getOrderByTouristid" resultType="com.example.smartairportsystem.entity.bowl.myparkingorder">
+        select po.orderid,po.starttime,po.endtime,ps.location,ps.price from parkingorder po, parkingspace ps where touristid = #{touristid} and ps.parkingspaceid = po.parkingspaceid
     </select>
 </mapper>

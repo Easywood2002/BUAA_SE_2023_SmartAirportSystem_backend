@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface merchantrequestmapper {
-    public void logupNewMerchantrequest(merchantrequest logupNewMerchantrequest);
+    public void addNewMerchantrequest(merchantrequest newrequest);
 }

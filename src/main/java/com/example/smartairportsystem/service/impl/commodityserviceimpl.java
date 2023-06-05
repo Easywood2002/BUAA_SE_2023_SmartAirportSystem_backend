@@ -15,10 +15,10 @@ public class commodityserviceimpl implements commodityservice {
     private commoditymapper commodityMapper;
 
     public commoditylist getCommodityByID(Integer commodityid){return commodityMapper.getCommodityByID(commodityid);}
-    public commoditylist getCommodityByCombine(Integer mercantid,String name){return commodityMapper.getCommodityByCombine(mercantid,name);}
-    public Integer getMerchantByCommodity(Integer commodityid){return commodityMapper.getMerchantByCommodity(commodityid);};
+    public commoditylist getCommodityByCombine(Integer merchantid,String name){return commodityMapper.getCommodityByCombine(merchantid,name);}
+    public Integer getMerchantidByCommodityid(Integer commodityid){return commodityMapper.getMerchantidByCommodityid(commodityid);}
     public void addNewCommodity(commoditylist newcommodity){commodityMapper.addNewCommodity(newcommodity);}
     public void updateOldCommodity(commoditylist newcommodity){commodityMapper.updateOldCommodity(newcommodity);}
     public void removeOldCommodity(Integer commodityid){commodityMapper.removeOldCommodity(commodityid);}
-    public List<commoditylist> listCommodityByMerchantid(Integer mercantid){return commodityMapper.listCommodityByMerchantid(mercantid);}
+    public List<commoditylist> listCommodityByMerchantid(Integer merchantid){return commodityMapper.listCommodityByMerchantid(merchantid);}
 }

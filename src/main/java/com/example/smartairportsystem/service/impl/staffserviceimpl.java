@@ -12,7 +12,8 @@ public class staffserviceimpl implements staffservice{
     private staffmapper staffMapper;
 
     public void logupNewStaff(staff newstaff){staffMapper.logupNewStaff(newstaff);}
-    public void removeOldStaff(Integer staffid){staffMapper.removeOldStaff(staffid);};
+    public void removeOldStaff(Integer staffid){staffMapper.removeOldStaff(staffid);}
     public staff getStaffByEmail(String email){return staffMapper.getStaffByEmail(email);}
+    public staff getStaffByIdnumber(String  idnumber){return staffMapper.getStaffByIdnumber(idnumber);}
     public staff getStaffByID(Integer staffid){return staffMapper.getStaffByID(staffid);}
 }

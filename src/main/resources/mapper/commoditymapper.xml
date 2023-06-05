@@ -15,7 +15,7 @@
         select * from commoditylist where merchantid = #{merchantid} and name = #{name}
     </select>
 
-    <select id="getMerchantByCommodity" resultType="com.example.smartairportsystem.entity.commoditylist">
+    <select id="getMerchantidByCommodityid" resultType="com.example.smartairportsystem.entity.merchant">
         select merchantid from commoditylist where commodityid = #{commodityid}
     </select>
 

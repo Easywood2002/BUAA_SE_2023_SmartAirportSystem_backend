@@ -13,14 +13,16 @@ public class staff {
     private String email;
     private String passwords;
     private String salt;
+    private String idnumber;
 
-    public staff(Integer staffid,String realname, String positionpost,String email,String passwords,String salt){
+    public staff(Integer staffid,String realname, String positionpost,String email,String passwords,String salt,String idnumber){
         this.staffid = staffid;
         this.realname = realname;
         this.positionpost = positionpost;
         this.email = email;
         this.passwords = passwords;
         this.salt = salt;
+        this.idnumber = idnumber;
     }
 
     public Integer getStaffid(){
@@ -69,5 +71,13 @@ public class staff {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(String idnumber) {
+        this.idnumber = idnumber;
     }
 }

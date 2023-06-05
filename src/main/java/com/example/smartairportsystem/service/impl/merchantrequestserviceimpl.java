@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @Service("merchantrequestservice")
 public class merchantrequestserviceimpl implements merchantrequestservice{
     @Autowired
-    private merchantmapper merchantMapper;
+    private merchantrequestmapper merchantrequestMapper;
 
-    public void logupNewMerchantrequest(merchantrequest newmerchantrequest){merchantrequestMapper.logupNewMerchantrequest(newmerchantrequest);}
+    public void addNewMerchantrequest(merchantrequest newrequest){merchantrequestMapper.addNewMerchantrequest(newrequest);}
 }

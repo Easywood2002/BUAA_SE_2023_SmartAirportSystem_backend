@@ -2,6 +2,7 @@ package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.entity.bowl.eticket;
+import com.example.smartairportsystem.entity.bowl.myparkingorder;
 import com.example.smartairportsystem.entity.bowl.seat;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
@@ -33,6 +34,8 @@ public class touristcontroller {
     private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
     @Resource
     private parkingorderservice parkingorderService = new parkingorderserviceimpl();
+    @Resource
+    private parkingspaceservice parkingspaceService = new parkingspaceserviceimpl();
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -104,7 +107,7 @@ public class touristcontroller {
                 }
             } else {
                 map.put("success", false);
-                map.put("message", "用户名不存在！");
+                map.put("message", "旅客用户不存在！");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -523,8 +526,9 @@ public class touristcontroller {
 
         //表单取参
         String touristtk = rawmap.get("token");
-        String parktime = rawmap.get("parktime");
-        String location = rawmap.get("parkingspaceid");
+        String starttime = rawmap.get("starttime");
+        String endtime = rawmap.get("endtime");
+        String parkingspaceid = rawmap.get("parkingspaceid");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
@@ -532,40 +536,38 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                parkingorder order = parkingorderService.getOrderByTouristid(tokenentity.getId());
-                //旅客尚未选座
+                myparkingorder order = parkingorderService.getOrderByTouristid(tokenentity.getId());
+                //用户尚未预定
                 if(order == null) {
-                    parkingorder space = parkingorderService.getOrderBySpaceid(parkingspaceid);
-                    //座位已选
-                    if(space != null){
+                    parkingorder exist = parkingorderService.getOrderBySpaceid(Integer.parseInt(parkingspaceid));
+                    if(exist != null){
                         map.put("success", false);
                         map.put("message", "停车位已被其他旅客选择！");
                     }else {
-                        parkingorderService.addNewOrder(0,Integer.parseInt(0,tokenentity.getId(),parktime,price,parkingspaceid));
+                        parkingorderService.addNewOrder(new parkingorder(0, tokenentity.getId(), starttime, endtime, Integer.parseInt(parkingspaceid)));
                         map.put("success", true);
                         map.put("message", "用户预定车位成功！");
                     }
                 }else{
                     map.put("success", false);
-                    map.put("message", "不可重复预定车位！");
+                    map.put("message", "不可重复预订！");
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "用户预定车位失败！");
+            map.put("message", "预定车位失败！");
         }
         return map;
     }
 
-    //游客用户查询预定泊车订单
+    //旅客用户查询预定泊车订单
     @RequestMapping(value = "/listparkingorder",method = RequestMethod.POST)
     public Map<String,Object> listparkingorder(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
         String touristtk = rawmap.get("token");
-        String orderid = rawmap.get("orderid");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
@@ -573,7 +575,8 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<parkingorder> rtlist = parkingorderService.getOrderByTouristid(tokenentity.getId());
+                List<myparkingorder> rtlist = new ArrayList<>();
+                rtlist.add(parkingorderService.getOrderByTouristid(tokenentity.getId()));
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -602,24 +605,23 @@ public class touristcontroller {
             }else {
                 parkingorderService.removeOldOrder(Integer.parseInt(orderid));
                 map.put("success", true);
-                map.put("message", "用户退订成功");
+                map.put("message", "车位退订成功!");
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "用户退订失败！");
+            map.put("message", "车位退订失败！");
         }
         return map;
     }
 
-    //列出空余车位功能, 未完成！！！！
+    //列出空余车位功能
     @RequestMapping(value = "/listparkinspace",method = RequestMethod.POST)
     public Map<String,Object> listParkingspace(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
         String touristtk = rawmap.get("token");
-        String orderid = rawmap.get("orderid");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
@@ -627,24 +629,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                parkingorder order = parkingorderservice.getOrderByID(Integer.parseInt(orderid));
-                ticket tkt = ticketService.getTicketByID(record.getTicketid());
-                int mount = ;
-                // List<parkingorder> polist = parkingorderService.getRecordByTicketid(record.getTicketid());
-                List<parkingspace> rtlist = new ArrayList<>();
-                for(int i=1;i<=mount;i++){
-                    //均初始化为未选择座位（可用蓝色标识）
-                    rtlist.add(new parkingspace(i,));
-                }
-
-                // if(! ps.available().equals("0")) {
-                //     //根据车位信息设置为已选择车位（可用灰色标识）
-                //        rtlist.set(Integer.parseInt(ps.getLocation()) - 1, new parkingspace(Integer.parseInt(ps.getLocation()), "true"));
-                // }
-                // //若当前用户已选择车位则单独标出（可用绿色标识）
-                // if(! order.getLocation().equals("0")){
-                //     rtlist.set(Integer.parseInt(order.getLocation()) - 1,new parkingspace(Integer.parseInt(order.getLocation()),"mine"));
-                // }
+                List<parkingspace> rtlist = parkingspaceService.listEmptyParkingspace();
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -654,6 +639,5 @@ public class touristcontroller {
             map.put("message", "获取列表失败！");
         }
         return map;
-
     }
 }

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.staff">
     </resultMap>
     <insert id="logupNewStaff" parameterType="com.example.smartairportsystem.entity.staff">
-        insert into staff(realname,positionpost,email,passwords,salt) values(#{realname},#{positionpost},#{email},sha1(#{passwords}),#{salt},#{vip})
+        insert into staff(realname,positionpost,email,passwords,salt,idnumber) values(#{realname},#{positionpost},#{email},sha1(#{passwords}),#{salt},#{idnumber})
     </insert>
 
     <select id="getStaffByEmail" resultType="com.example.smartairportsystem.entity.staff">
@@ -13,6 +13,10 @@
 
     <select id="getStaffByID" resultType="com.example.smartairportsystem.entity.staff">
         select * from staff where staffid = #{staffid}
+    </select>
+
+    <select id="getStaffByIdnumber" resultType="com.example.smartairportsystem.entity.staff">
+        select * from staff where idnumber = #{idnumber}
     </select>
 
     <delete id="removeOldStaff">

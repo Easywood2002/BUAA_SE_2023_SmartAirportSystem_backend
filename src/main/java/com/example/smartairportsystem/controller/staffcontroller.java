@@ -1,17 +1,31 @@
 package com.example.smartairportsystem.controller;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.smartairportsystem.entity.staff;
+import com.example.smartairportsystem.entity.token;
+import com.example.smartairportsystem.service.impl.securityserviceimpl;
+import com.example.smartairportsystem.service.impl.staffserviceimpl;
+import com.example.smartairportsystem.service.impl.tokenserviceimpl;
+import com.example.smartairportsystem.service.securityservice;
+import com.example.smartairportsystem.service.staffservice;
+import com.example.smartairportsystem.service.tokenservice;
+import com.example.smartairportsystem.utils.TokenTypeUtil;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.*;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/staff")
 public class staffcontroller {
     @Resource
-    private staff staffService = new staffserviceimpl();
+    private staffservice staffService = new staffserviceimpl();
     @Resource
-    private repairservice repairService = new repairserviceimpl();
+    private securityservice securityService = new securityserviceimpl();
+    @Resource
+    private tokenservice tokenService = new tokenserviceimpl();
+    //@Resource
+    //private repairservice repairService = new repairserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -24,20 +38,27 @@ public class staffcontroller {
         String email = rawmap.get("email");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
+        String idnumber = rawmap.get("idnumber");
 
         try{
             if(repasswords.equals(passwords)) {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                staff exist = staffService.getStaffByEmail(email);
+                staff exist = staffService.getStaffByIdnumber(idnumber);
                 if (exist != null) {
                     map.put("success", false);
-                    map.put("message", "邮箱已被注册！");
+                    map.put("message", "该身份证号已被注册！");
                 } else {
-                    staffService.logupNewStaff(new staff(0,realname,positionpost,email,passwords+salt,salt));
-                    map.put("success", true);
-                    map.put("message", "用户注册成功！");
+                    exist = staffService.getStaffByEmail(email);
+                    if (exist != null){
+                        map.put("success", false);
+                        map.put("message", "该邮箱已被注册！");
+                    }else {
+                        staffService.logupNewStaff(new staff(0, realname, positionpost, email, passwords + salt, salt, idnumber));
+                        map.put("success", true);
+                        map.put("message", "员工注册成功！");
+                    }
                 }
             }else{
                 map.put("success", false);
@@ -46,7 +67,7 @@ public class staffcontroller {
         }catch (Exception e){
             e.printStackTrace();
             map.put("success",false);
-            map.put("message","用户注册失败！");
+            map.put("message","员工注册失败！");
         }
         return map;
     }
@@ -85,7 +106,7 @@ public class staffcontroller {
                 }
             } else {
                 map.put("success", false);
-                map.put("message", "用户名不存在！");
+                map.put("message", "员工不存在！");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -95,7 +116,7 @@ public class staffcontroller {
         return map;
     }
 
-    //列出该工作人员的实名信息功能
+    /*//列出该工作人员的实名信息功能
     @RequestMapping(value = "/liststaff",method = RequestMethod.POST)
     public Map<String,Object> listStaff(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
@@ -119,8 +140,9 @@ public class staffcontroller {
             map.put("message", "获取信息失败！");
         }
         return map;
-    }
-    //工作人员删除实名信息功能
+    }*/
+
+    /*//工作人员删除实名信息功能
     @RequestMapping(value = "/removestaff",method = RequestMethod.POST)
     public Map<String,Object> removeStaff(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
@@ -144,7 +166,7 @@ public class staffcontroller {
             map.put("message", "用户注销失败！");
         }
         return map;
-    }
+    }*/
 
     //工作人员添加报修请求
 

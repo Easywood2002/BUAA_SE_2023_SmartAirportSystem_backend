@@ -11,5 +11,7 @@ public class merchantrequestserviceimpl implements merchantrequestservice{
     @Autowired
     private merchantmapper merchantMapper;
 
-    public void logupNewMerchantrequest(merchantrequest newmerchantrequest){merchantrequestMapper.logupNewMerchantrequest(newmerchantrequest);}
+    public void addNewMerchantrequest(merchantrequest newmerchantrequest){merchantrequestMapper.logupNewMerchantrequest(newmerchantrequest);}
+    public merchantrequest getMerchantrequestByEmail(String email){merchantrequestMapper.getMerchantrequestBtEmail(email);}
+    public void removeOldMerchantrequest(String email){merchantrequestMapper.removeOldMerchantrequest(email);}
 }

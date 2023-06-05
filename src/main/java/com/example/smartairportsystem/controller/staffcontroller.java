@@ -12,6 +12,8 @@ public class staffcontroller {
     private staff staffService = new staffserviceimpl();
     @Resource
     private repairrecordservice repairrecordService = new repairrecordserviceimpl();
+    @Resource
+    private merchantservice merchantService = new merchantserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -245,13 +247,13 @@ public class staffcontroller {
     }
 
     //工作人员审核商户入驻请求功能
-    @RequestMapping(value = "/examinerepairrecord", method = RequestMethod.POST)
-    public Map<String, Object> examineRepairrecord(@RequestParam Map<String,String> rawmap){
+    @RequestMapping(value = "/examinemerchantrequest", method = RequestMethod.POST)
+    public Map<String, Object> examineMerchantrequest(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
         String stafftk = rawmap.get("token");
-        String recordid = rawmap.get("recordid");
+        String email = rawmap.get("email");
         String approved = rawmap.get("approved");
 
         try {
@@ -260,20 +262,23 @@ public class staffcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                repairrecord exist = repairService.getRepairrecordByID(Integer.parseInt(recordid));
-                if (exist == null) {
+                merchant exist = merchantService.getMerchantByEmail(email);
+                if (exist != null) {
                     map.put("success", false);
-                    map.put("message", "该报修请求不存在！");
+                    map.put("message", "该商户已入驻！");
                 } else {
-                    repairService.examineRepairrecord(Integer.parseInt(recordid),approved);
+                    if (approved == "Approve") {
+                        merchantService.logupNewMerchant(new merchant(0,exist.getRealname,exist.getID,exist.getPasswords,exist.getSalt,exist.getShopname,exist.getEmail));
+                    }
+                    merchantrequestService.removeOldMerchantrequest(email);
                     map.put("success", true);
-                    map.put("message", "报修请求审核成功！");
+                    map.put("message", "商户入驻请求审核成功！");
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "报修请求审核失败！");
+            map.put("message", "商户入驻请求审核失败！");
         }
         return map;
     }

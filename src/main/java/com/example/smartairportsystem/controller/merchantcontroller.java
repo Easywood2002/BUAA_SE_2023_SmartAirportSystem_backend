@@ -13,15 +13,16 @@ public class merchantcontroller {
     @Resource
     private commodityservice commodityService = new commodityserviceimpl();
     @Resource
-    private merchantrequestservice merchantrequestService = new merchantserviceimpl();
+    private merchantrequestservice merchantrequestService = new merchantrequestserviceimpl();
 
-    //商户注册功能
+    //商户提交入驻申请功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
     public Map<String,Object> logupMerchant(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
         String realname = rawmap.get("realname");
+        String nickname = rawmap.get("nickname");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
@@ -42,9 +43,9 @@ public class merchantcontroller {
                     map.put("success", false);
                     map.put("message", "该邮箱已被注册！");
                 } else {
-                    merchantService.logupNewMerchant(new merchant(0,realname,idnumber,passwords+salt,salt,shopname,email));
+                    merchantrequestService.addNewMerchantrequest(new merchantrequest(0,realname,nickname,idnumber,passwords+salt,salt,shopname,email));
                     map.put("success", true);
-                    map.put("message", "用户注册成功！");
+                    map.put("message", "商户提交入驻申请成功！");
                 }
             }else{
                 map.put("success", false);
@@ -54,6 +55,39 @@ public class merchantcontroller {
             e.printStackTrace();
             map.put("success",false);
             map.put("message","用户注册失败！");
+        }
+        return map;
+    }
+
+    //商户撤销入驻请求功能
+    @RequestMapping(value = "/removemerchant",method = RequestMethod.POST)
+    public Map<String,Object> removeMerchant(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String email = rawmap.get("email");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                merchantrequest exist = merchantrequestService.getMerchantrequestByEmail(email);
+                if (exist == null) {
+                    map.put("success", false);
+                    map.put("message", "该商户未提交入驻请求！");
+                }else {
+                    merchantrequestService.removeOldMerchantrequest(email);
+                    map.put("success", true);
+                    map.put("message", "商户入驻请求已撤销！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "商户入驻请求撤销失败！");
         }
         return map;
     }
@@ -136,11 +170,11 @@ public class merchantcontroller {
         //表单取参
         String merchanttk = rawmap.get("token");
         String realname = rawmap.get("realname");
+        String idnumber = rawmap.get("idnumber");
         String passwords = rawmap.get("passwords");
         String repasswords = rawmap.get("repasswords");
         String shopname = rawmap.get("shopname");
         String email = rawmap.get("email");
-        String idnumber = rawmap.get("idnumber");
 
         try {
             token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
@@ -193,45 +227,6 @@ public class merchantcontroller {
             map.put("success", false);
             map.put("message", "商户信息注销失败！");
         }
-        return map;
-    }
-
-    //商户提交入驻请求
-    @RequestMapping(value = "/addmerchantrequest", method = RequestMethod.POST)
-    public Map<String, Object> addMerchantrequest(@RequestParam Map<String,String> rawmap){
-        Map<String, Object> map = new HashMap<>();
-
-        //表单取参
-        String realname = rawmap.get("realname");
-        String nickname = rawmap.get("nickname");
-        String passwords = rawmap.get("passwords");
-        String repasswords = rawmap.get("repasswords");
-        String email = rawmap.get("email");
-
-        try{
-            if(repasswords.equals(passwords)) {
-                //对用户设置的密码加盐加密后保存
-                Random root = new Random((new Random()).nextInt());
-                String salt = root.nextInt()+"";
-                merchantrequest exist = merchantrequestService.getMerchantrequestByEmail(email);
-                if (exist != null) {
-                    map.put("success", false);
-                    map.put("message", "请勿重复提交请求！");
-                } else {
-                    merchantrequestService.logupNewMerchantrequest(new merchantrequest(0,realname,nickname,passwords+salt,salt,email));
-                    map.put("success", true);
-                    map.put("message", "商户入驻请求提交成功！");
-                }
-            }else{
-                map.put("success", false);
-                map.put("message", "确认密码不一致！");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success",false);
-            map.put("message","商户入驻请求提交失败！");
-        }
-
         return map;
     }
     

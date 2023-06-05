@@ -10,17 +10,21 @@ public class merchantrequest {
 
     private String realname;
     private String nickname;
+    private Integer idnumber;
     private String passwords;
     private String salt;
     private String email;
+    private String shopname;
 
-    public merchantrequest(Integer loginRequest, String realname,String nickname,String passwords,String salt,String email){
+    public merchantrequest(Integer loginRequest, String realname,String nickname,Integer idnumber,String passwords,String salt,String shopname,String email){
         this.loginRequest = loginRequest;
         this.realname = realname;
         this.nickname = nickname;
+        this.idnumber = idnumber;
         this.passwords = passwords;
         this.salt = salt;
         this.email = email;
+        this.shopname = shopname;
     }
 
     public Integer getLoginRequest() {
@@ -47,6 +51,14 @@ public class merchantrequest {
         this.nickname = nickname;
     }
 
+    public Integer getIdnumber() {
+        return idnumber;
+    }
+
+    public void setIdnumber(Integer idnumber) {
+        this.idnumber = idnumber;
+    }
+
     public String getPasswords() {
         return passwords;
     }
@@ -69,5 +81,13 @@ public class merchantrequest {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
+        this.shopname = shopname;
     }
 }

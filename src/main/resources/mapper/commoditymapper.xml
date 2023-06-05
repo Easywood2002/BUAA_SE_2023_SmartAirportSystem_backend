@@ -23,6 +23,10 @@
         update commoditylist set name = #{name},merchantid = #{merchantid},counts = #{counts},price = #{price} where commodityid = #{commodityid}
     </update>
 
+    <update id="updateCounts">
+        update commoditylist set counts = #{newcounts} where commodityid = #{commodityid}
+    </update>
+
     <delete id="removeOldCommodity">
         delete from commoditylist where commodityid = #{commodityid}
     </delete>

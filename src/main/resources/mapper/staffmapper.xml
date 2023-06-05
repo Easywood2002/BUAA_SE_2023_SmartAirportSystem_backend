@@ -7,6 +7,10 @@
         insert into staff(realname,positionpost,email,passwords,salt,idnumber) values(#{realname},#{positionpost},#{email},sha1(#{passwords}),#{salt},#{idnumber})
     </insert>
 
+    <update id="updatePassword">
+        update staff set passwords = sha1(#{passwords}) where staffid = #{staffid}
+    </update>
+
     <select id="getStaffByEmail" resultType="com.example.smartairportsystem.entity.staff">
         select * from staff where email = #{email}
     </select>

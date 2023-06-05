@@ -55,7 +55,7 @@ public class staffcontroller {
                         map.put("success", false);
                         map.put("message", "该邮箱已被注册！");
                     }else {
-                        staffService.logupNewStaff(new staff(0, realname, positionpost, email, passwords + salt, salt, idnumber));
+                        staffService.logupNewStaff(new staff(0, realname, Integer.parseInt(positionpost), email, passwords + salt, salt, idnumber));
                         map.put("success", true);
                         map.put("message", "员工注册成功！");
                     }
@@ -98,11 +98,11 @@ public class staffcontroller {
                         tokenService.updateOldToken(newtk, TokenTypeUtil.STAFF);
                     }
                     map.put("success", true);
-                    map.put("message", "用户登录成功！");
+                    map.put("message", "员工登录成功！");
                     map.put("token",stafftk);
                 }else {
                     map.put("success", false);
-                    map.put("message", "用户密码错误！");
+                    map.put("message", "员工密码错误！");
                 }
             } else {
                 map.put("success", false);
@@ -111,7 +111,48 @@ public class staffcontroller {
         }catch (Exception e){
             e.printStackTrace();
             map.put("success",false);
-            map.put("message","用户登录失败！");
+            map.put("message","员工登录失败！");
+        }
+        return map;
+    }
+
+    //员工修改密码功能
+    @RequestMapping(value = "/updatepassword",method = RequestMethod.POST)
+    public Map<String,Object> updatePassword(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+        String newpasswords = rawmap.get("newpasswords");
+        String renewpasswords = rawmap.get("renewpasswords");
+        String passwords = rawmap.get("passwords");
+
+        try{
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                if(renewpasswords.equals(newpasswords)) {
+                    staff exist = staffService.getStaffByID(tokenentity.getId());
+                    String inpwd = securityService.SHA1(passwords+exist.getSalt());
+                    if(inpwd.equals(exist.getPasswords())) {
+                        staffService.updatePassword(tokenentity.getId(),newpasswords+exist.getSalt());
+                        map.put("success", true);
+                        map.put("message", "修改密码成功！");
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "员工密码错误！");
+                    }
+                }else{
+                    map.put("success",false);
+                    map.put("message","确认密码不一致！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","修改密码失败！");
         }
         return map;
     }
@@ -168,9 +209,15 @@ public class staffcontroller {
         return map;
     }*/
 
-    //工作人员添加报修请求
+    //工作人员添加行李信息功能
 
-    //工作人员审核报修请求
+    //工作人员更新行李信息功能
+
+    //工作人员删除行李信息功能
+
+    //工作人员申请报修功能
+
+    //工作人员审核报修请求功能
     
-    //工作人员审核商户入驻请求
+    //工作人员审核商户入驻请求功能
 }

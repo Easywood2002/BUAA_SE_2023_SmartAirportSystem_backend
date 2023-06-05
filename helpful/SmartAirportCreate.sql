@@ -25,7 +25,7 @@ create table airlinecompanytoken(
 create table staff(
 	staffid int primary key auto_increment,
 	realname varchar(255),
-	positionpost varchar(255),
+	positionpost int,
 	email varchar(255),
 	passwords varchar(255),
 	salt varchar(255),
@@ -146,8 +146,12 @@ create table commoditylist(
 create table commodityorder(
     orderid int primary key auto_increment,
     counts int,
+    touristid int,
     commodityid int,
-    touristid int
+    terminal int,
+    departuregate varchar(255),
+    arrivetime varchar(255),
+    email varchar(255)
 );
 
 create table information(

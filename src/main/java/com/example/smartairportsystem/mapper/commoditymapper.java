@@ -15,6 +15,7 @@ public interface commoditymapper {
     public commoditylist getCommodityByCombine(@Param("merchantid") Integer merchantid,@Param("name") String name);
     public Integer getMerchantidByCommodityid(Integer commodityid);
     public void addNewCommodity(commoditylist newcommodity);
+    public void updateCounts(@Param("commodityid") Integer commodityid,@Param("newcounts") Integer newcounts);
     public void updateOldCommodity(commoditylist newcommodity);
     public void removeOldCommodity(Integer commodityid);
     public List<commoditylist> listCommodityByMerchantid(Integer merchantid);

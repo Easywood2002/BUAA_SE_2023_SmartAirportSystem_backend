@@ -1,11 +1,9 @@
 package com.example.smartairportsystem.entity.bowl;
 
 import javax.persistence.Entity;
-import javax.persistence.Id;
 
 @Entity
 public class myparkingorder {
-    @Id
     private Integer orderid;
 
     private String starttime;

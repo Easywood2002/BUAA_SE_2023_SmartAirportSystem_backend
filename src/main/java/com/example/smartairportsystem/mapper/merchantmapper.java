@@ -14,6 +14,7 @@ public interface merchantmapper {
     public merchant getMerchantByID(Integer merchantid);
     public merchant getMerchantByEmail(String email);
     public merchant getMerchantByIdnumber(String idnumber);
+    public List<merchant> listAllMerchant();
     public void updateOldMerchant(merchant newmerchant);
     public void updatePassword(@Param("merchantid") Integer merchantid, @Param("newpasswords") String newpasswords);
     public void removeOldMerchant(Integer merchantid);

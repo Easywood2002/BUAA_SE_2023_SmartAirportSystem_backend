@@ -9,13 +9,13 @@ public class staff {
     private Integer staffid;
 
     private String realname;
-    private String positionpost;
+    private Integer positionpost;
     private String email;
     private String passwords;
     private String salt;
     private String idnumber;
 
-    public staff(Integer staffid,String realname, String positionpost,String email,String passwords,String salt,String idnumber){
+    public staff(Integer staffid,String realname, Integer positionpost,String email,String passwords,String salt,String idnumber){
         this.staffid = staffid;
         this.realname = realname;
         this.positionpost = positionpost;
@@ -41,11 +41,11 @@ public class staff {
         this.realname = realname;
     }
 
-    public String getPositionpost(){
+    public Integer getPositionpost(){
         return this.positionpost;
     }
 
-    public void setPositionpost(String positionpost){
+    public void setPositionpost(Integer positionpost){
         this.positionpost = positionpost;
     }
 

@@ -2,6 +2,7 @@ package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.entity.bowl.eticket;
+import com.example.smartairportsystem.entity.bowl.mycommodityorder;
 import com.example.smartairportsystem.entity.bowl.myparkingorder;
 import com.example.smartairportsystem.entity.bowl.seat;
 import com.example.smartairportsystem.service.*;
@@ -9,6 +10,7 @@ import com.example.smartairportsystem.service.impl.*;
 
 import com.example.smartairportsystem.utils.TimeFormatUtil;
 import com.example.smartairportsystem.utils.TokenTypeUtil;
+import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,11 +33,17 @@ public class touristcontroller {
     @Resource
     private ticketservice ticketService = new ticketserviceimpl();
     @Resource
+    private merchantservice merchantService = new merchantserviceimpl();
+    @Resource
+    private commodityservice commodityService = new commodityserviceimpl();
+    @Resource
     private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
     @Resource
     private parkingorderservice parkingorderService = new parkingorderserviceimpl();
     @Resource
     private parkingspaceservice parkingspaceService = new parkingspaceserviceimpl();
+    @Resource
+    private commodityorderservice commodityorderService = new commodityorderserviceimpl();
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -453,18 +461,18 @@ public class touristcontroller {
                 List<seat> rtlist = new ArrayList<>();
                 for(int i=1;i<=mount;i++){
                     //均初始化为未选择座位（可用蓝色标识）
-                    rtlist.add(new seat(i,"false"));
+                    rtlist.add(new seat(i, TypeUtil.FALSE));
                 }
                 for(purchaserecord pr : prlist){
                     //跳过尚未选座的订单
                     if(! pr.getSeatinfo().equals("0")) {
                         //根据订单信息设置为已选择座位（可用灰色标识）
-                        rtlist.set(Integer.parseInt(pr.getSeatinfo()) - 1, new seat(Integer.parseInt(pr.getSeatinfo()), "true"));
+                        rtlist.set(Integer.parseInt(pr.getSeatinfo()) - 1, new seat(Integer.parseInt(pr.getSeatinfo()), TypeUtil.TRUE));
                     }
                 }
                 //若当前用户已选择座位则单独标出（可用绿色标识）
                 if(! record.getSeatinfo().equals("0")){
-                    rtlist.set(Integer.parseInt(record.getSeatinfo()) - 1,new seat(Integer.parseInt(record.getSeatinfo()),"mine"));
+                    rtlist.set(Integer.parseInt(record.getSeatinfo()) - 1,new seat(Integer.parseInt(record.getSeatinfo()),TypeUtil.MINE));
                 }
                 map.put("success", true);
                 map.put("message", rtlist);
@@ -637,6 +645,153 @@ public class touristcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //列出机场商户功能
+    @RequestMapping(value = "/listmerchant",method = RequestMethod.POST)
+    public Map<String,Object> listMerchant(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<merchant> rtlist = merchantService.listAllMerchant();
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //列出商户所有商品功能
+    @RequestMapping(value = "/listcommodity",method = RequestMethod.POST)
+    public Map<String,Object> listCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String merchantid = rawmap.get("merchantid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<commoditylist> rtlist = commodityService.listCommodityByMerchantid(Integer.parseInt(merchantid));
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //旅客用户订购商品功能
+    @RequestMapping(value = "/purchasecommodity",method = RequestMethod.POST)
+    public Map<String,Object> purchaseCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String commodityid = rawmap.get("commodityid");
+        String counts = rawmap.get("counts");
+        String terminal = rawmap.get("terminal");
+        String departuregate = rawmap.get("departuregate");
+        String arrivetime = rawmap.get("arrivetime");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                commoditylist com = commodityService.getCommodityByID(Integer.parseInt(commodityid));
+                if(com.getCounts() < Integer.parseInt(counts)){
+                    map.put("success", false);
+                    map.put("message", "剩余商品不足！");
+                }else {
+                    commodityorderService.addNewOrder(new commodityorder(0,Integer.parseInt(counts),tokenentity.getId(),Integer.parseInt(commodityid),Integer.parseInt(terminal),departuregate,arrivetime,touristService.getTouristByID(tokenentity.getId()).getEmail()));
+                    commodityService.updateCounts(Integer.parseInt(commodityid),com.getCounts() - Integer.parseInt(counts));
+                    map.put("success", true);
+                    map.put("message", "用户购买成功！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "用户购买失败！");
+        }
+        return map;
+    }
+
+    //旅客用户查询商品订单功能
+    @RequestMapping(value = "/listcommodityorder",method = RequestMethod.POST)
+    public Map<String,Object> listCommodityorder(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                List<mycommodityorder> rtlist = commodityorderService.listOrderByTouristid(tokenentity.getId());
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //旅客用户取消商品订单功能
+    @RequestMapping(value = "/returncommodity",method = RequestMethod.POST)
+    public Map<String,Object> returnCommodity(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                commodityorder co = commodityorderService.getOrderByID(Integer.parseInt(orderid));
+                commoditylist cl = commodityService.getCommodityByID(co.getCommodityid());
+                commodityorderService.removeOldOrder(co.getOrderid());
+                commodityService.updateCounts(co.getCommodityid(),cl.getCounts()+co.getCounts());
+                map.put("success", true);
+                map.put("message", "用户退订成功！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "用户退订失败！");
         }
         return map;
     }

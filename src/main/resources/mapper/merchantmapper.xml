@@ -19,6 +19,10 @@
         select * from merchant where idnumber = #{idnumber}
     </select>
 
+    <select id="listAllMerchant" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant
+    </select>
+
     <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
         update merchant set realname = #{realname},idnumber = #{idnumber},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
     </update>

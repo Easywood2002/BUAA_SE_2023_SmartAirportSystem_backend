@@ -147,8 +147,43 @@ public class staffcontroller {
     }
 
     //工作人员添加报修请求
+    @RequestMapping(value = "/addrepairrecord", method = RequestMethod.POST)
+    public Map<String, Object> addRepairrecord(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String deviceinfo = rawmap.get("deviceinfo");
+        String location = rawmap.get("location");
+        String approved = rawmap.get("approved");
+        String devicename = rawmap.get("devicename");
+        String devicepicture = rawmap.get("devicepicture");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                repairrecord exist = repairService.getRepairByDeviceinfo(deviceinfo);
+                if (exist != null) {
+                    map.put("success", false);
+                    map.put("message", "请勿重复提交报修请求！");
+                } else {
+                    repairService.addNewRepairrecord(new repairrecord(0, deviceinfo, location, approved, devicename, devicepicture));
+                    map.put("success", true);
+                    map.put("message", "报修请求提交成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "报修请求添加失败！");
+        }
+        return map;
+    }
 
     //工作人员审核报修请求
     
     //工作人员审核商户入驻请求
+    
 }

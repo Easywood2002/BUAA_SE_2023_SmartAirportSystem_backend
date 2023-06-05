@@ -3,7 +3,15 @@
 <mapper namespace="com.example.smartairportsystem.mapper.merchantrequestmapper">
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchantrequest">
     </resultMap>
-    <insert id="logupNewMerchantrequest" parameterType="com.example.smartairportsystem.entity.merchantrequest">
-        insert into merchantrequest(realname,nickname,passwords,salt,email) values(#{realname},#{nickname},sha1(#{passwords}),#{salt},#{email})
+    <insert id="addNewMerchantrequest" parameterType="com.example.smartairportsystem.entity.merchantrequest">
+        insert into merchantrequest(realname,nickname,idnumber,passwords,salt,shopname,email) values(#{realname},#{nickname},#{idnumber},sha1(#{passwords}),#{salt},#{shopname},#{email})
     </insert>
+
+    <select id="getMerchantrequestByEmail" resultType="com.example.smartairportsystem.entity.merchantrequest">
+        select * from merchantrequest where email = #{email}
+    </select>
+
+    <delete id="removeOldMerchantrequest">
+        delete from merchantrequest where email = #{email}
+    </delete>
 </mapper>

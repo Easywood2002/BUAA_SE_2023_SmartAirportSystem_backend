@@ -11,7 +11,7 @@ public class staffcontroller {
     @Resource
     private staff staffService = new staffserviceimpl();
     @Resource
-    private repairservice repairService = new repairserviceimpl();
+    private repairrecordservice repairrecordService = new repairrecordserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -146,30 +146,31 @@ public class staffcontroller {
         return map;
     }
 
-    //工作人员添加报修请求
+    //工作人员添加设备报修请求功能
     @RequestMapping(value = "/addrepairrecord", method = RequestMethod.POST)
     public Map<String, Object> addRepairrecord(@RequestParam Map<String,String> rawmap){
         Map<String, Object> map = new HashMap<>();
 
         //表单取参
-        String deviceinfo = rawmap.get("deviceinfo");
-        String location = rawmap.get("location");
-        String approved = rawmap.get("approved");
+        String stafftk = rawmap.get("token");
+        String deviceid = rawmap.get("deviceid");
         String devicename = rawmap.get("devicename");
         String devicepicture = rawmap.get("devicepicture");
+        String deviceinfo = rawmap.get("deviceinfo");
+        String location = rawmap.get("location");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                repairrecord exist = repairService.getRepairByDeviceinfo(deviceinfo);
+                repairrecord exist = repairService.getRepairrecordByDeviceid(Integer.parseInt(deviceid));
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "请勿重复提交报修请求！");
                 } else {
-                    repairService.addNewRepairrecord(new repairrecord(0, deviceinfo, location, approved, devicename, devicepicture));
+                    repairService.addNewRepairrecord(new repairrecord(0,Integer.parseInt(deviceid),devicename,devicepicture,deviceinfo,location,"False"));
                     map.put("success", true);
                     map.put("message", "报修请求提交成功！");
                 }
@@ -182,8 +183,98 @@ public class staffcontroller {
         return map;
     }
 
-    //工作人员审核报修请求
-    
-    //工作人员审核商户入驻请求
-    
+    //工作人员审核设备报修请求功能
+    @RequestMapping(value = "/examinerepairrecord", method = RequestMethod.POST)
+    public Map<String, Object> examineRepairrecord(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String recordid = rawmap.get("recordid");
+        String approved = rawmap.get("approved");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                repairrecord exist = repairService.getRepairrecordByID(Integer.parseInt(recordid));
+                if (exist == null) {
+                    map.put("success", false);
+                    map.put("message", "该报修请求不存在！");
+                } else {
+                    repairService.examineRepairrecord(Integer.parseInt(recordid),approved);
+                    map.put("success", true);
+                    map.put("message", "报修请求审核成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "报修请求审核失败！");
+        }
+        return map;
+    }
+
+    //工作人员撤销设备报修请求功能
+    @RequestMapping(value = "/removerepairrecord",method = RequestMethod.POST)
+    public Map<String,Object> removeRepairrecord(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String recordid = rawmap.get("recordid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                staffService.removeOldRepairrecord(Integer.parseInt(recordid));
+                map.put("success", true);
+                map.put("message", "该报修请求撤销成功！");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "该报修请求撤销失败！");
+        }
+        return map;
+    }
+
+    //工作人员审核商户入驻请求功能
+    @RequestMapping(value = "/examinerepairrecord", method = RequestMethod.POST)
+    public Map<String, Object> examineRepairrecord(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String recordid = rawmap.get("recordid");
+        String approved = rawmap.get("approved");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                repairrecord exist = repairService.getRepairrecordByID(Integer.parseInt(recordid));
+                if (exist == null) {
+                    map.put("success", false);
+                    map.put("message", "该报修请求不存在！");
+                } else {
+                    repairService.examineRepairrecord(Integer.parseInt(recordid),approved);
+                    map.put("success", true);
+                    map.put("message", "报修请求审核成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "报修请求审核失败！");
+        }
+        return map;
+    }
 }

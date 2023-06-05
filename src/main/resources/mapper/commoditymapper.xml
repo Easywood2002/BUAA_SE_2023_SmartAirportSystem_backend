@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.commoditymapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.commoditylist">
+    </resultMap>
+    <insert id="addNewCommodity" parameterType="com.example.smartairportsystem.entity.commoditylist">
+        insert into commoditylist(name,merchantid,counts,price) values(#{name},#{merichantid},#{counts},#{price})
+    </insert>
+
+    <select id="getCommodityByID" resultType="com.example.smartairportsystem.entity.commoditylist">
+        select * from commoditylist where commodityid = #{commodityid}
+    </select>
+
+    <select id="getCommodityByCombine" resultType="com.example.smartairportsystem.entity.commoditylist">
+        select * from commoditylist where merchantid = #{merchantid} and name = #{name}
+    </select>
+
+    <select id="getMerchantByCommodity" resultType="com.example.smartairportsystem.entity.commoditylist">
+        select merchantid from commoditylist where commodityid = #{commodityid}
+    </select>
+
+    <update id="updateOldCommodity" parameterType="com.example.smartairportsystem.entity.commoditylist">
+        update commoditylist set name = #{name},merchantid = #{merchantid},counts = #{counts},price = #{price} where commodityid = #{commodityid}
+    </update>
+
+    <delete id="removeOldCommodity">
+        delete from commoditylist where commodityid = #{commodityid}
+    </delete>
+
+    <select id="listCommodityByMerchantid" resultType="com.example.smartairportsystem.entity.commoditylist">
+        select * from commoditylist where merchantid = #{merchantid}
+    </select>
+</mapper>

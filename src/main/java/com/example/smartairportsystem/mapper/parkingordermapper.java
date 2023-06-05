@@ -12,7 +12,7 @@ import java.util.List;
 public interface parkingordermapper {
     public void addNewOrder(parkingorder neworder);
     public void removeOldOrder(Integer orderid);
-    public void selectParkingForOrderid(@Param("orderid") Integer orderid,@Param("parkingspaceid") Integer parkingspaceid);
     public parkingorder getOrderByID(Integer orderid);
     public parkingorder getOrderBySpaceid(@Param("parkingspaceid") Integer parkingspaceid);
+    public parkingorder getOrderByTouristid(Integer touristid);
 }

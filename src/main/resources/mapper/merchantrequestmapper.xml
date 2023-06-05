@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.merchantrequestmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchantrequest">
+    </resultMap>
+    <insert id="logupNewMerchantrequest" parameterType="com.example.smartairportsystem.entity.merchantrequest">
+        insert into merchantrequest(realname,nickname,passwords,salt,email) values(#{realname},#{nickname},sha1(#{passwords}),#{salt},#{email})
+    </insert>
+</mapper>

@@ -11,15 +11,15 @@
         delete from parkingorder where orderid = #{orderid}
     </delete>
 
-    <update id="selectParkingForOrderid">
-        update parkingorder set parkingspaceid = #{parkingspaceid} where orderid = #{orderid}
-    </update>
-
     <select id="getOrderByID" resultType="com.example.smartairportsystem.entity.parkingorder">
         select * from parkingorder where orderid = #{orderid}
     </select>
 
     <select id="getOrderBySpaceid" resultType="com.example.smartairportsystem.entity.parkingorder">
         select * from parkingorder where parkingspaceid = #{parkingspaceid}
+    </select>
+
+    <select id="getOrderByTouristid" resultType="com.example.smartairportsystem.entity.parkingorder">
+        select * from parkingorder where touristid = #{touristid}
     </select>
 </mapper>

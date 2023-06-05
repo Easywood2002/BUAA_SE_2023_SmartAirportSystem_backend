@@ -15,6 +15,10 @@
         select * from commoditylist where merchantid = #{merchantid} and name = #{name}
     </select>
 
+    <select id="getMerchantByCommodity" resultType="com.example.smartairportsystem.entity.commoditylist">
+        select merchantid from commoditylist where commodityid = #{commodityid}
+    </select>
+
     <update id="updateOldCommodity" parameterType="com.example.smartairportsystem.entity.commoditylist">
         update commoditylist set name = #{name},merchantid = #{merchantid},counts = #{counts},price = #{price} where commodityid = #{commodityid}
     </update>
@@ -24,6 +28,6 @@
     </delete>
 
     <select id="listCommodityByMerchantid" resultType="com.example.smartairportsystem.entity.commoditylist">
-        select * from commoditylist where commodityid = #{commodityid}
+        select * from commoditylist where merchantid = #{merchantid}
     </select>
 </mapper>

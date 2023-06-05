@@ -13,6 +13,7 @@ import java.util.List;
 public interface commoditymapper {
     public commoditylist getCommodityByID(Integer commodityid);
     public commoditylist getCommodityByCombine(@Param("merchantid") Integer mercantid,@Param("name") String name);
+    public Integer getMerchantByCommodity(Integer commodityid);
     public void addNewCommodity(commoditylist newcommodity);
     public void updateOldCommodity(commoditylist newcommodity);
     public void removeOldCommodity(Integer commodityid);

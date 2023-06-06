@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface companymapper {
     public void logupNewCompany(airlinecompany newcompany);
+    public void updateOldCompany(airlinecompany newcompany);
     public void updatePassword(@Param("touristid") Integer companyid, @Param("newpasswords") String newpasswords);
     public airlinecompany getCompanyByEmail(String email);
     public airlinecompany getCompanyByID(Integer companyid);

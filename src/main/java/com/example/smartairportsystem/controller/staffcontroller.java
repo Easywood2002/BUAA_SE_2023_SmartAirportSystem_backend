@@ -1,5 +1,6 @@
 package com.example.smartairportsystem.controller;
 
+import com.example.smartairportsystem.entity.merchant;
 import com.example.smartairportsystem.entity.staff;
 import com.example.smartairportsystem.entity.token;
 import com.example.smartairportsystem.service.impl.securityserviceimpl;
@@ -122,13 +123,13 @@ public class staffcontroller {
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
-        String merchanttk = rawmap.get("token");
+        String stafftk = rawmap.get("token");
         String newpasswords = rawmap.get("newpasswords");
         String renewpasswords = rawmap.get("renewpasswords");
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "员工未登录或已注销登录！");
@@ -153,6 +154,48 @@ public class staffcontroller {
             e.printStackTrace();
             map.put("success",false);
             map.put("message","修改密码失败！");
+        }
+        return map;
+    }
+
+    //员工修改信息功能
+    @RequestMapping(value = "/updatestaff",method = RequestMethod.POST)
+    public Map<String,Object> updateStaff(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String realname = rawmap.get("realname");
+        String positionpost = rawmap.get("positionpost");
+        String email = rawmap.get("email");
+        String idnumber = rawmap.get("idnumber");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff conflict = staffService.getStaffByIdnumber(idnumber);
+                if(conflict != null){
+                    map.put("success", false);
+                    map.put("message", "该身份证号已被使用！");
+                }else {
+                    conflict = staffService.getStaffByEmail(email);
+                    if (conflict != null){
+                        map.put("success", false);
+                        map.put("message", "该邮箱已被使用！");
+                    }else {
+                        staffService.updateOldStaff(new staff(tokenentity.getId(), realname, Integer.parseInt(positionpost), email, "", "",idnumber));
+                        map.put("success", true);
+                        map.put("message", "员工信息已更新！");
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改员工信息失败！");
         }
         return map;
     }

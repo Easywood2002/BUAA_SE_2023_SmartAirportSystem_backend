@@ -11,6 +11,10 @@
         update tourist set passwords = sha1(#{newpasswords}) where touristid = #{touristid}
     </update>
 
+    <update id="updateEmail">
+        update tourist set email = #{newemail} where touristid = #{touristid}
+    </update>
+
     <select id="getTouristByEmail" resultType="com.example.smartairportsystem.entity.tourist">
         select * from tourist where email = #{email}
     </select>

@@ -7,6 +7,10 @@
         insert into staff(realname,positionpost,email,passwords,salt,idnumber) values(#{realname},#{positionpost},#{email},sha1(#{passwords}),#{salt},#{idnumber})
     </insert>
 
+    <update id="updateOldStaff" parameterType="com.example.smartairportsystem.entity.staff">
+        update staff set realname = #{realname},positionpost = #{positionpost},idnumber = #{idnumber},email = #{email} where staffid = #{staffid}
+    </update>
+
     <update id="updatePassword">
         update staff set passwords = sha1(#{passwords}) where staffid = #{staffid}
     </update>

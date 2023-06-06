@@ -166,6 +166,39 @@ public class touristcontroller {
         return map;
     }
 
+    //旅客用户改绑邮箱功能
+    @RequestMapping(value = "/updateemail",method = RequestMethod.POST)
+    public Map<String,Object> updateEmail(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String newemail = rawmap.get("newemail");
+
+        try{
+            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                tourist conflict = touristService.getTouristByEmail(newemail);
+                if(conflict != null) {
+                    map.put("success", false);
+                    map.put("message", "该邮箱已被使用！");
+                }else{
+                    touristService.updateEmail(tokenentity.getId(),newemail);
+                    map.put("success", true);
+                    map.put("message", "邮箱改绑成功！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","邮箱改绑失败！");
+        }
+        return map;
+    }
+
     //列出该用户的实名信息功能
     @RequestMapping(value = "/listperson",method = RequestMethod.POST)
     public Map<String,Object> listPerson(@RequestParam Map<String,String> rawmap){

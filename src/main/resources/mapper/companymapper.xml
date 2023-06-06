@@ -11,6 +11,10 @@
         update airlinecompany set passwords = sha1(#{newpasswords}) where companyid = #{companyid}
     </update>
 
+    <update id="updateOldCompany" parameterType="com.example.smartairportsystem.entity.airlinecompany">
+        update airlinecompany set name = #{name},email = #{email} where companyid = #{companyid}
+    </update>
+
     <select id="getCompanyByEmail" resultType="com.example.smartairportsystem.entity.airlinecompany">
         select * from airlinecompany where email = #{email}
     </select>

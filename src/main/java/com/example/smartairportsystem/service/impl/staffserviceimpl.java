@@ -13,6 +13,7 @@ public class staffserviceimpl implements staffservice{
     private staffmapper staffMapper;
 
     public void logupNewStaff(staff newstaff){staffMapper.logupNewStaff(newstaff);}
+    public void updateOldStaff(staff newstaff){staffMapper.updateOldStaff(newstaff);}
     public void updatePassword(Integer staffid, String newpasswords){staffMapper.updatePassword(staffid,newpasswords);}
     public void removeOldStaff(Integer staffid){staffMapper.removeOldStaff(staffid);}
     public staff getStaffByEmail(String email){return staffMapper.getStaffByEmail(email);}

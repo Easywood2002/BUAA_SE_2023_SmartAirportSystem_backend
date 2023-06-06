@@ -111,13 +111,13 @@ public class companycontroller {
         Map<String,Object> map = new HashMap<>();
 
         //表单取参
-        String touristtk = rawmap.get("token");
+        String companytk = rawmap.get("token");
         String newpasswords = rawmap.get("newpasswords");
         String renewpasswords = rawmap.get("renewpasswords");
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -142,6 +142,40 @@ public class companycontroller {
             e.printStackTrace();
             map.put("success",false);
             map.put("message","修改密码失败！");
+        }
+        return map;
+    }
+
+    //航司修改信息功能
+    @RequestMapping(value = "/updatecompany",method = RequestMethod.POST)
+    public Map<String,Object> updateCompany(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String email = rawmap.get("email");
+        String name = rawmap.get("name");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                airlinecompany conflict = companyService.getCompanyByEmail(email);
+                if(conflict != null){
+                    map.put("success", false);
+                    map.put("message", "该邮箱已被使用！");
+                }else {
+                    companyService.updateOldCompany(new airlinecompany(tokenentity.getId(),email, name, "", ""));
+                    map.put("success", true);
+                    map.put("message", "航司信息已更新！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改航司信息失败！");
         }
         return map;
     }

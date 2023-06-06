@@ -27,6 +27,10 @@
         select * from purchaserecord where ticketid = #{ticketid}
     </select>
 
+    <select id="listTodayRecord" resultType="com.example.smartairportsystem.entity.purchaserecord">
+        select pr.orderid,pr.personid,pr.ticketid,pr.purchasetime,pr.seatinfo from purchaserecord pr,ticket tk,flight f where pr.ticketid = tk.ticketid and tk.flightid = f.flightid and f.departuretime like #{today}
+    </select>
+
     <select id="getCountByTicketid" resultType="Integer">
         select count(*) from purchaserecord where ticketid = #{ticketid}
     </select>

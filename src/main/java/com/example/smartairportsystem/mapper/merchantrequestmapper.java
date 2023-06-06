@@ -9,5 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface merchantrequestmapper {
     public void addNewMerchantrequest(merchantrequest newrequest);
     public merchantrequest getMerchantrequestByEmail(String email);
+    public merchantrequest getMerchantrequestByID(Integer requestid);
+    public merchantrequest getMerchantrequestByIdnumber(String idnumber);
     public void removeOldMerchantrequest(Integer requestid);
 }

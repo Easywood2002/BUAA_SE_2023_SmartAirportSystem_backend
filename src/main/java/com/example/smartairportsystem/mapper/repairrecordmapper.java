@@ -2,15 +2,15 @@ package com.example.smartairportsystem.mapper;
 
 import com.example.smartairportsystem.entity.repairrecord;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
 @Repository
-public interface staffmapper {
+public interface repairrecordmapper {
     public void addNewRepairrecord(repairrecord newrepairrecord);
-    public repairrecord getRepairrecordByDeviceid(Integer deviceid);
     public repairrecord getRepairrecordByID(Integer recordid);
-    public void examineRepairrecord(Integer recordid,String approved);
+    public void examineRepairrecord(@Param("recordid") Integer recordid, @Param("approved") Integer approved);
     public void removeOldRepairrecord(Integer recordid);
     
 }

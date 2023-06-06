@@ -3,7 +3,7 @@ package com.example.smartairportsystem.controller;
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
-import com.example.smartairportsystem.utils.TokenTypeUtil;
+import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -80,11 +80,11 @@ public class companycontroller {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String companytk = securityService.MD5(exist.getCompanyid().toString());
                     token newtk = new token(exist.getCompanyid(), companytk);
-                    token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.COMPANY);
+                    token existtk = tokenService.getTokenByID(newtk.getId(), TypeUtil.Token.COMPANY);
                     if (existtk == null) {
-                        tokenService.loginNewToken(newtk, TokenTypeUtil.COMPANY);
+                        tokenService.loginNewToken(newtk, TypeUtil.Token.COMPANY);
                     } else {
-                        tokenService.updateOldToken(newtk, TokenTypeUtil.COMPANY);
+                        tokenService.updateOldToken(newtk, TypeUtil.Token.COMPANY);
                     }
                     map.put("success", true);
                     map.put("message", "航司登录成功！");
@@ -117,7 +117,7 @@ public class companycontroller {
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -157,7 +157,7 @@ public class companycontroller {
         String name = rawmap.get("name");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -189,7 +189,7 @@ public class companycontroller {
         String companytk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -222,7 +222,7 @@ public class companycontroller {
         String terminal = rawmap.get("terminal");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -262,7 +262,7 @@ public class companycontroller {
         String terminal = rawmap.get("terminal");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -295,7 +295,7 @@ public class companycontroller {
         String flightid = rawmap.get("flightid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -325,7 +325,7 @@ public class companycontroller {
         String amount = rawmap.get("amount");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -361,7 +361,7 @@ public class companycontroller {
         String amount = rawmap.get("amount");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -394,7 +394,7 @@ public class companycontroller {
         String ticketid = rawmap.get("ticketid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -421,7 +421,7 @@ public class companycontroller {
         String flightid = rawmap.get("flightid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");

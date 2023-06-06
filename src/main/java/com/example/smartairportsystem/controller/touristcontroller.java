@@ -9,7 +9,6 @@ import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 
 import com.example.smartairportsystem.utils.TimeFormatUtil;
-import com.example.smartairportsystem.utils.TokenTypeUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,11 +99,11 @@ public class touristcontroller {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String touristtk = securityService.MD5(exist.getTouristid().toString());
                     token newtk = new token(exist.getTouristid(),touristtk);
-                    token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.TOURIST);
+                    token existtk = tokenService.getTokenByID(newtk.getId(), TypeUtil.Token.TOURIST);
                     if (existtk == null){
-                        tokenService.loginNewToken(newtk, TokenTypeUtil.TOURIST);
+                        tokenService.loginNewToken(newtk, TypeUtil.Token.TOURIST);
                     }else{
-                        tokenService.updateOldToken(newtk, TokenTypeUtil.TOURIST);
+                        tokenService.updateOldToken(newtk, TypeUtil.Token.TOURIST);
                     }
                     map.put("success", true);
                     map.put("message", "用户登录成功！");
@@ -137,7 +136,7 @@ public class touristcontroller {
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -176,7 +175,7 @@ public class touristcontroller {
         String newemail = rawmap.get("newemail");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -208,7 +207,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -237,7 +236,7 @@ public class touristcontroller {
         String email = rawmap.get("email");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -273,7 +272,7 @@ public class touristcontroller {
         String email = rawmap.get("email");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -306,7 +305,7 @@ public class touristcontroller {
         String personid = rawmap.get("personid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -335,7 +334,7 @@ public class touristcontroller {
         String date = rawmap.get("date");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -362,7 +361,7 @@ public class touristcontroller {
         String flightid = rawmap.get("flightid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -390,7 +389,7 @@ public class touristcontroller {
         String personidlist = rawmap.get("personidlist");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -428,7 +427,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -455,7 +454,7 @@ public class touristcontroller {
         String orderid = rawmap.get("orderid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -482,7 +481,7 @@ public class touristcontroller {
         String orderid = rawmap.get("orderid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -494,18 +493,18 @@ public class touristcontroller {
                 List<seat> rtlist = new ArrayList<>();
                 for(int i=1;i<=mount;i++){
                     //均初始化为未选择座位（可用蓝色标识）
-                    rtlist.add(new seat(i, TypeUtil.FALSE));
+                    rtlist.add(new seat(i, TypeUtil.Seat.FALSE));
                 }
                 for(purchaserecord pr : prlist){
                     //跳过尚未选座的订单
                     if(! pr.getSeatinfo().equals("0")) {
                         //根据订单信息设置为已选择座位（可用灰色标识）
-                        rtlist.set(Integer.parseInt(pr.getSeatinfo()) - 1, new seat(Integer.parseInt(pr.getSeatinfo()), TypeUtil.TRUE));
+                        rtlist.set(Integer.parseInt(pr.getSeatinfo()) - 1, new seat(Integer.parseInt(pr.getSeatinfo()), TypeUtil.Seat.TRUE));
                     }
                 }
                 //若当前用户已选择座位则单独标出（可用绿色标识）
                 if(! record.getSeatinfo().equals("0")){
-                    rtlist.set(Integer.parseInt(record.getSeatinfo()) - 1,new seat(Integer.parseInt(record.getSeatinfo()),TypeUtil.MINE));
+                    rtlist.set(Integer.parseInt(record.getSeatinfo()) - 1,new seat(Integer.parseInt(record.getSeatinfo()),TypeUtil.Seat.MINE));
                 }
                 map.put("success", true);
                 map.put("message", rtlist);
@@ -529,7 +528,7 @@ public class touristcontroller {
         String seatid = rawmap.get("seatid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -572,7 +571,7 @@ public class touristcontroller {
         String parkingspaceid = rawmap.get("parkingspaceid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -611,7 +610,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -639,7 +638,7 @@ public class touristcontroller {
         String orderid = rawmap.get("orderid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -665,7 +664,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -691,7 +690,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -718,7 +717,7 @@ public class touristcontroller {
         String merchantid = rawmap.get("merchantid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -749,7 +748,7 @@ public class touristcontroller {
         String arrivetime = rawmap.get("arrivetime");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -782,7 +781,7 @@ public class touristcontroller {
         String touristtk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -809,7 +808,7 @@ public class touristcontroller {
         String orderid = rawmap.get("orderid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(touristtk,TokenTypeUtil.TOURIST);
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");

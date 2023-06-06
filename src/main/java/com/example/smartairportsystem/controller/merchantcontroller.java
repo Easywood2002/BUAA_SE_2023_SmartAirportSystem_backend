@@ -4,13 +4,13 @@ import com.example.smartairportsystem.entity.commoditylist;
 import com.example.smartairportsystem.entity.merchantrequest;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
+import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.smartairportsystem.entity.merchant;
 import com.example.smartairportsystem.entity.token;
-import com.example.smartairportsystem.utils.TokenTypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -98,11 +98,11 @@ public class merchantcontroller {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String merchanttk = securityService.MD5(exist.getMerchantid().toString());
                     token newtk = new token(exist.getMerchantid(),merchanttk);
-                    token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.MERCHANT);
+                    token existtk = tokenService.getTokenByID(newtk.getId(), TypeUtil.Token.MERCHANT);
                     if (existtk == null){
-                        tokenService.loginNewToken(newtk, TokenTypeUtil.MERCHANT);
+                        tokenService.loginNewToken(newtk, TypeUtil.Token.MERCHANT);
                     }else{
-                        tokenService.updateOldToken(newtk, TokenTypeUtil.MERCHANT);
+                        tokenService.updateOldToken(newtk, TypeUtil.Token.MERCHANT);
                     }
                     map.put("success", true);
                     map.put("message", "商户登录成功！");
@@ -135,7 +135,7 @@ public class merchantcontroller {
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
@@ -177,7 +177,7 @@ public class merchantcontroller {
         String idnumber = rawmap.get("idnumber");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -206,32 +206,6 @@ public class merchantcontroller {
         return map;
     }
 
-    /*//商户注销账户功能
-    @RequestMapping(value = "/removemerchant",method = RequestMethod.POST)
-    public Map<String,Object> removeMerchant(@RequestParam Map<String,String> rawmap){
-        Map<String,Object> map = new HashMap<>();
-
-        //表单取参
-        String merchanttk = rawmap.get("token");
-
-        try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
-            if(tokenentity == null){
-                map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
-            }else {
-                merchantService.removeOldMerchant(tokenentity.getId());
-                map.put("success", true);
-                map.put("message", "商户信息已注销！");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success", false);
-            map.put("message", "商户信息注销失败！");
-        }
-        return map;
-    }*/
-
     //商户添加商品信息功能
     @RequestMapping(value = "/addcommodity", method = RequestMethod.POST)
     public Map<String, Object> addCommodity(@RequestParam Map<String,String> rawmap){
@@ -244,7 +218,7 @@ public class merchantcontroller {
         String price = rawmap.get("price");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
@@ -280,7 +254,7 @@ public class merchantcontroller {
         String price = rawmap.get("price");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
@@ -313,7 +287,7 @@ public class merchantcontroller {
         String commodityid = rawmap.get("commodityid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
@@ -339,7 +313,7 @@ public class merchantcontroller {
         String merchanttk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(merchanttk,TokenTypeUtil.MERCHANT);
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");

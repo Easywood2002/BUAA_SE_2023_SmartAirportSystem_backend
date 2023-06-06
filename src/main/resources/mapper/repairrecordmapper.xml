@@ -4,12 +4,8 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.repairrecord">
     </resultMap>
     <insert id="addNewRepairrecord" parameterType="com.example.smartairportsystem.entity.repairrecord">
-        insert into repairrecord(deviceid,devicename,devicepicture,deviceinfo,location,approved) values(#{deviceid},#{devicename},#{devicepicture}#{deviceinfo},#{location},#{approved})
+        insert into repairrecord(deviceinfo,location,approved,devicename,devicepicture) values(#{deviceinfo},#{location},#{approved},#{devicename},#{devicepicture})
     </insert>
-
-    <select id="getRepairrecordByDeviceid" resultType="com.example.smartairportsystem.entity.repairrecord">
-        select * from repairrecord where deviceid = #{deviceid}
-    </select>
 
     <select id="getRepairrecordByID" resultType="com.example.smartairportsystem.entity.repairrecord">
         select * from repairrecord where recordid = #{recordid}

@@ -36,7 +36,7 @@ create table repairrecord(
 	recordid int primary key auto_increment,
 	deviceinfo varchar(255),
 	location varchar(255),
-	approved varchar(255),
+	approved int,
 	devicename varchar(255),
 	devicepicture varchar(255)
 );

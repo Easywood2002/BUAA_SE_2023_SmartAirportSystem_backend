@@ -11,6 +11,14 @@
         select * from merchantrequest where email = #{email}
     </select>
 
+    <select id="getMerchantrequestByID" resultType="com.example.smartairportsystem.entity.merchantrequest">
+        select * from merchantrequest where requestid = #{requestid}
+    </select>
+
+    <select id="getMerchantrequestByIdnumber" resultType="com.example.smartairportsystem.entity.merchantrequest">
+        select * from merchantrequest where idnumber = #{idnumber}
+    </select>
+
     <delete id="removeOldMerchantrequest">
         delete from merchantrequest where requestid = #{requestid}
     </delete>

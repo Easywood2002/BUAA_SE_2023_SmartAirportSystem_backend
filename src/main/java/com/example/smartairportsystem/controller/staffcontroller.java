@@ -1,17 +1,9 @@
 package com.example.smartairportsystem.controller;
 
-import com.example.smartairportsystem.entity.merchant;
-import com.example.smartairportsystem.entity.staff;
-import com.example.smartairportsystem.entity.token;
-import com.example.smartairportsystem.service.impl.merchantserviceimpl;
-import com.example.smartairportsystem.service.impl.securityserviceimpl;
-import com.example.smartairportsystem.service.impl.staffserviceimpl;
-import com.example.smartairportsystem.service.impl.tokenserviceimpl;
-import com.example.smartairportsystem.service.merchantservice;
-import com.example.smartairportsystem.service.securityservice;
-import com.example.smartairportsystem.service.staffservice;
-import com.example.smartairportsystem.service.tokenservice;
-import com.example.smartairportsystem.utils.TokenTypeUtil;
+import com.example.smartairportsystem.entity.*;
+import com.example.smartairportsystem.service.*;
+import com.example.smartairportsystem.service.impl.*;
+import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -31,6 +23,8 @@ public class staffcontroller {
     private repairrecordservice repairrecordService = new repairrecordserviceimpl();
     @Resource
     private merchantservice merchantService = new merchantserviceimpl();
+    @Resource
+    private merchantrequestservice merchantrequestService = new merchantrequestserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -96,11 +90,11 @@ public class staffcontroller {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String stafftk = securityService.MD5(exist.getStaffid().toString());
                     token newtk = new token(exist.getStaffid(),stafftk);
-                    token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.STAFF);
+                    token existtk = tokenService.getTokenByID(newtk.getId(), TypeUtil.Token.STAFF);
                     if (existtk == null){
-                        tokenService.loginNewToken(newtk, TokenTypeUtil.STAFF);
+                        tokenService.loginNewToken(newtk, TypeUtil.Token.STAFF);
                     }else{
-                        tokenService.updateOldToken(newtk, TokenTypeUtil.STAFF);
+                        tokenService.updateOldToken(newtk, TypeUtil.Token.STAFF);
                     }
                     map.put("success", true);
                     map.put("message", "员工登录成功！");
@@ -133,7 +127,7 @@ public class staffcontroller {
         String passwords = rawmap.get("passwords");
 
         try{
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "员工未登录或已注销登录！");
@@ -175,7 +169,7 @@ public class staffcontroller {
         String idnumber = rawmap.get("idnumber");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "员工未登录或已注销登录！");
@@ -204,63 +198,6 @@ public class staffcontroller {
         return map;
     }
 
-    /*//列出该工作人员的实名信息功能
-    @RequestMapping(value = "/liststaff",method = RequestMethod.POST)
-    public Map<String,Object> listStaff(@RequestParam Map<String,String> rawmap){
-        Map<String,Object> map = new HashMap<>();
-
-        //表单取参
-        String stafftk = rawmap.get("token");
-
-        try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
-            if(tokenentity == null){
-                map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
-            }else {
-                staff rt = staffService.getStaffByID(tokenentity.getId());
-                map.put("success", true);
-                map.put("message", rt);
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success", false);
-            map.put("message", "获取信息失败！");
-        }
-        return map;
-    }*/
-
-    /*//工作人员删除实名信息功能
-    @RequestMapping(value = "/removestaff",method = RequestMethod.POST)
-    public Map<String,Object> removeStaff(@RequestParam Map<String,String> rawmap){
-        Map<String,Object> map = new HashMap<>();
-
-        //表单取参
-        String stafftk = rawmap.get("token");
-
-        try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
-            if(tokenentity == null){
-                map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
-            }else {
-                staffService.removeOldStaff(tokenentity.getId());
-                map.put("success", true);
-                map.put("message", "用户已注销！");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success", false);
-            map.put("message", "用户注销失败！");
-        }
-        return map;
-    }*/
-
-    //工作人员添加行李信息功能
-
-    //工作人员更新行李信息功能
-
-    //工作人员删除行李信息功能
     //工作人员添加设备报修请求功能
     @RequestMapping(value = "/addrepairrecord", method = RequestMethod.POST)
     public Map<String, Object> addRepairrecord(@RequestParam Map<String,String> rawmap){
@@ -268,29 +205,23 @@ public class staffcontroller {
 
         //表单取参
         String stafftk = rawmap.get("token");
-        String deviceid = rawmap.get("deviceid");
         String devicename = rawmap.get("devicename");
         String devicepicture = rawmap.get("devicepicture");
         String deviceinfo = rawmap.get("deviceinfo");
         String location = rawmap.get("location");
 
-    //工作人员申请报修功能
-
-    //工作人员审核报修请求功能
-
-    //工作人员审核商户入驻请求功能
         try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "员工未登录或已注销登录！");
             }else {
-                repairrecord exist = repairService.getRepairrecordByDeviceid(Integer.parseInt(deviceid));
-                if (exist != null) {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.REPAIRSTAFF)) {
                     map.put("success", false);
-                    map.put("message", "请勿重复提交报修请求！");
+                    map.put("message", "您无权提交报修申请！");
                 } else {
-                    repairService.addNewRepairrecord(new repairrecord(0,Integer.parseInt(deviceid),devicename,devicepicture,deviceinfo,location,"False"));
+                    repairrecordService.addNewRepairrecord(new repairrecord(0,devicename,devicepicture,deviceinfo,location,TypeUtil.Approve.UNSOLVED));
                     map.put("success", true);
                     map.put("message", "报修请求提交成功！");
                 }
@@ -298,7 +229,7 @@ public class staffcontroller {
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "报修请求添加失败！");
+            map.put("message", "报修请求提交失败！");
         }
         return map;
     }
@@ -314,17 +245,17 @@ public class staffcontroller {
         String approved = rawmap.get("approved");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "员工未登录或已注销登录！");
             }else {
-                repairrecord exist = repairService.getRepairrecordByID(Integer.parseInt(recordid));
-                if (exist == null) {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
                     map.put("success", false);
-                    map.put("message", "该报修请求不存在！");
+                    map.put("message", "您无权处理报修申请！");
                 } else {
-                    repairService.examineRepairrecord(Integer.parseInt(recordid),approved);
+                    repairrecordService.examineRepairrecord(Integer.parseInt(recordid), Integer.parseInt(approved));
                     map.put("success", true);
                     map.put("message", "报修请求审核成功！");
                 }
@@ -332,12 +263,12 @@ public class staffcontroller {
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "报修请求审核失败！");
+            map.put("message", "报修请求处理失败！");
         }
         return map;
     }
 
-    //工作人员撤销设备报修请求功能
+    //工作人员删除设备报修请求功能
     @RequestMapping(value = "/removerepairrecord",method = RequestMethod.POST)
     public Map<String,Object> removeRepairrecord(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
@@ -347,19 +278,25 @@ public class staffcontroller {
         String recordid = rawmap.get("recordid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "员工未登录或已注销登录！");
             }else {
-                staffService.removeOldRepairrecord(Integer.parseInt(recordid));
-                map.put("success", true);
-                map.put("message", "该报修请求撤销成功！");
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR) || stf.getPositionpost().equals(TypeUtil.Staff.REPAIRSTAFF)) {
+                    repairrecordService.removeOldRepairrecord(Integer.parseInt(recordid));
+                    map.put("success", true);
+                    map.put("message", "报修请求删除成功！");
+                } else {
+                    map.put("success", false);
+                    map.put("message", "您无权删除报修申请！");
+                }
             }
         }catch (Exception e){
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "该报修请求撤销失败！");
+            map.put("message", "报修请求删除失败！");
         }
         return map;
     }
@@ -371,24 +308,22 @@ public class staffcontroller {
 
         //表单取参
         String stafftk = rawmap.get("token");
-        String email = rawmap.get("email");
+        String requestid = rawmap.get("requestid");
         String approved = rawmap.get("approved");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(stafftk,TokenTypeUtil.STAFF);
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "员工未登录或已注销登录！");
             }else {
-                merchant exist = merchantService.getMerchantByEmail(email);
-                if (exist != null) {
-                    map.put("success", false);
-                    map.put("message", "该商户已入驻！");
-                } else {
-                    if (approved == "Approve") {
-                        merchantService.logupNewMerchant(new merchant(0,exist.getRealname,exist.getID,exist.getPasswords,exist.getSalt,exist.getShopname,exist.getEmail));
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
+                    if (Integer.parseInt(approved) == TypeUtil.Approve.ACCESS) {
+                        merchantrequest mr = merchantrequestService.getMerchantrequestByID(Integer.parseInt(requestid));
+                        merchantService.logupNewMerchant(new merchant(0,mr.getRealname(),mr.getPasswords(),mr.getSalt(),mr.getShopname(),mr.getEmail(), mr.getIdnumber()));
                     }
-                    merchantrequestService.removeOldMerchantrequest(email);
+                    merchantrequestService.removeOldMerchantrequest(Integer.parseInt(requestid));
                     map.put("success", true);
                     map.put("message", "商户入驻请求审核成功！");
                 }
@@ -396,8 +331,14 @@ public class staffcontroller {
         } catch (Exception e) {
             e.printStackTrace();
             map.put("success", false);
-            map.put("message", "商户入驻请求审核失败！");
+            map.put("message", "商户入驻请求处理失败！");
         }
         return map;
     }
+
+    //工作人员添加行李信息功能
+
+    //工作人员更新行李信息功能
+
+    //工作人员删除行李信息功能
 }

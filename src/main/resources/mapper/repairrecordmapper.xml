@@ -18,4 +18,8 @@
     <delete id="removeOldRepairrecord">
         delete from repairrecord where recordid = #{recordid}
     </delete>
+
+    <select id="listAllRecord" resultType="com.example.smartairportsystem.entity.repairrecord">
+        select * from repairrecord
+    </select>
 </mapper>

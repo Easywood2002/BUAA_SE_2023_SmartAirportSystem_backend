@@ -8,6 +8,7 @@ import com.example.smartairportsystem.entity.bowl.seat;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 
+import com.example.smartairportsystem.utils.EmailUtil;
 import com.example.smartairportsystem.utils.TimeFormatUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
@@ -43,6 +44,32 @@ public class touristcontroller {
     private parkingspaceservice parkingspaceService = new parkingspaceserviceimpl();
     @Resource
     private commodityorderservice commodityorderService = new commodityorderserviceimpl();
+    @Resource
+    private luggageservice luggageService = new luggageserviceimpl();
+
+    /*@RequestMapping(value = "/test",method = RequestMethod.POST)
+    public Map<String,Object> test(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        String email = rawmap.get("email");
+
+        try {
+            String raw = securityService.MD5(TimeFormatUtil.getCurrentTime() + email);
+            Random random = new Random();
+            int start = random.nextInt(raw.length()-6);
+            String code = raw.substring(start,start+5);
+
+            EmailUtil.sendAuthCodeEmail(email,code);
+            EmailUtil.sendInformationEmail(email);
+            map.put("success", true);
+            map.put("message", "验证码发送成功！");
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","验证码发送失败！");
+        }
+        return map;
+    }*/
 
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -824,6 +851,34 @@ public class touristcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "用户退订失败！");
+        }
+        return map;
+    }
+
+    //旅客用户查询行李状态功能
+    @RequestMapping(value = "/checkluggage",method = RequestMethod.POST)
+    public Map<String,Object> checkLuggage(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String touristtk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "用户未登录或已注销登录！");
+            }else {
+                purchaserecord pr = purchaserecordService.getRecordByID(Integer.parseInt(orderid));
+                luggage lg = luggageService.getLuggageByCombine(pr.getPersonid(),pr.getTicketid());
+                map.put("success", true);
+                map.put("message", lg);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "行李状态查询失败！");
         }
         return map;
     }

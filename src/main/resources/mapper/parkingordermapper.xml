@@ -20,6 +20,6 @@
     </select>
 
     <select id="getOrderByTouristid" resultType="com.example.smartairportsystem.entity.bowl.myparkingorder">
-        select po.orderid,po.starttime,po.endtime,ps.location,ps.price from parkingorder po, parkingspace ps where touristid = #{touristid} and ps.parkingspaceid = po.parkingspaceid
+        select po.orderid,po.starttime,po.endtime,ps.location,ps.price from parkingorder po, parkingspace ps where po.touristid = #{touristid} and ps.parkingspaceid = po.parkingspaceid
     </select>
 </mapper>

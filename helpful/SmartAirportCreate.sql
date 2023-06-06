@@ -43,8 +43,8 @@ create table repairrecord(
 
 create table luggage(
 	luggageid int primary key auto_increment,
-	touristid int,
-	flightid int,
+	personid int,
+	ticketid int,
 	state varchar(255),
 	location varchar(255)
 );

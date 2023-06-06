@@ -1,6 +1,7 @@
 package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.*;
+import com.example.smartairportsystem.entity.bowl.mycommodityorder;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.TypeUtil;
@@ -19,6 +20,10 @@ public class staffcontroller {
     private securityservice securityService = new securityserviceimpl();
     @Resource
     private tokenservice tokenService = new tokenserviceimpl();
+    @Resource
+    private luggageservice luggageService = new luggageserviceimpl();
+    @Resource
+    private purchaserecordservice purchaserecordService = new purchaserecordserviceimpl();
     @Resource
     private repairrecordservice repairrecordService = new repairrecordserviceimpl();
     @Resource
@@ -234,6 +239,32 @@ public class staffcontroller {
         return map;
     }
 
+    //工作人员列出设备报修请求功能
+    @RequestMapping(value = "/listrepairrecord",method = RequestMethod.POST)
+    public Map<String,Object> listRepairrecord(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                List<repairrecord> rtlist = repairrecordService.listAllRecord();
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
     //工作人员审核设备报修请求功能
     @RequestMapping(value = "/examinerepairrecord", method = RequestMethod.POST)
     public Map<String, Object> examineRepairrecord(@RequestParam Map<String,String> rawmap){
@@ -301,6 +332,32 @@ public class staffcontroller {
         return map;
     }
 
+    //工作人员列出商户入驻请求功能
+    @RequestMapping(value = "/listmerchantrequest",method = RequestMethod.POST)
+    public Map<String,Object> listMerchantrequest(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                List<merchantrequest> rtlist = merchantrequestService.listAllRequest();
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
     //工作人员审核商户入驻请求功能
     @RequestMapping(value = "/examinemerchantrequest", method = RequestMethod.POST)
     public Map<String, Object> examineMerchantrequest(@RequestParam Map<String,String> rawmap){
@@ -337,8 +394,108 @@ public class staffcontroller {
     }
 
     //工作人员添加行李信息功能
+    @RequestMapping(value = "/addluggage", method = RequestMethod.POST)
+    public Map<String, Object> addLuggage(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+        map.put("luggageid","null");
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String orderid = rawmap.get("orderid");
+        String state = rawmap.get("state");
+        String location = rawmap.get("location");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.COMMONSTAFF)) {
+                    map.put("success", false);
+                    map.put("message", "您无权添加行李信息！");
+                } else {
+                    purchaserecord pr = purchaserecordService.getRecordByID(Integer.parseInt(orderid));
+                    luggageService.addNewLuggage(new luggage(0,pr.getPersonid(),pr.getTicketid(),state,location));
+                    map.put("success", true);
+                    map.put("message", "添加行李信息成功！");
+                    map.put("luggageid",luggageService.getLuggageByCombine(pr.getPersonid(),pr.getTicketid()).getLuggageid());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "添加行李信息失败！");
+        }
+        return map;
+    }
 
     //工作人员更新行李信息功能
+    @RequestMapping(value = "/updateluggage", method = RequestMethod.POST)
+    public Map<String, Object> updateLuggage(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String luggageid = rawmap.get("luggageid");
+        String state = rawmap.get("state");
+        String location = rawmap.get("location");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.COMMONSTAFF)) {
+                    map.put("success", false);
+                    map.put("message", "您无权更新行李信息！");
+                } else {
+                    luggageService.updateOldLuggage(Integer.parseInt(luggageid),state,location);
+                    map.put("success", true);
+                    map.put("message", "更新行李信息成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "更新行李信息失败！");
+        }
+        return map;
+    }
 
     //工作人员删除行李信息功能
+    @RequestMapping(value = "/removeluggage", method = RequestMethod.POST)
+    public Map<String, Object> removeLuggage(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String luggageid = rawmap.get("luggageid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.COMMONSTAFF)) {
+                    map.put("success", false);
+                    map.put("message", "您无权删除行李信息！");
+                } else {
+                    luggageService.removeOldLuggage(Integer.parseInt(luggageid));
+                    map.put("success", true);
+                    map.put("message", "删除行李信息成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "删除行李信息失败！");
+        }
+        return map;
+    }
 }

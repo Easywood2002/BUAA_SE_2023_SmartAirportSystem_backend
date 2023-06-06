@@ -943,6 +943,44 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 		 	 "message": "具体原因信息"}
 ```
 
+### （二十五）查询行李状态：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/tourist/checkluggage
+```
+
+​	**请求方式：**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+             "orderid": "2"}
+		 
+（前端传入登录后得到的识别码token及订单id，验证后为该用户查询该机票订单所对应的实名乘客的行李状态）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+		 	 "message": "具体原因信息"}
+```
+
 
 
 ## 二、航空公司：
@@ -1786,6 +1824,42 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo"}
 			 "message": List形式的该商户的商品信息列表/"具体原因信息"}
 ```
 
+### （九）列出商品订单：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/merchant/listcommodityorder
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo"}
+		 
+（前端传入识别码token，验证后列出该商户的所有订单信息）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": List形式的该商户的商品订单列表/"具体原因信息"}
+```
+
 
 
 ## 四、工作人员：
@@ -1960,6 +2034,406 @@ Form Data请求{"token": "12321tyuyt123hj878sdllo",
 			{"success": true/false, 
 
 			 "message": "具体原因信息"}
+```
+
+### （五）添加报修申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/addrepairrecord
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"devicename": "Light",
+
+			"devicepicture": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB …",
+			
+			"deviceinfo": "Broken",
+			
+			"location": "North Gate"}
+		 
+（前端传入识别码token，员工输入设备名称、设备图片、设备信息和位置，验证后生成报修清单并提交）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （六）列出报修申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/merchant/listrepairrecord
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo"}
+		 
+（前端传入识别码token，验证后列出所有设备报修申请信息）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": List形式的设备报修申请信息列表/"具体原因信息"}
+```
+
+### （七）审核报修申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/examinerepairrecord
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"recordid": "4",
+
+			"approved": "0"}
+		 
+（前端传入识别码token，管理员输入所选的申请id和处理意见，验证后对该申请进行相应的处理）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （八）删除报修申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/removerepairrecord
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"recordid": "5"}
+		 
+（前端传入识别码token，管理员输入所选的申请id，验证后删除该申请）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （九）列出入驻申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/merchant/listmerchantrequest
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo"}
+		 
+（前端传入识别码token，验证后列出所有商户入驻申请信息）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": List形式的所有商户入驻申请信息列表/"具体原因信息"}
+```
+
+### （十）审核入驻申请：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/examinemerchantrequest
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"requestid": "4",
+
+			"approved": "0"}
+		 
+（前端传入识别码token，管理员输入所选的申请id和处理意见，验证后对该申请进行相应的处理）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （十一）添加行李信息：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/addluggage
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"orderid": "4",
+
+			"state": "arrived",
+			
+			"location": "A10"}
+		 
+（前端传入识别码token，管理员输入机票订单号、行李状态和行李位置，验证后为该订单添加行李信息）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （十二）更新行李信息：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/updateluggage
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"luggageid": "4",
+
+			"state": "arrived",
+			
+			"location": "A10"}
+		 
+（前端传入识别码token，管理员输入行李id、更新后的状态和位置，验证后对该行李信息进行更新）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+### （十三）删除行李信息：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/staff/removeluggage
+```
+
+​	**请求方式**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"token": "12321tyuyt123hj878sdllo",
+
+			"luggageid": "4"}
+		 
+（前端传入识别码token，管理员输入行李id，验证后删除该行李信息）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+			 "message": "具体原因信息"}
+```
+
+
+
+## 五、普通游客：
+
+### （一）查询航班信息：
+
+​	**根路径：**
+
+```
+http://101.200.143.220:8080
+```
+
+​	**API路径：**
+
+```
+/passby/searchflight
+```
+
+​	**请求方式：**
+
+```
+POST
+```
+
+​	**携带数据示例（最佳建议）：**
+
+```
+Form Data请求{"takeofflocation": "北京",
+			
+			"landinglocation": "上海",
+			
+			"date": "2023-06-01"}
+		 
+（前端传入识别码token，游客输入出发地、目的地和日期进行查询）
+```
+
+​	**返回数据示例：**
+
+```
+			{"success": true/false, 
+
+		 	 "message": List形式的由该限制条件筛选出的航班信息列表/"具体原因信息"}
 ```
 
 

@@ -14,6 +14,13 @@ spring:
     multipart:
       max-file-size: -1
       max-request-size: -1
+  mail:
+    host: smpt.qq.com
+    username: 2238158271@qq.com
+    password: tqmrnourwpeodjch
+    default-encoding: utf-8
+    port: 587
+
 
 mybatis:
   type-aliases-package: com.example.smartairportsystem.entity

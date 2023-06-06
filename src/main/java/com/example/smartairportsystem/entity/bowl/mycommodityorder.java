@@ -12,8 +12,10 @@ public class mycommodityorder {
     private String departuregate;
     private String arrivetime;
     private Double price;
+    private String merchantemail;
+    private String touristemail;
 
-    public mycommodityorder(Integer orderid,String shopname,String commodityname, Integer counts,Integer terminal, String departuregate,String arrivetime, Double price){
+    public mycommodityorder(Integer orderid,String shopname,String commodityname, Integer counts,Integer terminal, String departuregate,String arrivetime, Double price,String merchantemail,String touristemail){
         this.orderid = orderid;
         this.shopname = shopname;
         this.commodityname = commodityname;
@@ -22,6 +24,8 @@ public class mycommodityorder {
         this.departuregate = departuregate;
         this.arrivetime = arrivetime;
         this.price = price;
+        this.merchantemail = merchantemail;
+        this.touristemail = touristemail;
     }
 
     public String getArrivetime() {
@@ -86,5 +90,21 @@ public class mycommodityorder {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getMerchantemail() {
+        return merchantemail;
+    }
+
+    public void setMerchantemail(String merchantemail) {
+        this.merchantemail = merchantemail;
+    }
+
+    public String getTouristemail() {
+        return touristemail;
+    }
+
+    public void setTouristemail(String touristemail) {
+        this.touristemail = touristemail;
     }
 }

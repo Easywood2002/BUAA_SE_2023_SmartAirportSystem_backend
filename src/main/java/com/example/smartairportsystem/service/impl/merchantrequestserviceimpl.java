@@ -6,6 +6,8 @@ import com.example.smartairportsystem.service.merchantrequestservice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("merchantrequestservice")
 public class merchantrequestserviceimpl implements merchantrequestservice{
     @Autowired
@@ -16,4 +18,5 @@ public class merchantrequestserviceimpl implements merchantrequestservice{
     public merchantrequest getMerchantrequestByID(Integer requestid){return merchantrequestMapper.getMerchantrequestByID(requestid);}
     public merchantrequest getMerchantrequestByIdnumber(String idnumber){return merchantrequestMapper.getMerchantrequestByIdnumber(idnumber);}
     public void removeOldMerchantrequest(Integer requestid){merchantrequestMapper.removeOldMerchantrequest(requestid);}
+    public List<merchantrequest> listAllRequest(){return merchantrequestMapper.listAllRequest();}
 }

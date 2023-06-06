@@ -14,4 +14,5 @@ public interface commodityordermapper {
     public void removeOldOrder(Integer orderid);
     public commodityorder getOrderByID(Integer orderid);
     public List<mycommodityorder> listOrderByTouristid(Integer touristid);
+    public List<mycommodityorder> listOrderByMerchantid(Integer merchantid);
 }

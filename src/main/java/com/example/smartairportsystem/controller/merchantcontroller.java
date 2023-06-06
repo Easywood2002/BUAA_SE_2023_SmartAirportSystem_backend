@@ -1,5 +1,6 @@
 package com.example.smartairportsystem.controller;
 
+import com.example.smartairportsystem.entity.bowl.mycommodityorder;
 import com.example.smartairportsystem.entity.commoditylist;
 import com.example.smartairportsystem.entity.merchantrequest;
 import com.example.smartairportsystem.service.*;
@@ -33,6 +34,8 @@ public class merchantcontroller {
     private securityservice securityService = new securityserviceimpl();
     @Resource
     private tokenservice tokenService = new tokenserviceimpl();
+    @Resource
+    private commodityorderservice commodityorderService = new commodityorderserviceimpl();
 
     //商户入驻功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -290,7 +293,7 @@ public class merchantcontroller {
             token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "商户未登录或已注销登录！");
             }else {
                 commodityService.removeOldCommodity(Integer.parseInt(commodityid));
                 map.put("success", true);
@@ -316,9 +319,35 @@ public class merchantcontroller {
             token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
             if(tokenentity == null){
                 map.put("success", false);
-                map.put("message", "用户未登录或已注销登录！");
+                map.put("message", "商户未登录或已注销登录！");
             }else {
                 List<commoditylist> rtlist = commodityService.listCommodityByMerchantid(tokenentity.getId());
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //商户查询自身的商品订单
+    @RequestMapping(value = "/listcommodityorder",method = RequestMethod.POST)
+    public Map<String,Object> listCommodityorder(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String merchanttk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(merchanttk,TypeUtil.Token.MERCHANT);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "商户未登录或已注销登录！");
+            }else {
+                List<mycommodityorder> rtlist = commodityorderService.listOrderByMerchantid(tokenentity.getId());
                 map.put("success", true);
                 map.put("message", rtlist);
             }

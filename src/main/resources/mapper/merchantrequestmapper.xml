@@ -22,4 +22,8 @@
     <delete id="removeOldMerchantrequest">
         delete from merchantrequest where requestid = #{requestid}
     </delete>
+
+    <select id="listAllRequest" resultType="com.example.smartairportsystem.entity.merchantrequest">
+        select * from merchantrequest
+    </select>
 </mapper>

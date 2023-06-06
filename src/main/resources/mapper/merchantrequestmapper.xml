@@ -4,6 +4,14 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchantrequest">
     </resultMap>
     <insert id="addNewMerchantrequest" parameterType="com.example.smartairportsystem.entity.merchantrequest">
-        insert into merchant(realname,passwords,salt,shopname,email,idnumber) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email},#{idnumber})
+        insert into merchantrequest(realname,passwords,salt,shopname,email,idnumber) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email},#{idnumber})
     </insert>
+
+    <select id="getMerchantrequestByEmail" resultType="com.example.smartairportsystem.entity.merchantrequest">
+        select * from merchantrequest where email = #{email}
+    </select>
+
+    <delete id="removeOldMerchantrequest">
+        delete from merchantrequest where requestid = #{requestid}
+    </delete>
 </mapper>

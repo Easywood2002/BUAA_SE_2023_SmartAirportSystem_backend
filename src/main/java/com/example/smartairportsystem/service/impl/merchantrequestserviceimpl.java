@@ -12,4 +12,6 @@ public class merchantrequestserviceimpl implements merchantrequestservice{
     private merchantrequestmapper merchantrequestMapper;
 
     public void addNewMerchantrequest(merchantrequest newrequest){merchantrequestMapper.addNewMerchantrequest(newrequest);}
+    public merchantrequest getMerchantrequestByEmail(String email){return merchantrequestMapper.getMerchantrequestByEmail(email);}
+    public void removeOldMerchantrequest(Integer requestid){merchantrequestMapper.removeOldMerchantrequest(requestid);}
 }

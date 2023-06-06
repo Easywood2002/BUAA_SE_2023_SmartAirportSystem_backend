@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.repairrecordmapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.repairrecord">
+    </resultMap>
+    <insert id="addNewRepairrecord" parameterType="com.example.smartairportsystem.entity.repairrecord">
+        insert into repairrecord(deviceid,devicename,devicepicture,deviceinfo,location,approved) values(#{deviceid},#{devicename},#{devicepicture}#{deviceinfo},#{location},#{approved})
+    </insert>
+
+    <select id="getRepairrecordByDeviceid" resultType="com.example.smartairportsystem.entity.repairrecord">
+        select * from repairrecord where deviceid = #{deviceid}
+    </select>
+
+    <select id="getRepairrecordByID" resultType="com.example.smartairportsystem.entity.repairrecord">
+        select * from repairrecord where recordid = #{recordid}
+    </select>
+
+    <update id="examineRepairrecord" parameterType="com.example.smartairportsystem.entity.repairrecord">
+        update repairrecord set approved = #{approved} where recordid = #{recordid}
+    </update>
+
+    <delete id="removeOldRepairrecord">
+        delete from repairrecord where recordid = #{recordid}
+    </delete>
+</mapper>

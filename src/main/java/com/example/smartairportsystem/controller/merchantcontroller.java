@@ -232,45 +232,6 @@ public class merchantcontroller {
         return map;
     }*/
 
-    /*//商户提交入驻请求
-    @RequestMapping(value = "/addmerchantrequest", method = RequestMethod.POST)
-    public Map<String, Object> addMerchantrequest(@RequestParam Map<String,String> rawmap){
-        Map<String, Object> map = new HashMap<>();
-
-        //表单取参
-        String realname = rawmap.get("realname");
-        String nickname = rawmap.get("nickname");
-        String passwords = rawmap.get("passwords");
-        String repasswords = rawmap.get("repasswords");
-        String email = rawmap.get("email");
-
-        try{
-            if(repasswords.equals(passwords)) {
-                //对用户设置的密码加盐加密后保存
-                Random root = new Random((new Random()).nextInt());
-                String salt = root.nextInt()+"";
-                merchant exist = merchantService.getMerchantByEmail(email);
-                if (exist != null) {
-                    map.put("success", false);
-                    map.put("message", "请勿重复提交请求！");
-                } else {
-                    merchantrequestService.addNewMerchantrequest(new merchantrequest(0,realname,nickname,passwords+salt,salt,email));
-                    map.put("success", true);
-                    map.put("message", "商户入驻请求提交成功！");
-                }
-            }else{
-                map.put("success", false);
-                map.put("message", "确认密码不一致！");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success",false);
-            map.put("message","商户入驻请求提交失败！");
-        }
-
-        return map;
-    }*/
-
     //商户添加商品信息功能
     @RequestMapping(value = "/addcommodity", method = RequestMethod.POST)
     public Map<String, Object> addCommodity(@RequestParam Map<String,String> rawmap){

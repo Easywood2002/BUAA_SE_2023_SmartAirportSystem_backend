@@ -16,7 +16,7 @@
     </select>
 
     <select id="getPersonByCombine" resultType="com.example.smartairportsystem.entity.person">
-        select * from person where touristid = #{touristid} and idnumber = #{idnumber}
+        select * from person where touristid = #{touristid} and idnumber = #{idnumber} and personid != #{exceptid}
     </select>
 
     <delete id="removeOldPerson">

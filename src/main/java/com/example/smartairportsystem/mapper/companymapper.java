@@ -11,6 +11,6 @@ public interface companymapper {
     public void logupNewCompany(airlinecompany newcompany);
     public void updateOldCompany(airlinecompany newcompany);
     public void updatePassword(@Param("touristid") Integer companyid, @Param("newpasswords") String newpasswords);
-    public airlinecompany getCompanyByEmail(String email);
+    public airlinecompany getCompanyByEmail(@Param("email") String email,@Param("exceptid") Integer exceptid);
     public airlinecompany getCompanyByID(Integer companyid);
 }

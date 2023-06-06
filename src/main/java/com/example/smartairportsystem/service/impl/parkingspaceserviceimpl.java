@@ -14,4 +14,9 @@ public class parkingspaceserviceimpl implements parkingspaceservice {
     private parkingspacemapper parkingspaceMapper;
 
     public List<parkingspace> listEmptyParkingspace(){return parkingspaceMapper.listEmptyParkingspace();}
+    public List<parkingspace> listAllParkingspace(){return parkingspaceMapper.listAllParkingspace();}
+    public void addNewParkingspace(parkingspace newps){parkingspaceMapper.addNewParkingspace(newps);}
+    public void updateOldParkingspace(parkingspace newps){parkingspaceMapper.updateOldParkingspace(newps);}
+    public void removeOldParkingspace(Integer parkingspaceid){parkingspaceMapper.removeOldParkingspace(parkingspaceid);}
+    public parkingspace getParkingspaceByLocation(String location,Integer exceptid){return parkingspaceMapper.getParkingspaceByLocation(location,exceptid);}
 }

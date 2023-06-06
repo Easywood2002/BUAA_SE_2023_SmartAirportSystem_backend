@@ -16,7 +16,7 @@
     </update>
 
     <select id="getCompanyByEmail" resultType="com.example.smartairportsystem.entity.airlinecompany">
-        select * from airlinecompany where email = #{email}
+        select * from airlinecompany where email = #{email} and companyid != #{exceptid}
     </select>
 
     <select id="getCompanyByID" resultType="com.example.smartairportsystem.entity.airlinecompany">

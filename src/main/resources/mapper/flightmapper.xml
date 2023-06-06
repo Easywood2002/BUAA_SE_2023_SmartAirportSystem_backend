@@ -12,7 +12,7 @@
     </select>
 
     <select id="getFlightByCombine" resultType="com.example.smartairportsystem.entity.flight">
-        select * from flight where name = #{name} and companyid = #{companyid} and departuretime = #{departuretime}
+        select * from flight where name = #{name} and companyid = #{companyid} and departuretime = #{departuretime} and flightid != #{exceptid}
     </select>
 
     <update id="updateOldFlight" parameterType="com.example.smartairportsystem.entity.flight">

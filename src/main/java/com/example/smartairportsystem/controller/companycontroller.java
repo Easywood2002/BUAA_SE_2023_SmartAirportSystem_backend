@@ -40,7 +40,7 @@ public class companycontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt() + "";
-                airlinecompany exist = companyService.getCompanyByEmail(email);
+                airlinecompany exist = companyService.getCompanyByEmail(email,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "航司重复注册！");
@@ -72,7 +72,7 @@ public class companycontroller {
         String passwords = rawmap.get("passwords");
 
         try {
-            airlinecompany exist = companyService.getCompanyByEmail(email);
+            airlinecompany exist = companyService.getCompanyByEmail(email,0);
             if (exist != null) {
                 //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords + exist.getSalt());
@@ -162,7 +162,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                airlinecompany conflict = companyService.getCompanyByEmail(email);
+                airlinecompany conflict = companyService.getCompanyByEmail(email,tokenentity.getId());
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "该邮箱已被使用！");
@@ -227,7 +227,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
+                flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "航班信息已存在！");
@@ -267,7 +267,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
+                flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime,Integer.parseInt(flightid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同航班信息！");
@@ -330,7 +330,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype);
+                ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "机票信息已存在！");
@@ -366,7 +366,7 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket conflict = ticketService.getTicketByCombine(ticketService.getTicketByID(Integer.parseInt(ticketid)).getFlightid(),tickettype);
+                ticket conflict = ticketService.getTicketByCombine(ticketService.getTicketByID(Integer.parseInt(ticketid)).getFlightid(),tickettype,Integer.parseInt(ticketid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同机票信息！");

@@ -12,7 +12,7 @@
     </select>
 
     <select id="getCommodityByCombine" resultType="com.example.smartairportsystem.entity.commoditylist">
-        select * from commoditylist where merchantid = #{merchantid} and name = #{name}
+        select * from commoditylist where merchantid = #{merchantid} and name = #{name} and commodityid != #{exceptid}
     </select>
 
     <select id="getMerchantidByCommodityid" resultType="com.example.smartairportsystem.entity.merchant">

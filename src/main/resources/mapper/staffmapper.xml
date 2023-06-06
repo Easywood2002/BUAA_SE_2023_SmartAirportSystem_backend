@@ -16,7 +16,7 @@
     </update>
 
     <select id="getStaffByEmail" resultType="com.example.smartairportsystem.entity.staff">
-        select * from staff where email = #{email}
+        select * from staff where email = #{email} and staffid != #{exceptid}
     </select>
 
     <select id="getStaffByID" resultType="com.example.smartairportsystem.entity.staff">
@@ -24,7 +24,7 @@
     </select>
 
     <select id="getStaffByIdnumber" resultType="com.example.smartairportsystem.entity.staff">
-        select * from staff where idnumber = #{idnumber}
+        select * from staff where idnumber = #{idnumber} and staffid != #{exceptid}
     </select>
 
     <delete id="removeOldStaff">

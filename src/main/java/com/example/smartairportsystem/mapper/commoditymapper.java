@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface commoditymapper {
     public commoditylist getCommodityByID(Integer commodityid);
-    public commoditylist getCommodityByCombine(@Param("merchantid") Integer merchantid,@Param("name") String name);
+    public commoditylist getCommodityByCombine(@Param("merchantid") Integer merchantid,@Param("name") String name,@Param("exceptid") Integer exceptid);
     public Integer getMerchantidByCommodityid(Integer commodityid);
     public void addNewCommodity(commoditylist newcommodity);
     public void updateCounts(@Param("commodityid") Integer commodityid,@Param("newcounts") Integer newcounts);

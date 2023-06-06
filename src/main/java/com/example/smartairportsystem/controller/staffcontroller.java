@@ -1,7 +1,6 @@
 package com.example.smartairportsystem.controller;
 
 import com.example.smartairportsystem.entity.*;
-import com.example.smartairportsystem.entity.bowl.mycommodityorder;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.TypeUtil;
@@ -30,6 +29,8 @@ public class staffcontroller {
     private merchantservice merchantService = new merchantserviceimpl();
     @Resource
     private merchantrequestservice merchantrequestService = new merchantrequestserviceimpl();
+    @Resource
+    private parkingspaceservice parkingspaceService = new parkingspaceserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -49,12 +50,12 @@ public class staffcontroller {
                 //对用户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                staff exist = staffService.getStaffByIdnumber(idnumber);
+                staff exist = staffService.getStaffByIdnumber(idnumber,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "该身份证号已被注册！");
                 } else {
-                    exist = staffService.getStaffByEmail(email);
+                    exist = staffService.getStaffByEmail(email,0);
                     if (exist != null){
                         map.put("success", false);
                         map.put("message", "该邮箱已被注册！");
@@ -81,13 +82,14 @@ public class staffcontroller {
     public Map<String,Object> loginStaff(@RequestParam Map<String,String> rawmap){
         Map<String,Object> map = new HashMap<>();
         map.put("token", "null");
+        map.put("positionpost","null");
 
         //表单取参
         String email = rawmap.get("email");
         String passwords = rawmap.get("passwords");
 
         try{
-            staff exist = staffService.getStaffByEmail(email);
+            staff exist = staffService.getStaffByEmail(email,0);
             if (exist != null) {
                 //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords+exist.getSalt());
@@ -104,6 +106,7 @@ public class staffcontroller {
                     map.put("success", true);
                     map.put("message", "员工登录成功！");
                     map.put("token",stafftk);
+                    map.put("position",exist.getPositionpost());
                 }else {
                     map.put("success", false);
                     map.put("message", "员工密码错误！");
@@ -179,12 +182,12 @@ public class staffcontroller {
                 map.put("success", false);
                 map.put("message", "员工未登录或已注销登录！");
             }else {
-                staff conflict = staffService.getStaffByIdnumber(idnumber);
+                staff conflict = staffService.getStaffByIdnumber(idnumber,tokenentity.getId());
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "该身份证号已被使用！");
                 }else {
-                    conflict = staffService.getStaffByEmail(email);
+                    conflict = staffService.getStaffByEmail(email,tokenentity.getId());
                     if (conflict != null){
                         map.put("success", false);
                         map.put("message", "该邮箱已被使用！");
@@ -495,6 +498,146 @@ public class staffcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "删除行李信息失败！");
+        }
+        return map;
+    }
+
+    //工作人员列出车位信息功能
+    @RequestMapping(value = "/listparkingspce", method = RequestMethod.POST)
+    public Map<String, Object> listParkingspce(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                List<parkingspace> rtlist = parkingspaceService.listAllParkingspace();
+                map.put("success", true);
+                map.put("message", rtlist);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //工作人员添加车位信息功能
+    @RequestMapping(value = "/addparkingspce", method = RequestMethod.POST)
+    public Map<String, Object> addParkingspce(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String price = rawmap.get("price");
+        String location = rawmap.get("location");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
+                    map.put("success", false);
+                    map.put("message", "您无权添加车位信息！");
+                } else {
+                    parkingspace ps = parkingspaceService.getParkingspaceByLocation(location,0);
+                    if(ps != null){
+                        map.put("success", false);
+                        map.put("message", "相同车位已存在！");
+                    }else {
+                        parkingspaceService.addNewParkingspace(new parkingspace(0, location,Double.parseDouble(price)));
+                        map.put("success", true);
+                        map.put("message", "添加车位信息成功！");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "添加车位信息失败！");
+        }
+        return map;
+    }
+
+    //工作人员修改车位信息功能
+    @RequestMapping(value = "/updateparkingspce", method = RequestMethod.POST)
+    public Map<String, Object> updateParkingspce(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String parkingspaceid = rawmap.get("parkingspaceid");
+        String price = rawmap.get("price");
+        String location = rawmap.get("location");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
+                    map.put("success", false);
+                    map.put("message", "您无权修改车位信息！");
+                } else {
+                    parkingspace ps = parkingspaceService.getParkingspaceByLocation(location,Integer.parseInt(parkingspaceid));
+                    if(ps != null){
+                        map.put("success", false);
+                        map.put("message", "相同车位已存在！");
+                    }else {
+                        parkingspaceService.updateOldParkingspace(new parkingspace(Integer.parseInt(parkingspaceid), location,Double.parseDouble(price)));
+                        map.put("success", true);
+                        map.put("message", "修改车位信息成功！");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改车位信息失败！");
+        }
+        return map;
+    }
+
+    //工作人员删除车位信息功能
+    @RequestMapping(value = "/removeparkingspce", method = RequestMethod.POST)
+    public Map<String, Object> removeParkingspce(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+        String parkingspaceid = rawmap.get("parkingspaceid");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                staff stf = staffService.getStaffByID(tokenentity.getId());
+                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
+                    map.put("success", false);
+                    map.put("message", "您无权删除车位信息！");
+                } else {
+                    parkingspaceService.removeOldParkingspace(Integer.parseInt(parkingspaceid));
+                    map.put("success", true);
+                    map.put("message", "删除车位信息成功！");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "删除车位信息失败！");
         }
         return map;
     }

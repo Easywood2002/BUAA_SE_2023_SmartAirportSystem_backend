@@ -55,12 +55,12 @@ public class merchantcontroller {
                 //对商户设置的密码加盐加密后保存
                 Random root = new Random((new Random()).nextInt());
                 String salt = root.nextInt()+"";
-                merchant exist = merchantService.getMerchantByIdnumber(idnumber);
+                merchant exist = merchantService.getMerchantByIdnumber(idnumber,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "该身份证号已申请入驻！");
                 } else {
-                    exist = merchantService.getMerchantByEmail(email);
+                    exist = merchantService.getMerchantByEmail(email,0);
                     if(exist != null){
                         map.put("success", false);
                         map.put("message", "该邮箱已申请入驻！");
@@ -93,7 +93,7 @@ public class merchantcontroller {
         String passwords = rawmap.get("passwords");
 
         try{
-            merchant exist = merchantService.getMerchantByEmail(email);
+            merchant exist = merchantService.getMerchantByEmail(email,0);
             if (exist != null) {
                 //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords+exist.getSalt());
@@ -185,12 +185,12 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                merchant conflict = merchantService.getMerchantByIdnumber(idnumber);
+                merchant conflict = merchantService.getMerchantByIdnumber(idnumber,tokenentity.getId());
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "该身份证号已被使用！");
                 }else {
-                    conflict = merchantService.getMerchantByEmail(email);
+                    conflict = merchantService.getMerchantByEmail(email,tokenentity.getId());
                     if (conflict != null){
                         map.put("success", false);
                         map.put("message", "该邮箱已被使用！");
@@ -226,7 +226,7 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
             }else {
-                commoditylist exist = commodityService.getCommodityByCombine(tokenentity.getId(),name);
+                commoditylist exist = commodityService.getCommodityByCombine(tokenentity.getId(),name,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "本店商品信息已存在！");
@@ -262,7 +262,7 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
             }else {
-                commoditylist conflict = commodityService.getCommodityByCombine(tokenentity.getId(),name);
+                commoditylist conflict = commodityService.getCommodityByCombine(tokenentity.getId(),name,Integer.parseInt(commodityid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同商品信息！");

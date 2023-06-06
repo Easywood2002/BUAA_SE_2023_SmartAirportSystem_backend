@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 @Repository
 public interface personmapper {
-    public person getPersonByCombine(@Param("touristid") Integer touristid, @Param("idnumber") String idnumber);
+    public person getPersonByCombine(@Param("touristid") Integer touristid, @Param("idnumber") String idnumber,@Param("exceptid") Integer exceptid);
     public person getPersonByID(Integer personid);
     public void updateOldPerson(person newperson);
     public void removeOldPerson(Integer personid);

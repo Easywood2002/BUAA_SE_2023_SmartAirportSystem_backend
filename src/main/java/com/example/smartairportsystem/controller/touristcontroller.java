@@ -268,7 +268,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber);
+                person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber,0);
                 if(exist != null){
                     map.put("success", false);
                     map.put("message", "实名信息已存在！");
@@ -304,7 +304,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber);
+                person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber,Integer.parseInt(personid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同实名信息！");

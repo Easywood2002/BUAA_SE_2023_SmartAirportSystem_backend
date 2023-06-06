@@ -12,11 +12,11 @@
     </select>
 
     <select id="getMerchantByEmail" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where email = #{email}
+        select * from merchant where email = #{email} and merchantid != #{exceptid}
     </select>
 
     <select id="getMerchantByIdnumber" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where idnumber = #{idnumber}
+        select * from merchant where idnumber = #{idnumber} and merchantid != #{exceptid}
     </select>
 
     <select id="listAllMerchant" resultType="com.example.smartairportsystem.entity.merchant">

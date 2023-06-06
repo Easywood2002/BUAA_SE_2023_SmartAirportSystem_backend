@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface commodityservice {
     public commoditylist getCommodityByID(Integer commodityid);
-    public commoditylist getCommodityByCombine(Integer merchantid,String name);
+    public commoditylist getCommodityByCombine(Integer merchantid,String name,Integer exceptid);
     public Integer getMerchantidByCommodityid(Integer commodityid);
     public void addNewCommodity(commoditylist newcommodity);
     public void updateCounts(Integer commodityid,Integer newcounts);

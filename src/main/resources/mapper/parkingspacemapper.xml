@@ -4,6 +4,26 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.parkingspace">
     </resultMap>
     <select id="listEmptyParkingspace" resultType="com.example.smartairportsystem.entity.parkingspace">
-        select * from parkingspace ps where parkingspaceid not in (select po.parkingspaceid from parkingorder po)
+        select * from parkingspace ps where ps.parkingspaceid not in (select po.parkingspaceid from parkingorder po)
     </select>
+
+    <select id="listAllParkingspace" resultType="com.example.smartairportsystem.entity.parkingspace">
+        select * from parkingspace
+    </select>
+
+    <select id="getParkingspaceByLocation" resultType="com.example.smartairportsystem.entity.parkingspace">
+        select * from parkingspace where location = #{location} and parkingspaceid != #{exceptid}
+    </select>
+
+    <update id="updateOldParkingspace" parameterType="com.example.smartairportsystem.entity.parkingspace">
+        update parkingspace set location = #{location},price = #{price} where parkingspaceid = #{parkingspaceid}
+    </update>
+
+    <insert id="addNewParkingspace" parameterType="com.example.smartairportsystem.entity.parkingspace">
+        insert into parkingspace(location,price) values(#{location},#{price})
+    </insert>
+
+    <delete id="removeOldParkingspace">
+        delete from parkingspace where parkingspaceid = #{parkingspaceid}
+    </delete>
 </mapper>

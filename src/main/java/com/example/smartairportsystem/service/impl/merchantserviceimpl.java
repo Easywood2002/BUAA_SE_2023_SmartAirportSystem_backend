@@ -16,8 +16,8 @@ public class merchantserviceimpl implements merchantservice{
 
     public void logupNewMerchant(merchant newmerchant){merchantMapper.logupNewMerchant(newmerchant);}
     public merchant getMerchantByID(Integer merchantid){return merchantMapper.getMerchantByID(merchantid);}
-    public merchant getMerchantByEmail(String email){return merchantMapper.getMerchantByEmail(email);}
-    public merchant getMerchantByIdnumber(String idnumber){return merchantMapper.getMerchantByIdnumber(idnumber);}
+    public merchant getMerchantByEmail(String email,Integer exceptid){return merchantMapper.getMerchantByEmail(email,exceptid);}
+    public merchant getMerchantByIdnumber(String idnumber,Integer exceptid){return merchantMapper.getMerchantByIdnumber(idnumber,exceptid);}
     public List<merchant> listAllMerchant(){return merchantMapper.listAllMerchant();}
     public void updatePassword(Integer merchantid, String newpasswords){merchantMapper.updatePassword(merchantid,newpasswords);}
     public void updateOldMerchant(merchant newmerchant){merchantMapper.updateOldMerchant(newmerchant);}

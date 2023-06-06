@@ -3,6 +3,7 @@ package com.example.smartairportsystem.controller;
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
+import com.example.smartairportsystem.utils.EmailUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,17 +38,23 @@ public class companycontroller {
 
         try {
             if (repasswords.equals(passwords)) {
-                //对用户设置的密码加盐加密后保存
-                Random root = new Random((new Random()).nextInt());
-                String salt = root.nextInt() + "";
-                airlinecompany exist = companyService.getCompanyByEmail(email,0);
-                if (exist != null) {
+                if(EmailUtil.isCorrect(email)) {
+                    //对用户设置的密码加盐加密后保存
+                    Random root = new Random((new Random()).nextInt());
+                    String salt = root.nextInt() + "";
+                    airlinecompany exist = companyService.getCompanyByEmail(email, 0);
+                    if (exist != null) {
+                        map.put("success", false);
+                        map.put("message", "航司重复注册！");
+                    } else {
+                        companyService.logupNewCompany(new airlinecompany(0, email, name, passwords + salt, salt));
+                        EmailUtil.sendInformationEmail(email,"尊敬的用户：您好！\n\t您的当前邮箱"+email+"已成功注册为"+TypeUtil.AirportLocation+"智慧机场系统航空公司！");
+                        map.put("success", true);
+                        map.put("message", "航司注册成功！");
+                    }
+                }else{
                     map.put("success", false);
-                    map.put("message", "航司重复注册！");
-                } else {
-                    companyService.logupNewCompany(new airlinecompany(0,email,name, passwords + salt, salt));
-                    map.put("success", true);
-                    map.put("message", "航司注册成功！");
+                    map.put("message", "邮箱格式有误！");
                 }
             } else {
                 map.put("success", false);
@@ -162,14 +169,19 @@ public class companycontroller {
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                airlinecompany conflict = companyService.getCompanyByEmail(email,tokenentity.getId());
-                if(conflict != null){
+                if(EmailUtil.isCorrect(email)) {
+                    airlinecompany conflict = companyService.getCompanyByEmail(email, tokenentity.getId());
+                    if (conflict != null) {
+                        map.put("success", false);
+                        map.put("message", "该邮箱已被使用！");
+                    } else {
+                        companyService.updateOldCompany(new airlinecompany(tokenentity.getId(), email, name, "", ""));
+                        map.put("success", true);
+                        map.put("message", "航司信息已更新！");
+                    }
+                }else{
                     map.put("success", false);
-                    map.put("message", "该邮箱已被使用！");
-                }else {
-                    companyService.updateOldCompany(new airlinecompany(tokenentity.getId(),email, name, "", ""));
-                    map.put("success", true);
-                    map.put("message", "航司信息已更新！");
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){

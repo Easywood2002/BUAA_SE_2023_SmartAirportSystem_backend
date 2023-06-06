@@ -47,30 +47,6 @@ public class touristcontroller {
     @Resource
     private luggageservice luggageService = new luggageserviceimpl();
 
-    /*@RequestMapping(value = "/test",method = RequestMethod.POST)
-    public Map<String,Object> test(@RequestParam Map<String,String> rawmap){
-        Map<String,Object> map = new HashMap<>();
-
-        String email = rawmap.get("email");
-
-        try {
-            String raw = securityService.MD5(TimeFormatUtil.getCurrentTime() + email);
-            Random random = new Random();
-            int start = random.nextInt(raw.length()-6);
-            String code = raw.substring(start,start+5);
-
-            EmailUtil.sendAuthCodeEmail(email,code);
-            EmailUtil.sendInformationEmail(email);
-            map.put("success", true);
-            map.put("message", "验证码发送成功！");
-        }catch (Exception e){
-            e.printStackTrace();
-            map.put("success",false);
-            map.put("message","验证码发送失败！");
-        }
-        return map;
-    }*/
-
     //旅客用户注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
     public Map<String,Object> logupTourist(@RequestParam Map<String,String> rawmap){
@@ -83,17 +59,23 @@ public class touristcontroller {
 
         try{
             if(repasswords.equals(passwords)) {
-                //对用户设置的密码加盐加密后保存
-                Random root = new Random((new Random()).nextInt());
-                String salt = root.nextInt()+"";
-                tourist exist = touristService.getTouristByEmail(email);
-                if (exist != null) {
+                if(EmailUtil.isCorrect(email)) {
+                    //对用户设置的密码加盐加密后保存
+                    Random root = new Random((new Random()).nextInt());
+                    String salt = root.nextInt() + "";
+                    tourist exist = touristService.getTouristByEmail(email);
+                    if (exist != null) {
+                        map.put("success", false);
+                        map.put("message", "邮箱已被注册！");
+                    } else {
+                        touristService.logupNewTourist(new tourist(0, email, passwords + salt, salt, "false"));
+                        EmailUtil.sendInformationEmail(email,"尊敬的用户：您好！\n\t您的当前邮箱"+email+"已成功注册为"+TypeUtil.AirportLocation+"智慧机场系统旅客用户！");
+                        map.put("success", true);
+                        map.put("message", "用户注册成功！");
+                    }
+                }else{
                     map.put("success", false);
-                    map.put("message", "邮箱已被注册！");
-                } else {
-                    touristService.logupNewTourist(new tourist(0,email,passwords+salt,salt, "false"));
-                    map.put("success", true);
-                    map.put("message", "用户注册成功！");
+                    map.put("message", "邮箱格式有误！");
                 }
             }else{
                 map.put("success", false);
@@ -207,14 +189,20 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                tourist conflict = touristService.getTouristByEmail(newemail);
-                if(conflict != null) {
-                    map.put("success", false);
-                    map.put("message", "该邮箱已被使用！");
+                if(EmailUtil.isCorrect(newemail)) {
+                    tourist conflict = touristService.getTouristByEmail(newemail);
+                    if (conflict != null) {
+                        map.put("success", false);
+                        map.put("message", "该邮箱已被使用！");
+                    } else {
+                        touristService.updateEmail(tokenentity.getId(), newemail);
+                        EmailUtil.sendInformationEmail(newemail,"尊敬的用户：您好！\n\t您的"+TypeUtil.AirportLocation+"智慧机场系统旅客用户账号邮箱已更改为"+newemail+"，请确认操作！");
+                        map.put("success", true);
+                        map.put("message", "邮箱改绑成功！");
+                    }
                 }else{
-                    touristService.updateEmail(tokenentity.getId(),newemail);
-                    map.put("success", true);
-                    map.put("message", "邮箱改绑成功！");
+                    map.put("success", false);
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){
@@ -268,14 +256,19 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person exist = personService.getPersonByCombine(tokenentity.getId(),idnumber,0);
-                if(exist != null){
-                    map.put("success", false);
-                    map.put("message", "实名信息已存在！");
+                if(EmailUtil.isCorrect(email)) {
+                    person exist = personService.getPersonByCombine(tokenentity.getId(), idnumber, 0);
+                    if (exist != null) {
+                        map.put("success", false);
+                        map.put("message", "实名信息已存在！");
+                    } else {
+                        personService.addNewPerson(new person(0, tokenentity.getId(), realname, idnumber, email));
+                        map.put("success", true);
+                        map.put("message", "添加实名信息成功！");
+                    }
                 }else{
-                    personService.addNewPerson(new person(0,tokenentity.getId(),realname,idnumber,email));
-                    map.put("success", true);
-                    map.put("message", "添加实名信息成功！");
+                    map.put("success", false);
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){
@@ -304,14 +297,19 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                person conflict = personService.getPersonByCombine(tokenentity.getId(),idnumber,Integer.parseInt(personid));
-                if(conflict != null){
+                if(EmailUtil.isCorrect(email)) {
+                    person conflict = personService.getPersonByCombine(tokenentity.getId(), idnumber, Integer.parseInt(personid));
+                    if (conflict != null) {
+                        map.put("success", false);
+                        map.put("message", "已存在相同实名信息！");
+                    } else {
+                        personService.updateOldPerson(new person(Integer.parseInt(personid), tokenentity.getId(), realname, idnumber, email));
+                        map.put("success", true);
+                        map.put("message", "实名信息已更新！");
+                    }
+                }else{
                     map.put("success", false);
-                    map.put("message", "已存在相同实名信息！");
-                }else {
-                    personService.updateOldPerson(new person(Integer.parseInt(personid),tokenentity.getId(),realname,idnumber,email));
-                    map.put("success", true);
-                    map.put("message", "实名信息已更新！");
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){
@@ -433,6 +431,9 @@ public class touristcontroller {
                     for (String personid : personids) {
                         purchaserecordService.addNewRecord(new purchaserecord(0,Integer.valueOf(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
                     }
+                    tourist t = touristService.getTouristByID(tokenentity.getId());
+                    flight f = flightService.getFlightByID(tkt.getTicketid());
+                    EmailUtil.sendInformationEmail(t.getEmail(),"尊敬的用户：您好！\n\t您已成功购买从"+f.getTakeofflocation()+"飞往"+f.getLandinglocation()+"的"+f.getName()+"航班的"+len+"张机票！");
                     map.put("success", true);
                     map.put("message", "用户购票成功");
                 }

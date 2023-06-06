@@ -10,5 +10,6 @@ public interface parkingspaceservice {
     public void addNewParkingspace(parkingspace newps);
     public void updateOldParkingspace(parkingspace newps);
     public void removeOldParkingspace(Integer parkingspaceid);
+    public parkingspace getParkingspaceByID(Integer parkingspaceid);
     public parkingspace getParkingspaceByLocation(String location,Integer exceptid);
 }

@@ -15,6 +15,10 @@
         select * from parkingspace where location = #{location} and parkingspaceid != #{exceptid}
     </select>
 
+    <select id="getParkingspaceByID" resultType="com.example.smartairportsystem.entity.parkingspace">
+        select * from parkingspace where parkingspaceid = #{parkingspaceid}
+    </select>
+
     <update id="updateOldParkingspace" parameterType="com.example.smartairportsystem.entity.parkingspace">
         update parkingspace set location = #{location},price = #{price} where parkingspaceid = #{parkingspaceid}
     </update>

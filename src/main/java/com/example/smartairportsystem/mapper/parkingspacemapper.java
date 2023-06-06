@@ -15,5 +15,6 @@ public interface parkingspacemapper {
     public void addNewParkingspace(parkingspace newps);
     public void updateOldParkingspace(parkingspace newps);
     public void removeOldParkingspace(Integer parkingspaceid);
+    public parkingspace getParkingspaceByID(Integer parkingspaceid);
     public parkingspace getParkingspaceByLocation(@Param("location") String location,@Param("exceptid") Integer exceptid);
 }

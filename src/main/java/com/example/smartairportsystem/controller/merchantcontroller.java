@@ -5,6 +5,7 @@ import com.example.smartairportsystem.entity.commoditylist;
 import com.example.smartairportsystem.entity.merchantrequest;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
+import com.example.smartairportsystem.utils.EmailUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,14 +61,20 @@ public class merchantcontroller {
                     map.put("success", false);
                     map.put("message", "该身份证号已申请入驻！");
                 } else {
-                    exist = merchantService.getMerchantByEmail(email,0);
-                    if(exist != null){
+                    if(EmailUtil.isCorrect(email)) {
+                        exist = merchantService.getMerchantByEmail(email, 0);
+                        if (exist != null) {
+                            map.put("success", false);
+                            map.put("message", "该邮箱已申请入驻！");
+                        } else {
+                            merchantrequestService.addNewMerchantrequest(new merchantrequest(0, realname, passwords + salt, salt, shopname, email, idnumber));
+                            EmailUtil.sendInformationEmail(email,"尊敬的用户：您好！\n\t您的当前邮箱"+email+"已成功提交申请，申请入驻为"+TypeUtil.AirportLocation+"智慧机场系统商户！");
+                            map.put("success", true);
+                            map.put("message", "商户入驻申请提交成功！");
+                        }
+                    }else{
                         map.put("success", false);
-                        map.put("message", "该邮箱已申请入驻！");
-                    }else {
-                        merchantrequestService.addNewMerchantrequest(new merchantrequest(0, realname, passwords + salt, salt, shopname, email, idnumber));
-                        map.put("success", true);
-                        map.put("message", "商户入驻申请提交成功！");
+                        map.put("message", "邮箱格式有误！");
                     }
                 }
             }else{
@@ -185,20 +192,25 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                merchant conflict = merchantService.getMerchantByIdnumber(idnumber,tokenentity.getId());
-                if(conflict != null){
-                    map.put("success", false);
-                    map.put("message", "该身份证号已被使用！");
-                }else {
-                    conflict = merchantService.getMerchantByEmail(email,tokenentity.getId());
-                    if (conflict != null){
+                if(EmailUtil.isCorrect(email)) {
+                    merchant conflict = merchantService.getMerchantByIdnumber(idnumber, tokenentity.getId());
+                    if (conflict != null) {
                         map.put("success", false);
-                        map.put("message", "该邮箱已被使用！");
-                    }else {
-                        merchantService.updateOldMerchant(new merchant(tokenentity.getId(), realname, "", "", shopname, email,idnumber));
-                        map.put("success", true);
-                        map.put("message", "商户信息已更新！");
+                        map.put("message", "该身份证号已被使用！");
+                    } else {
+                        conflict = merchantService.getMerchantByEmail(email, tokenentity.getId());
+                        if (conflict != null) {
+                            map.put("success", false);
+                            map.put("message", "该邮箱已被使用！");
+                        } else {
+                            merchantService.updateOldMerchant(new merchant(tokenentity.getId(), realname, "", "", shopname, email, idnumber));
+                            map.put("success", true);
+                            map.put("message", "商户信息已更新！");
+                        }
                     }
+                }else{
+                    map.put("success", false);
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){

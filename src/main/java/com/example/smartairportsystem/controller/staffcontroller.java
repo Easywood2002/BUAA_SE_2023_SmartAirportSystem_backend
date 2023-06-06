@@ -3,6 +3,7 @@ package com.example.smartairportsystem.controller;
 import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
+import com.example.smartairportsystem.utils.EmailUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,14 +56,20 @@ public class staffcontroller {
                     map.put("success", false);
                     map.put("message", "该身份证号已被注册！");
                 } else {
-                    exist = staffService.getStaffByEmail(email,0);
-                    if (exist != null){
-                        map.put("success", false);
-                        map.put("message", "该邮箱已被注册！");
+                    if(EmailUtil.isCorrect(email)) {
+                        exist = staffService.getStaffByEmail(email, 0);
+                        if (exist != null) {
+                            map.put("success", false);
+                            map.put("message", "该邮箱已被注册！");
+                        } else {
+                            staffService.logupNewStaff(new staff(0, realname, Integer.parseInt(positionpost), email, passwords + salt, salt, idnumber));
+                            EmailUtil.sendInformationEmail(email,"尊敬的用户：您好！\n\t您的当前邮箱"+email+"已成功注册为"+TypeUtil.AirportLocation+"智慧机场系统机厂员工！");
+                            map.put("success", true);
+                            map.put("message", "员工注册成功！");
+                        }
                     }else {
-                        staffService.logupNewStaff(new staff(0, realname, Integer.parseInt(positionpost), email, passwords + salt, salt, idnumber));
-                        map.put("success", true);
-                        map.put("message", "员工注册成功！");
+                        map.put("success", false);
+                        map.put("message", "邮箱格式有误！");
                     }
                 }
             }else{
@@ -106,7 +113,7 @@ public class staffcontroller {
                     map.put("success", true);
                     map.put("message", "员工登录成功！");
                     map.put("token",stafftk);
-                    map.put("position",exist.getPositionpost());
+                    map.put("positionpost",exist.getPositionpost());
                 }else {
                     map.put("success", false);
                     map.put("message", "员工密码错误！");
@@ -182,20 +189,25 @@ public class staffcontroller {
                 map.put("success", false);
                 map.put("message", "员工未登录或已注销登录！");
             }else {
-                staff conflict = staffService.getStaffByIdnumber(idnumber,tokenentity.getId());
-                if(conflict != null){
-                    map.put("success", false);
-                    map.put("message", "该身份证号已被使用！");
-                }else {
-                    conflict = staffService.getStaffByEmail(email,tokenentity.getId());
-                    if (conflict != null){
+                if(EmailUtil.isCorrect(email)) {
+                    staff conflict = staffService.getStaffByIdnumber(idnumber, tokenentity.getId());
+                    if (conflict != null) {
                         map.put("success", false);
-                        map.put("message", "该邮箱已被使用！");
-                    }else {
-                        staffService.updateOldStaff(new staff(tokenentity.getId(), realname, Integer.parseInt(positionpost), email, "", "",idnumber));
-                        map.put("success", true);
-                        map.put("message", "员工信息已更新！");
+                        map.put("message", "该身份证号已被使用！");
+                    } else {
+                        conflict = staffService.getStaffByEmail(email, tokenentity.getId());
+                        if (conflict != null) {
+                            map.put("success", false);
+                            map.put("message", "该邮箱已被使用！");
+                        } else {
+                            staffService.updateOldStaff(new staff(tokenentity.getId(), realname, Integer.parseInt(positionpost), email, "", "", idnumber));
+                            map.put("success", true);
+                            map.put("message", "员工信息已更新！");
+                        }
                     }
+                }else{
+                    map.put("success", false);
+                    map.put("message", "邮箱格式有误！");
                 }
             }
         }catch (Exception e){
@@ -378,10 +390,13 @@ public class staffcontroller {
                 map.put("message", "员工未登录或已注销登录！");
             }else {
                 staff stf = staffService.getStaffByID(tokenentity.getId());
+                merchantrequest mr = merchantrequestService.getMerchantrequestByID(Integer.parseInt(requestid));
                 if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
                     if (Integer.parseInt(approved) == TypeUtil.Approve.ACCESS) {
-                        merchantrequest mr = merchantrequestService.getMerchantrequestByID(Integer.parseInt(requestid));
                         merchantService.logupNewMerchant(new merchant(0,mr.getRealname(),mr.getPasswords(),mr.getSalt(),mr.getShopname(),mr.getEmail(), mr.getIdnumber()));
+                        EmailUtil.sendInformationEmail(mr.getEmail(),"尊敬的用户：您好！\n\t您的当前邮箱"+mr.getEmail()+"已通过审核，成功注册为"+TypeUtil.AirportLocation+"智慧机场系统商户！");
+                    }else{
+                        EmailUtil.sendInformationEmail(mr.getEmail(),"尊敬的用户：您好！\n\t您的当前邮箱"+mr.getEmail()+"所提交的商户入驻申请未通过管理员审核！");
                     }
                     merchantrequestService.removeOldMerchantrequest(Integer.parseInt(requestid));
                     map.put("success", true);

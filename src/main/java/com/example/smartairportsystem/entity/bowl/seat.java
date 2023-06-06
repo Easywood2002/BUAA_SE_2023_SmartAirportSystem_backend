@@ -6,9 +6,9 @@ import javax.persistence.Entity;
 public class seat {
     private Integer seatid;
 
-    private String occupied;
+    private Integer occupied;
 
-    public seat(Integer seatid,String occupied){
+    public seat(Integer seatid,Integer occupied){
         this.seatid = seatid;
         this.occupied = occupied;
     }
@@ -21,11 +21,11 @@ public class seat {
         this.seatid = seatid;
     }
 
-    public String getOccupied() {
+    public Integer getOccupied() {
         return occupied;
     }
 
-    public void setOccupied(String occupied) {
+    public void setOccupied(Integer occupied) {
         this.occupied = occupied;
     }
 }

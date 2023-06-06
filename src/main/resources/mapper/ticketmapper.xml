@@ -12,7 +12,7 @@
     </select>
 
     <select id="getTicketByCombine" resultType="com.example.smartairportsystem.entity.ticket">
-        select * from ticket where flightid = #{flightid} and tickettype = #{tickettype}
+        select * from ticket where flightid = #{flightid} and tickettype = #{tickettype} and ticketid != #{exceptid}
     </select>
 
     <update id="updateOldTicket" parameterType="com.example.smartairportsystem.entity.ticket">

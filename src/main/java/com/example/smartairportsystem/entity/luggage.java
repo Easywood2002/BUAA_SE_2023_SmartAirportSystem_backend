@@ -8,15 +8,15 @@ public class luggage {
     @Id
     private Integer luggageid;
 
-    private Integer touristid;
-    private Integer flightid;
+    private Integer personid;
+    private Integer ticketid;
     private String state;
     private String location;
 
-    public luggage(Integer luggageid,Integer touristid,Integer flightid,String state,String location){
+    public luggage(Integer luggageid,Integer personid,Integer ticketid,String state,String location){
         this.luggageid = luggageid;
-        this.touristid = touristid;
-        this.flightid = flightid;
+        this.personid = personid;
+        this.ticketid = ticketid;
         this.state = state;
         this.location = location;
     }
@@ -29,20 +29,20 @@ public class luggage {
         this.luggageid = luggageid;
     }
 
-    public Integer getTouristid() {
-        return touristid;
+    public Integer getPersonid() {
+        return personid;
     }
 
-    public void setTouristid(Integer touristid) {
-        this.touristid = touristid;
+    public void setPersonid(Integer personid) {
+        this.personid = personid;
     }
 
-    public Integer getFlightid() {
-        return flightid;
+    public Integer getTicketid() {
+        return ticketid;
     }
 
-    public void setFlightid(Integer flightid) {
-        this.flightid = flightid;
+    public void setTicketid(Integer ticketid) {
+        this.ticketid = ticketid;
     }
 
     public String getState() {

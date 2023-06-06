@@ -8,16 +8,14 @@ public class repairrecord {
     @Id
     private Integer recordid;
 
-    private Integer deviceid;
     private String deviceinfo;
     private String devicename;
     private String devicepicture;
     private String location;
-    private String approved;
+    private Integer approved;
 
-    public repairrecord(Integer recordid,Integer deviceid,String devicename,String devicepicture,String deviceinfo,String location,String approved){
+    public repairrecord(Integer recordid,String devicename,String devicepicture,String deviceinfo,String location,Integer approved){
         this.recordid = recordid;
-        this.deviceid = deviceid;
         this.devicename = devicename;
         this.devicepicture = devicepicture;
         this.deviceinfo = deviceinfo;
@@ -31,14 +29,6 @@ public class repairrecord {
 
     public void setRecordid(Integer recordid) {
         this.recordid = recordid;
-    }
-
-    public Integer getDeviceid() {
-        return deviceid;
-    }
-
-    public void setDeviceid(Integer deviceid) {
-        this.deviceid = deviceid;
     }
 
     public String getDeviceinfo() {
@@ -57,11 +47,11 @@ public class repairrecord {
         this.location = location;
     }
 
-    public String getApproved() {
+    public Integer getApproved() {
         return approved;
     }
 
-    public void setApproved(String approved) {
+    public void setApproved(Integer approved) {
         this.approved = approved;
     }
 

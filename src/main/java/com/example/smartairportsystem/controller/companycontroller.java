@@ -1,12 +1,10 @@
 package com.example.smartairportsystem.controller;
 
-import com.example.smartairportsystem.entity.airlinecompany;
-import com.example.smartairportsystem.entity.flight;
-import com.example.smartairportsystem.entity.ticket;
-import com.example.smartairportsystem.entity.token;
+import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
-import com.example.smartairportsystem.utils.TokenTypeUtil;
+import com.example.smartairportsystem.utils.EmailUtil;
+import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -40,17 +38,23 @@ public class companycontroller {
 
         try {
             if (repasswords.equals(passwords)) {
-                //对用户设置的密码加盐加密后保存
-                Random root = new Random((new Random()).nextInt());
-                String salt = root.nextInt() + "";
-                airlinecompany exist = companyService.getCompanyByEmail(email);
-                if (exist != null) {
+                if(EmailUtil.isCorrect(email)) {
+                    //对用户设置的密码加盐加密后保存
+                    Random root = new Random((new Random()).nextInt());
+                    String salt = root.nextInt() + "";
+                    airlinecompany exist = companyService.getCompanyByEmail(email, 0);
+                    if (exist != null) {
+                        map.put("success", false);
+                        map.put("message", "航司重复注册！");
+                    } else {
+                        companyService.logupNewCompany(new airlinecompany(0, email, name, passwords + salt, salt));
+                        EmailUtil.sendInformationEmail(email,"尊敬的用户：您好！\n\t您的当前邮箱"+email+"已成功注册为"+TypeUtil.AirportLocation+"智慧机场系统航空公司！");
+                        map.put("success", true);
+                        map.put("message", "航司注册成功！");
+                    }
+                }else{
                     map.put("success", false);
-                    map.put("message", "航司重复注册！");
-                } else {
-                    companyService.logupNewCompany(new airlinecompany(0,email,name, passwords + salt, salt));
-                    map.put("success", true);
-                    map.put("message", "航司注册成功！");
+                    map.put("message", "邮箱格式有误！");
                 }
             } else {
                 map.put("success", false);
@@ -75,7 +79,7 @@ public class companycontroller {
         String passwords = rawmap.get("passwords");
 
         try {
-            airlinecompany exist = companyService.getCompanyByEmail(email);
+            airlinecompany exist = companyService.getCompanyByEmail(email,0);
             if (exist != null) {
                 //取出用户盐值，与当前输入的密码拼接加密后再与数据库中的信息进行比较
                 String inpwd = securityService.SHA1(passwords + exist.getSalt());
@@ -83,11 +87,11 @@ public class companycontroller {
                     //将用户id经md5加密后作为token一并返回前端，便于后续访问
                     String companytk = securityService.MD5(exist.getCompanyid().toString());
                     token newtk = new token(exist.getCompanyid(), companytk);
-                    token existtk = tokenService.getTokenByID(newtk.getId(), TokenTypeUtil.COMPANY);
+                    token existtk = tokenService.getTokenByID(newtk.getId(), TypeUtil.Token.COMPANY);
                     if (existtk == null) {
-                        tokenService.loginNewToken(newtk, TokenTypeUtil.COMPANY);
+                        tokenService.loginNewToken(newtk, TypeUtil.Token.COMPANY);
                     } else {
-                        tokenService.updateOldToken(newtk, TokenTypeUtil.COMPANY);
+                        tokenService.updateOldToken(newtk, TypeUtil.Token.COMPANY);
                     }
                     map.put("success", true);
                     map.put("message", "航司登录成功！");
@@ -108,6 +112,86 @@ public class companycontroller {
         return map;
     }
 
+    //航空公司修改密码功能
+    @RequestMapping(value = "/updatepassword",method = RequestMethod.POST)
+    public Map<String,Object> updatePassword(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String newpasswords = rawmap.get("newpasswords");
+        String renewpasswords = rawmap.get("renewpasswords");
+        String passwords = rawmap.get("passwords");
+
+        try{
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                if(renewpasswords.equals(newpasswords)) {
+                    airlinecompany exist = companyService.getCompanyByID(tokenentity.getId());
+                    String inpwd = securityService.SHA1(passwords+exist.getSalt());
+                    if(inpwd.equals(exist.getPasswords())) {
+                        companyService.updatePassword(tokenentity.getId(),newpasswords+exist.getSalt());
+                        map.put("success", true);
+                        map.put("message", "修改密码成功！");
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "航司密码错误！");
+                    }
+                }else{
+                    map.put("success",false);
+                    map.put("message","确认密码不一致！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success",false);
+            map.put("message","修改密码失败！");
+        }
+        return map;
+    }
+
+    //航司修改信息功能
+    @RequestMapping(value = "/updatecompany",method = RequestMethod.POST)
+    public Map<String,Object> updateCompany(@RequestParam Map<String,String> rawmap){
+        Map<String,Object> map = new HashMap<>();
+
+        //表单取参
+        String companytk = rawmap.get("token");
+        String email = rawmap.get("email");
+        String name = rawmap.get("name");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "航司未登录或已注销登录！");
+            }else {
+                if(EmailUtil.isCorrect(email)) {
+                    airlinecompany conflict = companyService.getCompanyByEmail(email, tokenentity.getId());
+                    if (conflict != null) {
+                        map.put("success", false);
+                        map.put("message", "该邮箱已被使用！");
+                    } else {
+                        companyService.updateOldCompany(new airlinecompany(tokenentity.getId(), email, name, "", ""));
+                        map.put("success", true);
+                        map.put("message", "航司信息已更新！");
+                    }
+                }else{
+                    map.put("success", false);
+                    map.put("message", "邮箱格式有误！");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "修改航司信息失败！");
+        }
+        return map;
+    }
+
     //列出该航司的航班信息功能
     @RequestMapping(value = "/listflight",method = RequestMethod.POST)
     public Map<String,Object> listFlight(@RequestParam Map<String,String> rawmap){
@@ -117,7 +201,7 @@ public class companycontroller {
         String companytk = rawmap.get("token");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -150,12 +234,12 @@ public class companycontroller {
         String terminal = rawmap.get("terminal");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
+                flight exist = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "航班信息已存在！");
@@ -190,12 +274,12 @@ public class companycontroller {
         String terminal = rawmap.get("terminal");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime);
+                flight conflict = flightService.getFlightByCombine(name,tokenentity.getId(),departuretime,Integer.parseInt(flightid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同航班信息！");
@@ -223,7 +307,7 @@ public class companycontroller {
         String flightid = rawmap.get("flightid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -253,12 +337,12 @@ public class companycontroller {
         String amount = rawmap.get("amount");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype);
+                ticket exist = ticketService.getTicketByCombine(Integer.parseInt(flightid),tickettype,0);
                 if (exist != null) {
                     map.put("success", false);
                     map.put("message", "机票信息已存在！");
@@ -289,12 +373,12 @@ public class companycontroller {
         String amount = rawmap.get("amount");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
             }else {
-                ticket conflict = ticketService.getTicketByCombine(ticketService.getTicketByID(Integer.parseInt(ticketid)).getFlightid(),tickettype);
+                ticket conflict = ticketService.getTicketByCombine(ticketService.getTicketByID(Integer.parseInt(ticketid)).getFlightid(),tickettype,Integer.parseInt(ticketid));
                 if(conflict != null){
                     map.put("success", false);
                     map.put("message", "已存在相同机票信息！");
@@ -322,7 +406,7 @@ public class companycontroller {
         String ticketid = rawmap.get("ticketid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");
@@ -349,7 +433,7 @@ public class companycontroller {
         String flightid = rawmap.get("flightid");
 
         try {
-            token tokenentity = tokenService.getTokenByToken(companytk,TokenTypeUtil.COMPANY);
+            token tokenentity = tokenService.getTokenByToken(companytk,TypeUtil.Token.COMPANY);
             if(tokenentity == null){
                 map.put("success", false);
                 map.put("message", "航司未登录或已注销登录！");

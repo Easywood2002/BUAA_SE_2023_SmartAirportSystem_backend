@@ -4,27 +4,31 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchant">
     </resultMap>
     <insert id="logupNewMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
-        insert into merchant(realname,idnumber,passwords,salt,shopname,email) values(#{realname},#{idnumber},sha1(#{passwords}),#{salt},#{shopname},#{email})
+        insert into merchant(realname,passwords,salt,shopname,email,idnumber) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email},#{idnumber})
     </insert>
-
-    <select id="getMerchantByEmail" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where email = #{email}
-    </select>
 
     <select id="getMerchantByID" resultType="com.example.smartairportsystem.entity.merchant">
         select * from merchant where merchantid = #{merchantid}
     </select>
 
-    <select id="getMerchantByIDnumber" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where idnumber = #{idnumber}
+    <select id="getMerchantByEmail" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where email = #{email} and merchantid != #{exceptid}
     </select>
 
-    <select id="getMerchantByShopname" resultType="com.example.smartairportsystem.entity.merchant">
-        select * from merchant where shopname = #{shopname}
+    <select id="getMerchantByIdnumber" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant where idnumber = #{idnumber} and merchantid != #{exceptid}
+    </select>
+
+    <select id="listAllMerchant" resultType="com.example.smartairportsystem.entity.merchant">
+        select * from merchant
     </select>
 
     <update id="updateOldMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
-        update merchant set realname = #{realname},idnumber = #{idnumber},passwords = sha1(#{passwords}),salt = #{salt},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
+        update merchant set realname = #{realname},idnumber = #{idnumber},shopname = #{shopname},email = #{email} where merchantid = #{merchantid}
+    </update>
+
+    <update id="updatePassword">
+        update merchant set passwords = sha1(#{passwords}) where merchantid = #{merchantid}
     </update>
 
     <delete id="removeOldMerchant">

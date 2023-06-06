@@ -1,0 +1,31 @@
+package com.example.smartairportsystem.utils;
+
+public class TypeUtil {
+    public static String AirportLocation = "北京";
+
+    public static class Staff {
+        public static Integer ADMINISTRATOR = 0;
+        public static Integer COMMONSTAFF = 1;
+        public static Integer REPAIRSTAFF = 2;
+        public static Integer CUSTOMERSERVICE = 3;
+    }
+
+    public static class Seat {
+        public static Integer TRUE = 1;
+        public static Integer FALSE = 0;
+        public static Integer MINE = 2;
+    }
+
+    public static class Approve{
+        public static Integer ACCESS = 1;
+        public static Integer DENY = 0;
+        public static Integer UNSOLVED = 2;
+    }
+
+    public static class Token{
+        public static final int TOURIST = 0;
+        public static final int MERCHANT = 1;
+        public static final int STAFF = 2;
+        public static final int COMPANY = 3;
+    }
+}

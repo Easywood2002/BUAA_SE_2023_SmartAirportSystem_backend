@@ -3,6 +3,7 @@ package com.example.smartairportsystem.service.impl;
 import com.example.smartairportsystem.mapper.staffmapper;
 import com.example.smartairportsystem.entity.staff;
 import com.example.smartairportsystem.service.staffservice;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +13,10 @@ public class staffserviceimpl implements staffservice{
     private staffmapper staffMapper;
 
     public void logupNewStaff(staff newstaff){staffMapper.logupNewStaff(newstaff);}
-    public void removeOldStaff(Integer staffid){staffMapper.removeOldStaff(staffid);};
-    public staff getStaffByEmail(String email){return staffMapper.getStaffByEmail(email);}
+    public void updateOldStaff(staff newstaff){staffMapper.updateOldStaff(newstaff);}
+    public void updatePassword(Integer staffid, String newpasswords){staffMapper.updatePassword(staffid,newpasswords);}
+    public void removeOldStaff(Integer staffid){staffMapper.removeOldStaff(staffid);}
+    public staff getStaffByEmail(String email,Integer exceptid){return staffMapper.getStaffByEmail(email,exceptid);}
+    public staff getStaffByIdnumber(String  idnumber,Integer exceptid){return staffMapper.getStaffByIdnumber(idnumber,exceptid);}
     public staff getStaffByID(Integer staffid){return staffMapper.getStaffByID(staffid);}
 }

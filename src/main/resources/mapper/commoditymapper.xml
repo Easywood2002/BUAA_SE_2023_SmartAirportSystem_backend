@@ -12,15 +12,19 @@
     </select>
 
     <select id="getCommodityByCombine" resultType="com.example.smartairportsystem.entity.commoditylist">
-        select * from commoditylist where merchantid = #{merchantid} and name = #{name}
+        select * from commoditylist where merchantid = #{merchantid} and name = #{name} and commodityid != #{exceptid}
     </select>
 
-    <select id="getMerchantByCommodity" resultType="com.example.smartairportsystem.entity.commoditylist">
+    <select id="getMerchantidByCommodityid" resultType="com.example.smartairportsystem.entity.merchant">
         select merchantid from commoditylist where commodityid = #{commodityid}
     </select>
 
     <update id="updateOldCommodity" parameterType="com.example.smartairportsystem.entity.commoditylist">
         update commoditylist set name = #{name},merchantid = #{merchantid},counts = #{counts},price = #{price} where commodityid = #{commodityid}
+    </update>
+
+    <update id="updateCounts">
+        update commoditylist set counts = #{newcounts} where commodityid = #{commodityid}
     </update>
 
     <delete id="removeOldCommodity">

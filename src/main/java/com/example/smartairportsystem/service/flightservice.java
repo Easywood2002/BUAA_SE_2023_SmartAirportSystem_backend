@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface flightservice {
     public flight getFlightByID(Integer flightid);
-    public flight getFlightByCombine(String name,Integer companyid,String departuretime);
+    public flight getFlightByCombine(String name,Integer companyid,String departuretime,Integer exceptid);
     public void addNewFlight(flight newflight);
     public void updateOldFlight(flight newflight);
     public void removeOldFlight(Integer flightid);

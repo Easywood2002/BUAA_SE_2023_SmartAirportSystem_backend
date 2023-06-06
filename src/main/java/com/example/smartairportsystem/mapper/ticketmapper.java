@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ticketmapper {
     public ticket getTicketByID(Integer ticketid);
-    public ticket getTicketByCombine(@Param("flightid") Integer flightid,@Param("tickettype") String tickettype);
+    public ticket getTicketByCombine(@Param("flightid") Integer flightid,@Param("tickettype") String tickettype,@Param("exceptid") Integer exceptid);
     public void addNewTicket(ticket newticket);
     public void updateOldTicket(ticket newticket);
     public void removeOldTicket(Integer ticketid);

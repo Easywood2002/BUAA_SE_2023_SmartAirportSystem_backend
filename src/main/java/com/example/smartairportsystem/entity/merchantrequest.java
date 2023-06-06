@@ -6,33 +6,47 @@ import javax.persistence.Id;
 @Entity
 public class merchantrequest {
     @Id
-    private Integer loginRequest;
+    private Integer requestid;
 
     private String realname;
-    private String nickname;
-    private Integer idnumber;
     private String passwords;
     private String salt;
-    private String email;
     private String shopname;
+    private String email;
+    private String idnumber;
 
-    public merchantrequest(Integer loginRequest, String realname,String nickname,Integer idnumber,String passwords,String salt,String shopname,String email){
-        this.loginRequest = loginRequest;
+    public merchantrequest(Integer requestid, String realname,String passwords,String salt,String shopname,String email,String idnumber){
+        this.requestid = requestid;
         this.realname = realname;
-        this.nickname = nickname;
-        this.idnumber = idnumber;
-        this.passwords = passwords;
         this.salt = salt;
+        this.passwords = passwords;
+        this.shopname = shopname;
         this.email = email;
+        this.idnumber = idnumber;
+    }
+
+    public Integer getRequestid() {
+        return requestid;
+    }
+
+    public void setRequestid(Integer requestid) {
+        this.requestid = requestid;
+    }
+
+    public String getShopname() {
+        return shopname;
+    }
+
+    public void setShopname(String shopname) {
         this.shopname = shopname;
     }
 
-    public Integer getLoginRequest() {
-        return loginRequest;
+    public String getIdnumber() {
+        return idnumber;
     }
 
-    public void setLoginRequest(Integer loginRequest) {
-        this.loginRequest = loginRequest;
+    public void setIdnumber(String idnumber) {
+        this.idnumber = idnumber;
     }
 
     public String getRealname() {
@@ -41,22 +55,6 @@ public class merchantrequest {
 
     public void setRealname(String realname) {
         this.realname = realname;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public Integer getIdnumber() {
-        return idnumber;
-    }
-
-    public void setIdnumber(Integer idnumber) {
-        this.idnumber = idnumber;
     }
 
     public String getPasswords() {
@@ -81,13 +79,5 @@ public class merchantrequest {
 
     public void setSalt(String salt) {
         this.salt = salt;
-    }
-
-    public String getShopname() {
-        return shopname;
-    }
-
-    public void setShopname(String shopname) {
-        this.shopname = shopname;
     }
 }

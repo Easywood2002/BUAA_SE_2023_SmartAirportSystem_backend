@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.smartairportsystem.mapper.commodityordermapper">
+    <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.commodityorder">
+    </resultMap>
+    <insert id="addNewOrder" parameterType="com.example.smartairportsystem.entity.commodityorder">
+        insert into commodityorder(counts,touristid,commodityid,terminal,departuregate,arrivetime,email) values(#{counts},#{touristid},#{commodityid},#{terminal},#{departuregate},#{arrivetime},#{email})
+    </insert>
+
+    <delete id="removeOldOrder">
+        delete from commodityorder where orderid = #{orderid}
+    </delete>
+
+    <select id="getOrderByID" resultType="com.example.smartairportsystem.entity.commodityorder">
+        select * from commodityorder where orderid = #{orderid}
+    </select>
+
+    <select id="listOrderByTouristid" resultType="com.example.smartairportsystem.entity.bowl.mycommodityorder">
+        select co.orderid,m.shopname,cl.name,co.counts,co.terminal,co.departuregate,co.arrivetime,cl.price,m.email,t.email from commodityorder co, commoditylist cl,merchant m,tourist t where t.touristid = #{touristid} and co.touristid = t.touristid and co.commodityid = cl.commodityid and cl.merchantid = m.merchantid
+    </select>
+
+    <select id="listOrderByMerchant" resultType="com.example.smartairportsystem.entity.bowl.mycommodityorder">
+        select co.orderid,m.shopname,cl.name,co.counts,co.terminal,co.departuregate,co.arrivetime,cl.price,m.email,t.email from commodityorder co, commoditylist cl,merchant m,tourist t where m.merchantid = #{merchantid} and co.touristid = t.touristid and co.commodityid = cl.commodityid and cl.merchantid = m.merchantid
+    </select>
+</mapper>

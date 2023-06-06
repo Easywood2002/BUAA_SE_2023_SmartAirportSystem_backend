@@ -2,6 +2,7 @@ package com.example.smartairportsystem.mapper;
 
 import com.example.smartairportsystem.entity.staff;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Mapper
@@ -9,6 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface staffmapper {
     public void logupNewStaff(staff newstaff);
     public void removeOldStaff(Integer staffid);
-    public staff getStaffByEmail(String email);
+    public void updateOldStaff(staff newstaff);
+    public void updatePassword(@Param("staffid") Integer staffid, @Param("newpasswords") String newpasswords);
+    public staff getStaffByEmail(@Param("email") String email,@Param("exceptid") Integer exceptid);
+    public staff getStaffByIdnumber(@Param("idnumber") String  idnumber,@Param("exceptid") Integer exceptid);
     public staff getStaffByID(Integer staffid);
 }

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface flightmapper {
     public flight getFlightByID(Integer flightid);
-    public flight getFlightByCombine(@Param("name") String name,@Param("companyid") Integer companyid,@Param("departuretime") String departuretime);
+    public flight getFlightByCombine(@Param("name") String name,@Param("companyid") Integer companyid,@Param("departuretime") String departuretime,@Param("exceptid") Integer exceptid);
     public void addNewFlight(flight newflight);
     public void updateOldFlight(flight newflight);
     public void removeOldFlight(Integer flightid);

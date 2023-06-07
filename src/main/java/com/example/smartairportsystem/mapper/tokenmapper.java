@@ -26,4 +26,9 @@ public interface tokenmapper {
     public token getTokenByToken_MERCHANT(String token);
     public token getTokenByToken_STAFF(String token);
     public token getTokenByToken_COMPANY(String token);
+
+    public void logoutOldToken_TOURIST(String token);
+    public void logoutOldToken_MERCHANT(String token);
+    public void logoutOldToken_STAFF(String token);
+    public void logoutOldToken_COMPANY(String token);
 }

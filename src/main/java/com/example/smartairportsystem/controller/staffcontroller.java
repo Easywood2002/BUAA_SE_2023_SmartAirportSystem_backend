@@ -656,4 +656,30 @@ public class staffcontroller {
         }
         return map;
     }
+
+    //员工注销登录功能
+    @RequestMapping(value = "/logout",method = RequestMethod.POST)
+    public Map<String,Object> logoutMerchat(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                tokenService.logoutOldToken(stafftk,TypeUtil.Token.STAFF);
+                map.put("success", true);
+                map.put("message", "员工注销登录成功！");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "员工注销登录失败！");
+        }
+        return map;
+    }
 }

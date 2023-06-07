@@ -10,13 +10,15 @@ public class myparkingorder {
     private String endtime;
     private String location;
     private Double price;
+    private String status;
 
-    public myparkingorder(Integer orderid,String starttime,String endtime,String location,Double price){
+    public myparkingorder(Integer orderid,String starttime,String endtime,String location,Double price,String status){
         this.orderid = orderid;
         this.starttime = starttime;
         this.endtime = endtime;
         this.location = location;
         this.price = price;
+        this.status = status;
     }
 
     public Integer getOrderid() {
@@ -57,5 +59,13 @@ public class myparkingorder {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

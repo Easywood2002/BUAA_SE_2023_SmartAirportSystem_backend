@@ -429,10 +429,10 @@ public class touristcontroller {
                     map.put("message", "剩余机票不足！");
                 }else {
                     for (String personid : personids) {
-                        purchaserecordService.addNewRecord(new purchaserecord(0,Integer.valueOf(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
+                        purchaserecordService.addNewRecord(new purchaserecord(0,Integer.parseInt(personid), Integer.parseInt(ticketid), TimeFormatUtil.getCurrentTime(), "0"));
                     }
                     tourist t = touristService.getTouristByID(tokenentity.getId());
-                    flight f = flightService.getFlightByID(tkt.getTicketid());
+                    flight f = flightService.getFlightByID(tkt.getFlightid());
                     EmailUtil.sendInformationEmail(t.getEmail(),"尊敬的用户：您好！\n\t您已成功购买从"+f.getTakeofflocation()+"飞往"+f.getLandinglocation()+"的"+f.getName()+"航班的"+len+"张机票！");
                     map.put("success", true);
                     map.put("message", "用户购票成功");

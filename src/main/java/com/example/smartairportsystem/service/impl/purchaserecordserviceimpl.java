@@ -19,5 +19,6 @@ public class purchaserecordserviceimpl implements purchaserecordservice {
     public purchaserecord getRecordByID(Integer orderid){return purchaserecordMapper.getRecordByID(orderid);}
     public purchaserecord getRecordByCombine(Integer ticketid,String seatinfo){return purchaserecordMapper.getRecordByCombine(ticketid,seatinfo);}
     public List<purchaserecord> getRecordByTicketid(Integer ticketid){return purchaserecordMapper.getRecordByTicketid(ticketid);}
+    public List<purchaserecord> listTodayRecord(String today){return purchaserecordMapper.listTodayRecord(today);}
     public Integer getCountByTicketid(Integer ticketid){return purchaserecordMapper.getCountByTicketid(ticketid);}
 }

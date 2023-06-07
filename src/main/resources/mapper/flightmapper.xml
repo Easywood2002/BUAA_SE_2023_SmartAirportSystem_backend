@@ -27,6 +27,10 @@
         select * from flight where companyid = #{companyid}
     </select>
 
+    <select id="listTodayFlight" resultType="com.example.smartairportsystem.entity.flight">
+        select * from flight where departuretime like #{today}
+    </select>
+
     <select id="listFlightByCombine" resultType="com.example.smartairportsystem.entity.flight">
         select * from flight where takeofflocation = #{takeofflocation} and landinglocation = #{landinglocation} and departuretime like #{date}
     </select>

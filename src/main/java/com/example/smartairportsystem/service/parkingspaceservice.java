@@ -5,7 +5,7 @@ import com.example.smartairportsystem.entity.parkingspace;
 import java.util.List;
 
 public interface parkingspaceservice {
-    public List<parkingspace> listEmptyParkingspace();
+    public List<parkingspace> listEmptyParkingspace(String starttime,String endtime);
     public List<parkingspace> listAllParkingspace();
     public void addNewParkingspace(parkingspace newps);
     public void updateOldParkingspace(parkingspace newps);

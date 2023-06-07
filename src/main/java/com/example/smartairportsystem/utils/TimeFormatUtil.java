@@ -9,4 +9,11 @@ public class TimeFormatUtil {
         Date date = new Date(System.currentTimeMillis());
         return formatter.format(date);
     }
+
+    public static int getMinutes(String time){
+        String[] dtime = time.split(" ")[1].split(":");
+        int dhour = Integer.parseInt(dtime[0]);
+        int dmin = Integer.parseInt(dtime[1]);
+        return dhour*60+dmin;
+    }
 }

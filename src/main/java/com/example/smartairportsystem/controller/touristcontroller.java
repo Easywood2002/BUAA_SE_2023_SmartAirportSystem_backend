@@ -604,22 +604,9 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                myparkingorder order = parkingorderService.getOrderByTouristid(tokenentity.getId());
-                //用户尚未预定
-                if(order == null) {
-                    parkingorder exist = parkingorderService.getOrderBySpaceid(Integer.parseInt(parkingspaceid));
-                    if(exist != null){
-                        map.put("success", false);
-                        map.put("message", "停车位已被其他旅客选择！");
-                    }else {
-                        parkingorderService.addNewOrder(new parkingorder(0, tokenentity.getId(), starttime, endtime, Integer.parseInt(parkingspaceid)));
-                        map.put("success", true);
-                        map.put("message", "用户预定车位成功！");
-                    }
-                }else{
-                    map.put("success", false);
-                    map.put("message", "不可重复预订！");
-                }
+                parkingorderService.addNewOrder(new parkingorder(0, tokenentity.getId(), starttime, endtime, Integer.parseInt(parkingspaceid)));
+                map.put("success", true);
+                map.put("message", "用户预定车位成功！");
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -643,8 +630,27 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
+                List<myparkingorder> list = parkingorderService.listOrderByTouristid(tokenentity.getId());
                 List<myparkingorder> rtlist = new ArrayList<>();
-                rtlist.add(parkingorderService.getOrderByTouristid(tokenentity.getId()));
+                for(myparkingorder mpo:list){
+                    int time = TimeFormatUtil.getMinutes(TimeFormatUtil.getCurrentTime());
+                    int st = TimeFormatUtil.getMinutes(mpo.getStarttime());
+                    int en = TimeFormatUtil.getMinutes(mpo.getEndtime());
+
+                    if(time < st){
+                        mpo.setStatus(TypeUtil.Status.BOOK);
+                    }else if(time > en){
+                        mpo.setStatus(TypeUtil.Status.OLD);
+                    }else {
+                        mpo.setStatus(TypeUtil.Status.USING);
+                    }
+                    int zhour = (en-st)/60;
+                    if((en-st)%60 != 0){
+                        zhour = zhour + 1;
+                    }
+                    mpo.setPrice(zhour*mpo.getPrice());
+                    rtlist.add(mpo);
+                }
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -690,6 +696,8 @@ public class touristcontroller {
 
         //表单取参
         String touristtk = rawmap.get("token");
+        String starttime = rawmap.get("starttime");
+        String endtime = rawmap.get("endtime");
 
         try {
             token tokenentity = tokenService.getTokenByToken(touristtk,TypeUtil.Token.TOURIST);
@@ -697,7 +705,7 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<parkingspace> rtlist = parkingspaceService.listEmptyParkingspace();
+                List<parkingspace> rtlist = parkingspaceService.listEmptyParkingspace(starttime,endtime);
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -814,7 +822,12 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<mycommodityorder> rtlist = commodityorderService.listOrderByTouristid(tokenentity.getId());
+                List<mycommodityorder> list = commodityorderService.listOrderByTouristid(tokenentity.getId());
+                List<mycommodityorder> rtlist = new ArrayList<>();
+                for (mycommodityorder mco:list){
+                    mco.setPrice(mco.getPrice()*mco.getCounts());
+                    rtlist.add(mco);
+                }
                 map.put("success", true);
                 map.put("message", rtlist);
             }

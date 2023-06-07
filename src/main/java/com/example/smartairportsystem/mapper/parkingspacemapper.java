@@ -10,7 +10,6 @@ import java.util.List;
 @Mapper
 @Repository
 public interface parkingspacemapper {
-    public List<parkingspace> listEmptyParkingspace();
     public List<parkingspace> listAllParkingspace();
     public void addNewParkingspace(parkingspace newps);
     public void updateOldParkingspace(parkingspace newps);

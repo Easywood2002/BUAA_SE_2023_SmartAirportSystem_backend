@@ -16,10 +16,7 @@ import com.example.smartairportsystem.entity.token;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 @CrossOrigin
 @RestController
@@ -359,7 +356,12 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
             }else {
-                List<mycommodityorder> rtlist = commodityorderService.listOrderByMerchantid(tokenentity.getId());
+                List<mycommodityorder> list = commodityorderService.listOrderByMerchantid(tokenentity.getId());
+                List<mycommodityorder> rtlist = new ArrayList<>();
+                for (mycommodityorder mco:list){
+                    mco.setPrice(mco.getPrice()*mco.getCounts());
+                    rtlist.add(mco);
+                }
                 map.put("success", true);
                 map.put("message", rtlist);
             }

@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.merchant">
     </resultMap>
     <insert id="logupNewMerchant" parameterType="com.example.smartairportsystem.entity.merchant">
-        insert into merchant(realname,passwords,salt,shopname,email,idnumber) values(#{realname},sha1(#{passwords}),#{salt},#{shopname},#{email},#{idnumber})
+        insert into merchant(realname,passwords,salt,shopname,email,idnumber) values(#{realname},#{passwords},#{salt},#{shopname},#{email},#{idnumber})
     </insert>
 
     <select id="getMerchantByID" resultType="com.example.smartairportsystem.entity.merchant">

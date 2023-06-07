@@ -17,6 +17,6 @@ public class parkingorderserviceimpl implements parkingorderservice {
     public void addNewOrder(parkingorder neworder){parkingorderMapper.addNewOrder(neworder);}
     public void removeOldOrder(Integer orderid){parkingorderMapper.removeOldOrder(orderid);}
     public parkingorder getOrderByID(Integer orderid){return parkingorderMapper.getOrderByID(orderid);}
-    public parkingorder getOrderBySpaceid(Integer parkingspaceid){return parkingorderMapper.getOrderBySpaceid(parkingspaceid);}
-    public myparkingorder getOrderByTouristid(Integer touristid){return parkingorderMapper.getOrderByTouristid(touristid);}
+    public List<parkingorder> listOrderBySpaceid(Integer parkingspaceid){return parkingorderMapper.listOrderBySpaceid(parkingspaceid);}
+    public List<myparkingorder> listOrderByTouristid(Integer touristid){return parkingorderMapper.listOrderByTouristid(touristid);}
 }

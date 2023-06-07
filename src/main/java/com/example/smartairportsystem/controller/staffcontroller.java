@@ -391,7 +391,7 @@ public class staffcontroller {
             }else {
                 staff stf = staffService.getStaffByID(tokenentity.getId());
                 merchantrequest mr = merchantrequestService.getMerchantrequestByID(Integer.parseInt(requestid));
-                if (!stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
+                if (stf.getPositionpost().equals(TypeUtil.Staff.ADMINISTRATOR)) {
                     if (Integer.parseInt(approved) == TypeUtil.Approve.ACCESS) {
                         merchantService.logupNewMerchant(new merchant(0,mr.getRealname(),mr.getPasswords(),mr.getSalt(),mr.getShopname(),mr.getEmail(), mr.getIdnumber()));
                         EmailUtil.sendInformationEmail(mr.getEmail(),"尊敬的用户：您好！\n\t您的当前邮箱"+mr.getEmail()+"已通过审核，成功注册为"+TypeUtil.AirportLocation+"智慧机场系统商户！");
@@ -401,6 +401,9 @@ public class staffcontroller {
                     merchantrequestService.removeOldMerchantrequest(Integer.parseInt(requestid));
                     map.put("success", true);
                     map.put("message", "商户入驻请求审核成功！");
+                }else {
+                    map.put("success", false);
+                    map.put("message", "您无权处理该入驻请求！");
                 }
             }
         } catch (Exception e) {

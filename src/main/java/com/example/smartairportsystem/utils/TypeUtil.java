@@ -37,4 +37,10 @@ public class TypeUtil {
         public static String ABOARD = "正在登机";//起飞前30min开始登机
         public static String STOP = "停止登机";//起飞前10min停止登机
     }
+
+    public static class Status{
+        public static String USING = "使用中";
+        public static String BOOK = "已预定";
+        public static String OLD = "历史记录";
+    }
 }

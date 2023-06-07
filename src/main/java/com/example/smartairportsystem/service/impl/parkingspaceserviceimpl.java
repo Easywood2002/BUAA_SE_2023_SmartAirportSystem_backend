@@ -13,7 +13,7 @@ public class parkingspaceserviceimpl implements parkingspaceservice {
     @Autowired
     private parkingspacemapper parkingspaceMapper;
 
-    public List<parkingspace> listEmptyParkingspace(){return parkingspaceMapper.listEmptyParkingspace();}
+    public List<parkingspace> listEmptyParkingspace(String starttime,String endtime){return null;}
     public List<parkingspace> listAllParkingspace(){return parkingspaceMapper.listAllParkingspace();}
     public void addNewParkingspace(parkingspace newps){parkingspaceMapper.addNewParkingspace(newps);}
     public void updateOldParkingspace(parkingspace newps){parkingspaceMapper.updateOldParkingspace(newps);}

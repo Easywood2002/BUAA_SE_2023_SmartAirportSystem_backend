@@ -11,5 +11,6 @@ public interface flightservice {
     public void updateOldFlight(flight newflight);
     public void removeOldFlight(Integer flightid);
     public List<flight> listFlightByCompanyid(Integer companyid);
+    public List<flight> listTodayFlight(String today);
     public List<flight> listFlightByCombine(String takeofflocation,String landinglocation,String date);
 }

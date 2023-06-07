@@ -1,8 +1,10 @@
 package com.example.smartairportsystem.controller;
 
+import com.example.smartairportsystem.entity.bowl.schedule;
 import com.example.smartairportsystem.entity.flight;
 import com.example.smartairportsystem.service.flightservice;
 import com.example.smartairportsystem.service.impl.flightserviceimpl;
+import com.example.smartairportsystem.utils.Inform;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -29,6 +31,23 @@ public class passbycontroller {
 
         try {
             List<flight> rtlist = flightService.listFlightByCombine(takeofflocation,landinglocation,date+"%");
+            map.put("success", true);
+            map.put("message", rtlist);
+        }catch (Exception e){
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "获取列表失败！");
+        }
+        return map;
+    }
+
+    //游客查询航班时刻表功能
+    @RequestMapping(value = "/listschedule",method = RequestMethod.POST)
+    public Map<String,Object> listSchedule(){
+        Map<String,Object> map = new HashMap<>();
+
+        try {
+            List<schedule> rtlist = Inform.FlightSchedule;
             map.put("success", true);
             map.put("message", rtlist);
         }catch (Exception e){

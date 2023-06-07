@@ -28,4 +28,13 @@ public class TypeUtil {
         public static final int STAFF = 2;
         public static final int COMPANY = 3;
     }
+
+    public static class Schedule{
+        public static String TAKEOFF = "正在起飞";//起飞时间开始的10min
+        public static String LANDING = "正在降落";//降落时间之前的10min
+        public static String FLY = "飞行中";//除起飞和降落时间均为飞行中
+        public static String CHECK = "值机中";//起飞前2hour开始值机
+        public static String ABOARD = "正在登机";//起飞前30min开始登机
+        public static String STOP = "停止登机";//起飞前10min停止登机
+    }
 }

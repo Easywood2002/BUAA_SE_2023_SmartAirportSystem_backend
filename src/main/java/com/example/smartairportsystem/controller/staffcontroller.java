@@ -4,6 +4,7 @@ import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.EmailUtil;
+import com.example.smartairportsystem.utils.TimeFormatUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,6 +33,14 @@ public class staffcontroller {
     private merchantrequestservice merchantrequestService = new merchantrequestserviceimpl();
     @Resource
     private parkingspaceservice parkingspaceService = new parkingspaceserviceimpl();
+    @Resource
+    private commodityorderservice commodityorderService = new commodityorderserviceimpl();
+    @Resource
+    private parkingorderservice parkingorderService = new parkingorderserviceimpl();
+    @Resource
+    private ticketservice ticketService = new ticketserviceimpl();
+    @Resource
+    private commodityservice commodityService = new commodityserviceimpl();
 
     //工作人员注册功能
     @RequestMapping(value = "/logup",method = RequestMethod.POST)
@@ -656,6 +665,76 @@ public class staffcontroller {
             e.printStackTrace();
             map.put("success", false);
             map.put("message", "删除车位信息失败！");
+        }
+        return map;
+    }
+
+    //员工查询报表功能
+    @RequestMapping(value = "/reportforms",method = RequestMethod.POST)
+    public Map<String,Object> reportForms(@RequestParam Map<String,String> rawmap){
+        Map<String, Object> map = new HashMap<>();
+        map.put("ticket",0);
+        map.put("parking",0);
+        map.put("commodity",0);
+
+        //表单取参
+        String stafftk = rawmap.get("token");
+
+        try {
+            token tokenentity = tokenService.getTokenByToken(stafftk,TypeUtil.Token.STAFF);
+            if(tokenentity == null){
+                map.put("success", false);
+                map.put("message", "员工未登录或已注销登录！");
+            }else {
+                double ticketsum = 0;
+                double parkingsum = 0;
+                double commoditysum = 0;
+
+                List<purchaserecord> ticketlist = purchaserecordService.listAllRecord();
+                List<commodityorder> commoditylist = commodityorderService.listAllOrder();
+                List<parkingorder> parkinglist = parkingorderService.listAllOrder();
+
+                int days = TimeFormatUtil.getDays(TimeFormatUtil.getCurrentTime());
+
+                for (purchaserecord pr:ticketlist){
+                    ticket tkt = ticketService.getTicketByID(pr.getTicketid());
+                    int tdays = TimeFormatUtil.getDays(pr.getPurchasetime());
+                    int sub = days - tdays;
+                    if(sub >= 0 && sub <= 15)ticketsum = ticketsum + tkt.getPrice();
+                }
+                for (commodityorder co:commoditylist){
+                    commoditylist cl = commodityService.getCommodityByID(co.getCommodityid());
+                    int tdays = TimeFormatUtil.getDays(co.getArrivetime());
+                    int sub = days - tdays;
+                    if(sub >= 0 && sub <= 15)commoditysum = commoditysum + co.getCounts()* cl.getPrice();
+                }
+                for (parkingorder po:parkinglist){
+                    parkingspace ps = parkingspaceService.getParkingspaceByID(po.getParkingspaceid());
+
+                    int st = TimeFormatUtil.getMinutes(po.getStarttime());
+                    int en = TimeFormatUtil.getMinutes(po.getEndtime());
+
+                    int zhour = (en-st)/60;
+                    if((en-st)%60 != 0){
+                        zhour = zhour + 1;
+                    }
+
+                    int tdays = TimeFormatUtil.getDays(po.getStarttime());
+                    int sub = days - tdays;
+
+                    if(sub >= 0 && sub <= 15)parkingsum = parkingsum + ps.getPrice()*zhour;
+                }
+                tokenService.logoutOldToken(stafftk,TypeUtil.Token.STAFF);
+                map.put("success", true);
+                map.put("message", "查询报表成功！");
+                map.put("ticket",ticketsum);
+                map.put("parking",parkingsum);
+                map.put("commodity",commoditysum);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("success", false);
+            map.put("message", "查询报表失败！");
         }
         return map;
     }

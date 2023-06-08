@@ -13,6 +13,7 @@ public interface parkingordermapper {
     public void addNewOrder(parkingorder neworder);
     public void removeOldOrder(Integer orderid);
     public parkingorder getOrderByID(Integer orderid);
+    public List<parkingorder> listAllOrder();
     public List<parkingorder> listOrderBySpaceid(Integer parkingspaceid);
     public List<myparkingorder> listOrderByTouristid(Integer touristid);
 }

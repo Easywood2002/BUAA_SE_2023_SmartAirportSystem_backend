@@ -15,6 +15,7 @@ public interface purchaserecordmapper {
     public void selectSeatForOrderid(@Param("orderid") Integer orderid,@Param("seatinfo") String seatinfo);
     public purchaserecord getRecordByID(Integer orderid);
     public purchaserecord getRecordByCombine(@Param("ticketid") Integer ticketid,@Param("seatinfo") String seatinfo);
+    public List<purchaserecord> listAllRecord();
     public List<purchaserecord> getRecordByTicketid(Integer ticketid);
     public List<purchaserecord> listTodayRecord(String today);
     public Integer getCountByTicketid(Integer ticketid);

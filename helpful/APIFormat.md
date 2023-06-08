@@ -2669,7 +2669,7 @@ http://101.200.143.220:8080
 ​	**API路径：**
 
 ```
-/staff/reportform
+/staff/reportforms
 ```
 
 ​	**请求方式：**

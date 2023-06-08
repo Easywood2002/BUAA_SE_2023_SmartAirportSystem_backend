@@ -12,17 +12,17 @@ public class commodityorder {
     private Integer touristid;
     private Integer commodityid;
     private Integer terminal;
-    private String depaturegate;
+    private String departuregate;
     private String arrivetime;
     private String email;
 
-    public commodityorder(Integer orderid,Integer counts,Integer touristid,Integer commodityid,Integer terminal,String depaturegate,String arrivetime,String email){
+    public commodityorder(Integer orderid,Integer counts,Integer touristid,Integer commodityid,Integer terminal,String departuregate,String arrivetime,String email){
         this.orderid = orderid;
         this.touristid = touristid;
         this.counts = counts;
         this.commodityid = commodityid;
         this.terminal = terminal;
-        this.depaturegate = depaturegate;
+        this.departuregate = departuregate;
         this.arrivetime = arrivetime;
         this.email = email;
     }
@@ -67,12 +67,12 @@ public class commodityorder {
         this.email = email;
     }
 
-    public String getDepaturegate() {
-        return depaturegate;
+    public String getDeparturegate() {
+        return departuregate;
     }
 
-    public void setDepaturegate(String depaturegate) {
-        this.depaturegate = depaturegate;
+    public void setDeparturegate(String departuregate) {
+        this.departuregate = departuregate;
     }
 
     public String getArrivetime() {

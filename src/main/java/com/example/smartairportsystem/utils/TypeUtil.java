@@ -43,4 +43,9 @@ public class TypeUtil {
         public static String BOOK = "已预定";
         public static String OLD = "历史记录";
     }
+
+    public static class Runway{
+        public static Integer A1 = 1;
+        public static Integer A2 = 2;
+    }
 }

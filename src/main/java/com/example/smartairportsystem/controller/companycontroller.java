@@ -4,6 +4,7 @@ import com.example.smartairportsystem.entity.*;
 import com.example.smartairportsystem.service.*;
 import com.example.smartairportsystem.service.impl.*;
 import com.example.smartairportsystem.utils.EmailUtil;
+import com.example.smartairportsystem.utils.TimeFormatUtil;
 import com.example.smartairportsystem.utils.TypeUtil;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +25,8 @@ public class companycontroller {
     private flightservice flightService = new flightserviceimpl();
     @Resource
     private ticketservice ticketService = new ticketserviceimpl();
+    @Resource
+    private runwayservice runwayService = new runwayserviceimpl();
 
     //航空公司注册功能
     @RequestMapping(value = "/logup", method = RequestMethod.POST)
@@ -244,9 +247,54 @@ public class companycontroller {
                     map.put("success", false);
                     map.put("message", "航班信息已存在！");
                 } else {
-                    flightService.addNewFlight(new flight(0,name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
-                    map.put("success", true);
-                    map.put("message", "添加航班信息成功！");
+                    if(takeofflocation.startsWith(TypeUtil.AirportLocation) || landinglocation.startsWith(TypeUtil.AirportLocation)) {
+                        String keytime = landingtime;
+                        if(takeofflocation.startsWith(TypeUtil.AirportLocation)){
+                            keytime = departuretime;
+                        }
+                        String thatday = keytime.split(" ")[0]+"%";
+                        List<runway> rylist = runwayService.listOccupyByRunway(TypeUtil.Runway.A1,thatday,0);
+                        boolean isend = true;
+                        for (runway ry : rylist) {
+                            int ztime = TimeFormatUtil.getMinutes(ry.getTime());
+                            int ntime = TimeFormatUtil.getMinutes(keytime);
+                            if(ntime <= ztime+30 && ntime >= ztime-30){
+                                isend = false;
+                                break;
+                            }
+                        }
+                        if(isend){
+                            flightService.addNewFlight(new flight(0, name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
+                            flight fl = flightService.getFlightByCombine(name, tokenentity.getId(),departuretime,0);
+                            runwayService.addNewOccupy(new runway(fl.getFlightid(),keytime,TypeUtil.Runway.A1));
+                            map.put("success", true);
+                            map.put("message", "添加航班信息成功！");
+                        }else {
+                            rylist = runwayService.listOccupyByRunway(TypeUtil.Runway.A2,thatday,0);
+                            isend = true;
+                            for (runway ry : rylist) {
+                                int ztime = TimeFormatUtil.getMinutes(ry.getTime());
+                                int ntime = TimeFormatUtil.getMinutes(keytime);
+                                if(ntime <= ztime+30 && ntime >= ztime-30){
+                                    isend = false;
+                                    break;
+                                }
+                            }
+                            if(isend) {
+                                flightService.addNewFlight(new flight(0, name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
+                                flight fl = flightService.getFlightByCombine(name, tokenentity.getId(), departuretime, 0);
+                                runwayService.addNewOccupy(new runway(fl.getFlightid(), keytime, TypeUtil.Runway.A2));
+                                map.put("success", true);
+                                map.put("message", "添加航班信息成功！");
+                            }else{
+                                map.put("success", false);
+                                map.put("message", "无跑道可用！");
+                            }
+                        }
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "该航班不在管理范围内！");
+                    }
                 }
             }
         } catch (Exception e) {
@@ -284,9 +332,52 @@ public class companycontroller {
                     map.put("success", false);
                     map.put("message", "已存在相同航班信息！");
                 }else {
-                    flightService.updateOldFlight(new flight(Integer.parseInt(flightid),name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
-                    map.put("success", true);
-                    map.put("message", "航班信息已更新！");
+                    if(takeofflocation.startsWith(TypeUtil.AirportLocation) || landinglocation.startsWith(TypeUtil.AirportLocation)) {
+                        String keytime = landingtime;
+                        if(takeofflocation.startsWith(TypeUtil.AirportLocation)){
+                            keytime = departuretime;
+                        }
+                        String thatday = keytime.split(" ")[0]+"%";
+                        List<runway> rylist = runwayService.listOccupyByRunway(TypeUtil.Runway.A1,thatday,Integer.parseInt(flightid));
+                        boolean isend = true;
+                        for (runway ry : rylist) {
+                            int ztime = TimeFormatUtil.getMinutes(ry.getTime());
+                            int ntime = TimeFormatUtil.getMinutes(keytime);
+                            if(ntime <= ztime+30 && ntime >= ztime-30){
+                                isend = false;
+                                break;
+                            }
+                        }
+                        if(isend){
+                            flightService.updateOldFlight(new flight(Integer.parseInt(flightid),name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
+                            runwayService.updateOldOccupy(new runway(Integer.parseInt(flightid),keytime,TypeUtil.Runway.A1));
+                            map.put("success", true);
+                            map.put("message", "添加航班信息成功！");
+                        }else {
+                            rylist = runwayService.listOccupyByRunway(TypeUtil.Runway.A2,thatday,Integer.parseInt(flightid));
+                            isend = true;
+                            for (runway ry : rylist) {
+                                int ztime = TimeFormatUtil.getMinutes(ry.getTime());
+                                int ntime = TimeFormatUtil.getMinutes(keytime);
+                                if(ntime <= ztime+30 && ntime >= ztime-30){
+                                    isend = false;
+                                    break;
+                                }
+                            }
+                            if(isend) {
+                                flightService.updateOldFlight(new flight(Integer.parseInt(flightid),name, tokenentity.getId(), takeofflocation, landinglocation, departuretime, landingtime, departuregate, Integer.parseInt(terminal)));
+                                runwayService.updateOldOccupy(new runway(Integer.parseInt(flightid), keytime, TypeUtil.Runway.A2));
+                                map.put("success", true);
+                                map.put("message", "航班信息已更新！");
+                            }else{
+                                map.put("success", false);
+                                map.put("message", "无跑道可用！");
+                            }
+                        }
+                    }else{
+                        map.put("success", false);
+                        map.put("message", "该航班不在管理范围内！");
+                    }
                 }
             }
         } catch (Exception e) {

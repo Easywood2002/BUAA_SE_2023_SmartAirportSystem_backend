@@ -392,6 +392,10 @@ public class touristcontroller {
                 map.put("message", "用户未登录或已注销登录！");
             }else {
                 List<ticket> rtlist = ticketService.listTicketByFlightid(Integer.parseInt(flightid));
+                for(ticket tk:rtlist){
+                    int count = purchaserecordService.getCountByTicketid(tk.getTicketid());
+                    tk.setAmount(tk.getAmount()-count);
+                }
                 map.put("success", true);
                 map.put("message", rtlist);
             }
@@ -630,9 +634,8 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<myparkingorder> list = parkingorderService.listOrderByTouristid(tokenentity.getId());
-                List<myparkingorder> rtlist = new ArrayList<>();
-                for(myparkingorder mpo:list){
+                List<myparkingorder> rtlist = parkingorderService.listOrderByTouristid(tokenentity.getId());
+                for(myparkingorder mpo:rtlist){
                     int time = TimeFormatUtil.getMinutes(TimeFormatUtil.getCurrentTime());
                     int st = TimeFormatUtil.getMinutes(mpo.getStarttime());
                     int en = TimeFormatUtil.getMinutes(mpo.getEndtime());
@@ -649,7 +652,6 @@ public class touristcontroller {
                         zhour = zhour + 1;
                     }
                     mpo.setPrice(zhour*mpo.getPrice());
-                    rtlist.add(mpo);
                 }
                 map.put("success", true);
                 map.put("message", rtlist);
@@ -822,11 +824,9 @@ public class touristcontroller {
                 map.put("success", false);
                 map.put("message", "用户未登录或已注销登录！");
             }else {
-                List<mycommodityorder> list = commodityorderService.listOrderByTouristid(tokenentity.getId());
-                List<mycommodityorder> rtlist = new ArrayList<>();
-                for (mycommodityorder mco:list){
+                List<mycommodityorder> rtlist = commodityorderService.listOrderByTouristid(tokenentity.getId());
+                for (mycommodityorder mco:rtlist){
                     mco.setPrice(mco.getPrice()*mco.getCounts());
-                    rtlist.add(mco);
                 }
                 map.put("success", true);
                 map.put("message", rtlist);

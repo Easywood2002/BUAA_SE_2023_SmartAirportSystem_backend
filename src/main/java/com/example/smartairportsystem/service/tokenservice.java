@@ -7,4 +7,5 @@ public interface tokenservice {
     public void updateOldToken(token newtoken,int type);
     public token getTokenByID(Integer id,int type);
     public token getTokenByToken(String token,int type);
+    public void logoutOldToken(String token,int type);
 }

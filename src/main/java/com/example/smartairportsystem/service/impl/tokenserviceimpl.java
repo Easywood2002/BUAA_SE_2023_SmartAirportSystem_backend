@@ -89,4 +89,24 @@ public class tokenserviceimpl implements tokenservice {
         }
         return rttoken;
     }
+
+    public void logoutOldToken(String token,int type){
+
+        switch (type){
+            case TypeUtil.Token.TOURIST:
+                tokenMapper.logoutOldToken_TOURIST(token);
+                break;
+            case TypeUtil.Token.MERCHANT:
+                tokenMapper.logoutOldToken_MERCHANT(token);
+                break;
+            case TypeUtil.Token.STAFF:
+                tokenMapper.logoutOldToken_STAFF(token);
+                break;
+            case TypeUtil.Token.COMPANY:
+                tokenMapper.logoutOldToken_COMPANY(token);
+                break;
+            default:
+                break;
+        }
+    }
 }

@@ -15,11 +15,15 @@
         select * from commodityorder where orderid = #{orderid}
     </select>
 
+    <select id="listAllOrder" resultType="com.example.smartairportsystem.entity.commodityorder">
+        select * from commodityorder
+    </select>
+
     <select id="listOrderByTouristid" resultType="com.example.smartairportsystem.entity.bowl.mycommodityorder">
         select co.orderid,m.shopname,cl.name,co.counts,co.terminal,co.departuregate,co.arrivetime,cl.price,m.email,t.email from commodityorder co, commoditylist cl,merchant m,tourist t where t.touristid = #{touristid} and co.touristid = t.touristid and co.commodityid = cl.commodityid and cl.merchantid = m.merchantid
     </select>
 
-    <select id="listOrderByMerchant" resultType="com.example.smartairportsystem.entity.bowl.mycommodityorder">
+    <select id="listOrderByMerchantid" resultType="com.example.smartairportsystem.entity.bowl.mycommodityorder">
         select co.orderid,m.shopname,cl.name,co.counts,co.terminal,co.departuregate,co.arrivetime,cl.price,m.email,t.email from commodityorder co, commoditylist cl,merchant m,tourist t where m.merchantid = #{merchantid} and co.touristid = t.touristid and co.commodityid = cl.commodityid and cl.merchantid = m.merchantid
     </select>
 </mapper>

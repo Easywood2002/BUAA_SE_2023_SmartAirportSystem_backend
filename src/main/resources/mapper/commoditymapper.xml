@@ -4,7 +4,7 @@
     <resultMap id="BaseResultMap" type="com.example.smartairportsystem.entity.commoditylist">
     </resultMap>
     <insert id="addNewCommodity" parameterType="com.example.smartairportsystem.entity.commoditylist">
-        insert into commoditylist(name,merchantid,counts,price) values(#{name},#{merichantid},#{counts},#{price})
+        insert into commoditylist(name,merchantid,counts,price) values(#{name},#{merchantid},#{counts},#{price})
     </insert>
 
     <select id="getCommodityByID" resultType="com.example.smartairportsystem.entity.commoditylist">

@@ -15,6 +15,10 @@
         select * from parkingorder where orderid = #{orderid}
     </select>
 
+    <select id="listAllOrder" resultType="com.example.smartairportsystem.entity.parkingorder">
+        select * from parkingorder
+    </select>
+
     <select id="listOrderBySpaceid" resultType="com.example.smartairportsystem.entity.parkingorder">
         select * from parkingorder where parkingspaceid = #{parkingspaceid}
     </select>

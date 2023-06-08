@@ -115,6 +115,12 @@ create table flight(
 	terminal int
 );
 
+create table runway(
+    flightid int,
+    time varchar(255),
+    runway int
+);
+
 create table merchantrequest(
     requestid int primary key auto_increment,
     realname varchar(255),
@@ -172,9 +178,10 @@ create table notifyaudience(
 drop trigger if exists delflight;
 delimiter //
 create trigger delflight before delete on flight for each row
-    begin
-        delete from ticket where flightid = old.flightid;
-    end //
+begin
+    delete from ticket where flightid = old.flightid;
+    delete from runway where flightid = old.flightid;
+end //
 delimiter ;
 
 drop trigger if exists delticket;
@@ -190,5 +197,21 @@ delimiter //
 create trigger delperson before delete on person for each row
 begin
     delete from purchaserecord where personid = old.personid;
+end //
+delimiter ;
+
+drop trigger if exists delparkingspace;
+delimiter //
+create trigger delparkingspace before delete on parkingspace for each row
+begin
+    delete from parkingorder where parkingspaceid = old.parkingspaceid;
+end //
+delimiter ;
+
+drop trigger if exists delcommodity;
+delimiter //
+create trigger delcommodity before delete on commoditylist for each row
+begin
+    delete from commodityorder where commodityid = old.commodityid;
 end //
 delimiter ;

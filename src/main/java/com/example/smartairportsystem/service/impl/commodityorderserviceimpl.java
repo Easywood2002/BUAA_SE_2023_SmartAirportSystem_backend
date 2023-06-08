@@ -17,6 +17,7 @@ public class commodityorderserviceimpl implements commodityorderservice {
     public void addNewOrder(commodityorder neworder){commodityorderMapper.addNewOrder(neworder);}
     public void removeOldOrder(Integer orderid){commodityorderMapper.removeOldOrder(orderid);}
     public commodityorder getOrderByID(Integer orderid){return commodityorderMapper.getOrderByID(orderid);}
+    public List<commodityorder> listAllOrder(){return commodityorderMapper.listAllOrder();}
     public List<mycommodityorder> listOrderByTouristid(Integer touristid){return commodityorderMapper.listOrderByTouristid(touristid);}
     public List<mycommodityorder> listOrderByMerchantid(Integer merchantid){return commodityorderMapper.listOrderByMerchantid(merchantid);}
 }

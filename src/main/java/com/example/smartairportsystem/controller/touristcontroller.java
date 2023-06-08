@@ -886,8 +886,10 @@ public class touristcontroller {
             }else {
                 purchaserecord pr = purchaserecordService.getRecordByID(Integer.parseInt(orderid));
                 luggage lg = luggageService.getLuggageByCombine(pr.getPersonid(),pr.getTicketid());
+                List<luggage> rtlist = new ArrayList<>();
+                rtlist.add(lg);
                 map.put("success", true);
-                map.put("message", lg);
+                map.put("message", rtlist);
             }
         }catch (Exception e){
             e.printStackTrace();

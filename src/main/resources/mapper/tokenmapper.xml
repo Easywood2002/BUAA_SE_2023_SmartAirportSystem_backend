@@ -55,4 +55,17 @@
     <select id="getTokenByToken_COMPANY" resultType="com.example.smartairportsystem.entity.token">
         select * from airlinecompanytoken where token = #{token}
     </select>
+
+    <delete id="logoutOldToken_TOURIST">
+        delete from touristtoken where token = #{token}
+    </delete>
+    <delete id="logoutOldToken_MERCHANT">
+        delete from merchanttoken where token = #{token}
+    </delete>
+    <delete id="logoutOldToken_STAFF">
+        delete from stafftoken where token = #{token}
+    </delete>
+    <delete id="logoutOldToken_COMPANY">
+        delete from airlinecompanytoken where token = #{token}
+    </delete>
 </mapper>

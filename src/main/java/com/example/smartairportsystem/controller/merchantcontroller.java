@@ -356,11 +356,9 @@ public class merchantcontroller {
                 map.put("success", false);
                 map.put("message", "商户未登录或已注销登录！");
             }else {
-                List<mycommodityorder> list = commodityorderService.listOrderByMerchantid(tokenentity.getId());
-                List<mycommodityorder> rtlist = new ArrayList<>();
-                for (mycommodityorder mco:list){
+                List<mycommodityorder> rtlist = commodityorderService.listOrderByMerchantid(tokenentity.getId());
+                for (mycommodityorder mco:rtlist){
                     mco.setPrice(mco.getPrice()*mco.getCounts());
-                    rtlist.add(mco);
                 }
                 map.put("success", true);
                 map.put("message", rtlist);
